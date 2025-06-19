@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Logo from '../assets/logo.png'
 import hero from '../assets/green.jpeg'
 import { HiMenuAlt3, HiX } from 'react-icons/hi'
+import MiddleImg from '../assets/hand-plant.png' // central image
 
 const navItems = [
   { name: 'Home', to: '/' },
@@ -10,6 +11,34 @@ const navItems = [
   { name: 'Products', to: '/products' },
   { name: 'Contact Us', to: '/contact' },
 ]
+
+// Static Circular Leaf Arrangement (emoji)
+function CircularLeafCircle({ count = 20, radius = 150 }) {
+  const angleStep = 360 / count
+  const leaves = Array.from({ length: count }).map((_, i) => {
+    const angle = i * angleStep
+    return (
+      <span
+        key={i}
+        className="absolute text-yellow-400"
+        style={{
+          fontSize: '24px',
+          top: '50%',
+          left: '50%',
+          transform: `rotate(${angle}deg) translate(${radius}px) rotate(-${angle}deg)`,
+          transformOrigin: 'center',
+        }}
+      >
+        🌿
+      </span>
+    )
+  })
+  return (
+    <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+      {leaves}
+    </div>
+  )
+}
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -22,15 +51,13 @@ export default function Header() {
   }
 
   return (
-    <div className="font-sans" style={bgStyle}>
+    <div className="relative font-sans" style={bgStyle}>
       {/* Header */}
       <header className="bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <img src={Logo} alt="AgroStrings Logo" className="h-14 sm:h-20 w-auto" />
-            </div>
+            <img src={Logo} alt="AgroStrings Logo" className="h-14 sm:h-20 w-auto" />
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex space-x-8">
@@ -62,19 +89,17 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setMenuOpen(!menuOpen)}
-                className="text-white focus:outline-none"
-              >
-                {menuOpen ? <HiX size={28} /> : <HiMenuAlt3 size={28} />}
-              </button>
-            </div>
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden text-white focus:outline-none"
+            >
+              {menuOpen ? <HiX size={28} /> : <HiMenuAlt3 size={28} />}
+            </button>
           </div>
 
           {/* Mobile Menu */}
           {menuOpen && (
-            <div className="md:hidden mt-4 space-y-4">
+            <div className="md:hidden mt-4 space-y-4 px-4">
               <nav className="flex flex-col space-y-2">
                 {navItems.map(item => (
                   <a
@@ -107,7 +132,7 @@ export default function Header() {
 
       {/* Hero Section */}
       <section className="py-20 md:py-24 font-sans">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-8">
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-8">
           {/* Left Text */}
           <div className="lg:w-1/2 text-center lg:text-left">
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-semibold text-gray-200 mb-4">
@@ -123,7 +148,12 @@ export default function Header() {
               Get Started
             </a>
           </div>
-          {/* You can add an image or illustration here if needed */}
+
+          {/* Decorative Middle Image + Static Circle of Leaves */}
+          <div className="hidden lg:flex lg:w-1/2 justify-center relative text-white">
+            <img src={MiddleImg} alt="Decorative" className="w-50 h-50" />
+            <CircularLeafCircle count={5} radius={150} />
+          </div>
         </div>
       </section>
     </div>
