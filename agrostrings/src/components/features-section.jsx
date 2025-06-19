@@ -62,7 +62,7 @@ export default function FeaturesSection() {
       </section>
 
       {/* AGROSTRINGS TV SECTION */}
-      <section className="py-12 bg-black">
+      <section className="py-12 bg-gradient-to-b from-[#333] to-[#1a281f]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl sm:text-2xl font-bold text-white mb-1 text-center">
             AgroStrings TV
@@ -111,7 +111,7 @@ export default function FeaturesSection() {
         <p className="text-[#fada25] font-medium text-xs sm:text-sm">
           {item.user}
         </p>
-        <p className="text-gray-200 text-xs sm:text-sm">
+        <p className="text-gray-300 text-xs sm:text-sm">
           {item.title}
         </p>
       </div>
