@@ -4,7 +4,7 @@ import Header from '../components/header'
 import FeaturesSection from '../components/features-section'
 import TestmonialSection from '../components/footer-testimonials'
 
-const Page = () => {
+const Home = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
@@ -15,4 +15,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default Home
