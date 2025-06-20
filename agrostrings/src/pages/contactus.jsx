@@ -1,11 +1,10 @@
 // src/pages/ContactPage.jsx
 import React, { useState } from 'react'
 import Logo from '../assets/logo.png'
-import hero from '../assets/green.jpeg'
-
-import bannerImg from '../assets/green.jpeg'
+import hero from '../assets/hero2.avif'
 import { HiMenuAlt3, HiX } from 'react-icons/hi'
 import { FiPhone, FiMail } from 'react-icons/fi'
+import Footer from '../components/footer'   // ← import your footer
 
 const navItems = [
   { name: 'Home', to: '/' },
@@ -14,14 +13,12 @@ const navItems = [
   { name: 'Contact Us', to: '/contact' },
 ]
 
-
-
 export default function ContactPage() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const bgStyle = {
     backgroundImage:
-      `linear-gradient(to right, rgb(2, 2, 2), rgba(7, 7, 7, 0.71)), url(${hero})`,
+      `linear-gradient(to right, rgb(2, 2, 2), rgba(12, 12, 12, 0.8)), url(${hero})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -34,12 +31,11 @@ export default function ContactPage() {
         <header className="bg-transparent">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">
-              {/* Logo */}
               <img src={Logo} alt="AgroStrings Logo" className="h-14 sm:h-20 w-auto" />
 
               {/* Desktop Nav */}
               <nav className="hidden md:flex space-x-8">
-                {navItems.map((item) => (
+                {navItems.map(item => (
                   <a
                     key={item.name}
                     href={item.to}
@@ -79,7 +75,7 @@ export default function ContactPage() {
             {menuOpen && (
               <div className="md:hidden mt-4 space-y-4 px-4">
                 <nav className="flex flex-col space-y-2">
-                  {navItems.map((item) => (
+                  {navItems.map(item => (
                     <a
                       key={item.name}
                       href={item.to}
@@ -110,45 +106,38 @@ export default function ContactPage() {
         </header>
 
         {/* Hero section */}
-        <section className="py-2 md:py-2">
-           <div className="text-center py-12">
-          <h2 className="text-4xl font-semibold text-gray-200">Contact Us</h2>
-          <p className="mt-2 text-gray-300">
-           Interested in partnering, investing, or learning more about the AgroStrings platform? We’re building the future of digital agriculture.connect with us today to explore how you can be part of it.
-          </p>
-        </div>
+        <section className="py-2">
+          <div className="text-center py-12">
+            <h2 className="text-4xl font-semibold text-[#fada25]">Contact Us</h2>
+          </div>
         </section>
       </div>
 
       {/* ===== CONTACT US ===== */}
       <section className="w-full">
-       
-
-        
-
-        {/* Info + Form */}
         <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Left Info */}
           <div className="space-y-6">
-            <p className="text-sm uppercase text-green-600 font-medium">Partner with us</p>
-            <h3 className="text-3xl font-bold text-gray-900">We are Here to Help</h3>
-            <p className="text-gray-600">
-              Lorem ipsum dolor sit amet consectetur adipiscing elit tellus elementum consequat eget conva.
+            <p className="text-sm uppercase text-gray-500 font-medium">Partner with us</p>
+            <h3 className="text-3xl font-bold text-gray-900">Quick Response, Always!</h3>
+            <p className="mt-2 text-gray-700 font-regular text-sm">
+              Interested in partnering, investing, or learning more about the AgroStrings platform?
+              We’re building the future of digital agriculture. Connect with us today to explore how you can be part of it.
             </p>
 
             <div className="space-y-4">
               <div className="flex items-center">
-                <FiPhone className="text-2xl text-green-600 mr-3" />
+                <FiPhone className="text-2xl text-gray-600 mr-3" />
                 <div>
                   <p className="text-sm text-gray-500">Phone</p>
-                  <p className="font-medium text-gray-900">(101) 222 123 456</p>
+                  <p className="font-medium text-gray-900">(+256) 222 123 456</p>
                 </div>
               </div>
               <div className="flex items-center">
-                <FiMail className="text-2xl text-green-600 mr-3" />
+                <FiMail className="text-2xl text-gray-600 mr-3" />
                 <div>
                   <p className="text-sm text-gray-500">Email</p>
-                  <p className="font-medium text-gray-900">company@agria.com</p>
+                  <p className="font-medium text-gray-900">agrostrings@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -166,7 +155,7 @@ export default function ContactPage() {
                     id="name"
                     name="name"
                     placeholder="Your Name"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-500"
                   />
                 </div>
                 <div>
@@ -176,7 +165,7 @@ export default function ContactPage() {
                     id="email"
                     name="email"
                     placeholder="Your Email"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-500"
                   />
                 </div>
               </div>
@@ -187,12 +176,12 @@ export default function ContactPage() {
                   name="message"
                   rows="5"
                   placeholder="Your Message"
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full inline-flex justify-center items-center bg-green-600 text-white font-medium py-3 rounded-md hover:bg-green-700 transition"
+                className="w-full inline-flex justify-center items-center bg-[#fada25] text-black font-medium py-3 rounded-md hover:bg-green-700 transition"
               >
                 Send message
               </button>
@@ -200,6 +189,9 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      {/* ===== FOOTER ===== */}
+      <Footer />
     </div>
-  )
+)
 }
