@@ -1,1 +1,1 @@
-## Agrostrings
+## Agrostrings is a platform
