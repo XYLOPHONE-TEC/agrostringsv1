@@ -114,7 +114,7 @@ export default function ContactPage() {
       </div>
 
       {/* ===== CONTACT US ===== */}
-      <section className="w-full">
+      <section className="w-full bg-gray-200">
         <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Left Info */}
           <div className="space-y-6">
@@ -130,58 +130,58 @@ export default function ContactPage() {
                 <FiPhone className="text-2xl text-gray-600 mr-3" />
                 <div>
                   <p className="text-sm text-gray-500">Phone</p>
-                  <p className="font-medium text-gray-900">(+256) 222 123 456</p>
+                  <p className="font-medium text-gray-700 text-sm">(+256) 222 123 456</p>
                 </div>
               </div>
               <div className="flex items-center">
                 <FiMail className="text-2xl text-gray-600 mr-3" />
                 <div>
                   <p className="text-sm text-gray-500">Email</p>
-                  <p className="font-medium text-gray-900">agrostrings@gmail.com</p>
+                  <p className="font-medium text-gray-700 text-sm">agrostrings@gmail.com</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Form */}
-          <div className="bg-gray-50 p-8 rounded-lg shadow">
-            <h3 className="text-2xl font-semibold text-gray-900 mb-6">Contact us</h3>
+          <div className="bg-[#222] p-8 rounded-lg shadow">
+            <h3 className="text-2xl font-semibold text-gray-200 mb-6">Contact us</h3>
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-200">Name</label>
                   <input
                     type="text"
                     id="name"
                     name="name"
                     placeholder="Your Name"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-500 text-gray-200"
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-200">Email</label>
                   <input
                     type="email"
                     id="email"
                     name="email"
                     placeholder="Your Email"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-500 text-gray-200"
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-200">Message</label>
                 <textarea
                   id="message"
                   name="message"
                   rows="5"
                   placeholder="Your Message"
-                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
+                  className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400 text-gray-200"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full inline-flex justify-center items-center bg-[#fada25] text-black font-medium py-3 rounded-md hover:bg-green-700 transition"
+                className="w-full inline-flex justify-center items-center bg-[#fada25] text-black font-medium py-3 rounded-md hover:bg-yellow-400 transition"
               >
                 Send message
               </button>
