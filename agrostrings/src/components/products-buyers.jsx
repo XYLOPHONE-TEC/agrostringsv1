@@ -32,10 +32,10 @@ export default function FarmersSection() {
             </div>
           </div>
 
-          <h2 className="relative z-10 text-2xl sm:text-3xl font-semibold">
+          <h2 className="relative z-10 text-3xl sm:text-4xl font-bold">
             For Farmers
           </h2>
-          <p className="relative z-10 text-sm sm:text-base text-gray-300 px-4">
+          <p className="relative z-10 text-sm sm:text-base text-gray-200 px-4">
             Whether you're a smallholder or large-scale farmer, get the support you need to grow smarter, reduce losses and reach premium markets.
           </p>
           <a
