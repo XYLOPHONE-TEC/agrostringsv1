@@ -3,7 +3,7 @@ import React from 'react'
 import Productheader from '../components/products-header'
 import Productbuyer from '../components/products-buyers'
 import Productseller from '../components/products-sellers'
-
+import Footersection from '../components/footer'
 
 
 const Home = () => {
@@ -12,6 +12,7 @@ const Home = () => {
       <Productheader />
    <Productbuyer />
       <Productseller />
+      <Footersection />
 
     </div>
   )

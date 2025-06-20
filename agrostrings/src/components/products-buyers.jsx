@@ -73,7 +73,7 @@ export default function FarmersSection() {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {/* Card 1 */}
-          <div className="bg-black p-6 flex flex-col items-center text-center space-y-4">
+          <div className="bg-[#111] p-6 flex flex-col items-center text-center space-y-4">
             <FaUserCheck size={32} className="text-white" />
             <h4 className="text-lg font-medium">Expert Agronomic Support</h4>
             <p className="text-sm text-gray-300">
@@ -81,7 +81,7 @@ export default function FarmersSection() {
             </p>
           </div>
           {/* Card 2 */}
-          <div className="bg-black p-6 flex flex-col items-center text-center space-y-4">
+          <div className="bg-[#111] p-6 flex flex-col items-center text-center space-y-4">
             <FaPlayCircle size={32} className="text-white" />
             <h4 className="text-lg font-medium">Learn with AgroStrings TV</h4>
             <p className="text-sm text-gray-300">
@@ -89,7 +89,7 @@ export default function FarmersSection() {
             </p>
           </div>
           {/* Card 3 */}
-          <div className="bg-black p-6 flex flex-col items-center text-center space-y-4">
+          <div className="bg-[#111] p-6 flex flex-col items-center text-center space-y-4">
             <FaRegCheckSquare size={32} className="text-white" />
             <h4 className="text-lg font-medium">Farm Smarter with Data</h4>
             <p className="text-sm text-gray-300">
