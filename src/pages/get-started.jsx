@@ -38,7 +38,7 @@ export default function GetStarted() {
     <div className="min-h-screen bg-gradient-to-b from-[#1a281f] to-[#333] text-white flex flex-col">
       {/* Header */}
       <nav className="w-full max-w-5xl mx-auto flex justify-between items-center py-4 px-4 md:py-6">
-        <img src={logo} alt="AgroStrings Logo" className="h-10 sm:h-15 w-auto" />
+        <img src={logo} alt="AgroStrings Logo" className="h-15 sm:h-15 w-auto" />
         <ul className="flex items-center space-x-4 text-xs sm:space-x-6 sm:text-sm">
           <li>
             <Link
