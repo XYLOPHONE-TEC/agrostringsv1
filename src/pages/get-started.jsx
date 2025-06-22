@@ -1,3 +1,4 @@
+// src/components/GetStarted.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaShoppingCart, FaUsers } from 'react-icons/fa';
@@ -35,11 +36,9 @@ export default function GetStarted() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1a281f] to-[#333] text-white flex flex-col">
-      {/* Header with tabs on all viewports */}
+      {/* Header */}
       <nav className="w-full max-w-5xl mx-auto flex justify-between items-center py-4 px-4 md:py-6">
         <img src={logo} alt="AgroStrings Logo" className="h-10 sm:h-15 w-auto" />
-
-        {/* Always-visible Tabs (smaller on mobile) */}
         <ul className="flex items-center space-x-4 text-xs sm:space-x-6 sm:text-sm">
           <li>
             <Link
@@ -73,12 +72,22 @@ export default function GetStarted() {
             <button
               key={key}
               onClick={() => handleSelect(key)}
-              className={`flex flex-col items-start p-4 sm:p-6 rounded-lg border-2 transition-colors focus:outline-none w-full
-                ${selectedRole === key ? 'border-yellow-400 bg-black' : 'border-transparent bg-[#111] hover:border-yellow-400'}`}
+              className={`
+                flex flex-row sm:flex-col items-center sm:items-start
+                p-4 sm:p-6 rounded-lg border-2 transition-colors focus:outline-none w-full
+                ${selectedRole === key
+                  ? 'border-yellow-400 bg-black'
+                  : 'border-transparent bg-[#111] hover:border-yellow-400'}
+              `}
             >
-              <div className="mb-3 p-2 bg-[#383422] rounded">{icon}</div>
-              <h2 className="text-lg sm:text-xl font-semibold mb-1">{label}</h2>
-              <p className="text-gray-400 text-xs sm:text-sm text-left">{description}</p>
+              {/* Icon container: right margin on mobile, bottom margin on desktop */}
+              <div className="p-2 bg-[#383422] rounded mr-4 sm:mr-0 sm:mb-3">
+                {icon}
+              </div>
+              <div className="flex-1 text-left">
+                <h2 className="text-lg sm:text-xl font-semibold mb-1">{label}</h2>
+                <p className="text-gray-400 text-xs sm:text-sm">{description}</p>
+              </div>
             </button>
           ))}
         </div>
@@ -86,8 +95,10 @@ export default function GetStarted() {
         <button
           onClick={handleContinue}
           disabled={!selectedRole}
-          className={`w-full sm:w-auto px-6 py-2 rounded-full font-medium transition-opacity disabled:opacity-50 mb-4
-            ${selectedRole ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300' : 'bg-yellow-700 text-gray-500'}`}
+          className={`
+            w-full sm:w-auto px-6 py-2 rounded-full font-medium transition-opacity disabled:opacity-50 mb-4
+            ${selectedRole ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300' : 'bg-yellow-700 text-gray-500'}
+          `}
         >
           Continue
         </button>
