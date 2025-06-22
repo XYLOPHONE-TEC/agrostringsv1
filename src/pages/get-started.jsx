@@ -38,7 +38,7 @@ export default function GetStarted() {
     <div className="min-h-screen bg-gradient-to-b from-[#1a281f] to-[#333] text-white flex flex-col">
       {/* Header */}
       <nav className="w-full max-w-5xl mx-auto flex justify-between items-center py-4 px-4 md:py-6">
-        <img src={logo} alt="AgroStrings Logo" className="h-15 sm:h-15 w-auto" />
+        <img src={logo} alt="AgroStrings Logo" className="h-15 w-auto" />
         <ul className="flex items-center space-x-4 text-xs sm:space-x-6 sm:text-sm">
           <li>
             <Link
@@ -60,7 +60,7 @@ export default function GetStarted() {
       </nav>
 
       {/* Main Content */}
-      <main className="flex-grow flex flex-col items-center justify-center px-4">
+      <main className="mt-2 sm:mt-6 flex-grow flex flex-col items-center justify-center px-4">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-bold mb-2 text-center">
           <span className="text-white">Welcome to </span>
           <span className="text-yellow-400">AgroStrings</span>
@@ -97,7 +97,9 @@ export default function GetStarted() {
           disabled={!selectedRole}
           className={`
             w-full sm:w-auto px-6 py-2 rounded-full font-medium transition-opacity disabled:opacity-50 mb-4
-            ${selectedRole ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300' : 'bg-yellow-700 text-gray-500'}
+            ${selectedRole
+              ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300'
+              : 'bg-yellow-700 text-gray-500'}
           `}
         >
           Continue
