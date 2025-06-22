@@ -102,7 +102,7 @@ export default function Header() {
       {/* OUR PARTNERS HERO */}
       <section className="py-20">
         <div className="text-center max-w-2xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-200">OUR PARTNERS</h2>
+          <h2 className="text-2xl font-bold text-gray-200">OUR PARTNERS</h2>
           <div className="w-24 h-1 bg-yellow-400 mx-auto mt-2" />
           <p className="mt-4 text-gray-200">
              Together with our partners, we create smarter solutions, minimize risks, and open doors to premium markets.

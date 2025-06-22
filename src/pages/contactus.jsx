@@ -114,30 +114,30 @@ export default function ContactPage() {
       </div>
 
       {/* ===== CONTACT US ===== */}
-      <section className="w-full bg-gray-200">
+      <section className="w-full bg-gradient-to-b from-[#222] to-[#333]">
         <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Left Info */}
           <div className="space-y-6">
-            <p className="text-sm uppercase text-gray-500 font-medium">Partner with us</p>
-            <h3 className="text-3xl font-bold text-gray-900">Quick Response, Always!</h3>
-            <p className="mt-2 text-gray-700 font-regular text-sm">
+            <p className="text-sm uppercase text-gray-400 font-medium">Partner with us</p>
+            <h3 className="text-3xl font-bold text-gray-200">Quick Response, Always!</h3>
+            <p className="mt-2 text-gray-200 font-regular text-sm">
               Interested in partnering, investing, or learning more about the AgroStrings platform?
               We’re building the future of digital agriculture. Connect with us today to explore how you can be part of it.
             </p>
 
             <div className="space-y-4">
               <div className="flex items-center">
-                <FiPhone className="text-2xl text-gray-600 mr-3" />
+                <FiPhone className="text-2xl text-gray-400 mr-3" />
                 <div>
-                  <p className="text-sm text-gray-500">Phone</p>
-                  <p className="font-medium text-gray-700 text-sm">(+256) 222 123 456</p>
+                  <p className="text-sm text-gray-400">Phone</p>
+                  <p className="font-medium text-gray-400 text-sm">(+256) 222 123 456</p>
                 </div>
               </div>
               <div className="flex items-center">
-                <FiMail className="text-2xl text-gray-600 mr-3" />
+                <FiMail className="text-2xl text-gray-400 mr-3" />
                 <div>
-                  <p className="text-sm text-gray-500">Email</p>
-                  <p className="font-medium text-gray-700 text-sm">agrostrings@gmail.com</p>
+                  <p className="text-sm text-gray-400">Email</p>
+                  <p className="font-medium text-gray-400 text-sm">agrostrings@gmail.com</p>
                 </div>
               </div>
             </div>
