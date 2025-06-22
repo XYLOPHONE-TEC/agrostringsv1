@@ -6,6 +6,13 @@ import { HiMenuAlt3, HiX } from 'react-icons/hi'
 
 import Footer from '../components/footer'
 
+// Import partner logos
+import PartnerA from '../assets/maker-partner.jpeg'
+import PartnerB from '../assets/maker-partner.jpeg'
+import PartnerC from '../assets/maker-partner.jpeg'
+import PartnerD from '../assets/maker-partner.jpeg'
+import PartnerE from '../assets/maker-partner.jpeg'
+
 const navItems = [
   { name: 'Home', to: '/' },
   { name: 'Partners', to: '/partners' },
@@ -13,6 +20,14 @@ const navItems = [
   { name: 'Contact Us', to: '/contact' },
 ]
 
+// List of partner logo imports
+const partnerLogos = [
+  { src: PartnerA, alt: 'Partner A' },
+  { src: PartnerB, alt: 'Partner B' },
+  { src: PartnerC, alt: 'Partner C' },
+  { src: PartnerD, alt: 'Partner D' },
+  { src: PartnerE, alt: 'Partner E' },
+]
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -105,24 +120,19 @@ export default function Header() {
           <h2 className="text-2xl font-bold text-gray-200">OUR PARTNERS</h2>
           <div className="w-24 h-1 bg-yellow-400 mx-auto mt-2" />
           <p className="mt-4 text-gray-200">
-             Together with our partners, we create smarter solutions, minimize risks, and open doors to premium markets.
+            Together with our partners, we create smarter solutions, minimize risks, and open doors to premium markets.
           </p>
         </div>
 
-        <div className="mt-12 space-y-8">
-          <div className="flex justify-center gap-6">
-            <div className="h-16 w-32 bg-gray-300 rounded-md" />
-            <div className="h-16 w-32 bg-gray-300 rounded-md" />
-            <div className="h-16 w-32 bg-gray-300 rounded-md" />
-          </div>
-          <div className="flex justify-center gap-6">
-            <div className="h-16 w-32 bg-gray-300 rounded-md" />
-            <div className="h-16 w-32 bg-gray-300 rounded-md" />
-          </div>
+        {/* Flex wrap for packed logos */}
+        <div className="mt-12 flex flex-wrap justify-center gap-2">
+          {partnerLogos.map(({ src, alt }) => (
+            <div key={alt} className="h-16 w-32 flex items-center justify-center">
+              <img src={src} alt={alt} className="h-full w-full object-contain" />
+            </div>
+          ))}
         </div>
       </section>
-
-      
 
       <Footer />
     </div>
