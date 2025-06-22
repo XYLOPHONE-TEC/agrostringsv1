@@ -61,7 +61,7 @@ export default function GetStarted() {
 
       {/* Main Content */}
       <main className="mt-2 sm:mt-6 flex-grow flex flex-col items-center justify-center px-4">
-        <h1 className="text-3xl sm:text-3xl md:text-5xl lg:text-5xl font-bold mb-2 text-center">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-5xl font-bold mb-2 text-center">
           <span className="text-white">Welcome to </span>
           <span className="text-yellow-400">AgroStrings</span>
         </h1>
