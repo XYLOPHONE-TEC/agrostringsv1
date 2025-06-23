@@ -6,6 +6,7 @@ import Products from './pages/products.jsx'
 import Contactus from './pages/contactus.jsx'
 import Partners from './pages/partners.jsx'
 import Getstarted from './pages/get-started.jsx'
+import Signup from './pages/signup.jsx'
 export default function App() {
   return (
     <div className="App">
@@ -18,6 +19,7 @@ export default function App() {
          <Route path="/contact" element={<Contactus />} />
          <Route path="/partners" element={<Partners />} />
          <Route path="/get-started" element={<Getstarted />} />
+         <Route path="/signup" element={<Signup />} />
       </Routes>
     </div>
   )
