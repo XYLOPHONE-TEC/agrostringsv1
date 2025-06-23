@@ -35,7 +35,7 @@ export default function GetStarted() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a281f] to-[#333] text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-[#111] to-[#1a281f] text-white flex flex-col">
       {/* Header */}
       <nav className="w-full max-w-5xl mx-auto flex justify-between items-center py-4 px-4 md:py-6">
         <img src={logo} alt="AgroStrings Logo" className="h-15 w-auto" />
