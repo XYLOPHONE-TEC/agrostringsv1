@@ -7,6 +7,7 @@ import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import logo from '../assets/logo.png';
 import debounce from 'lodash.debounce';
+import { FaLeaf } from 'react-icons/fa';
 
 const signupSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -89,24 +90,26 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-900 text-white">
+    <div className="h-screen flex flex-col bg-gradient-to-b from-[#111] to-[#1a281f] text-white">
       {/* Navbar */}
       <nav className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center space-x-2">
-          <img src={logo} alt="Farmer" className="h-6 w-auto" />
-          <span className="text-xl font-semibold">Farmer</span>
+          
+          <img src={logo} alt="Farmer" className="h-5 w-auto" />
+          <span className="text-2xl font-bold italic text-[#fada25]">Farmer</span>
+            <FaLeaf classNmae />
         </div>
-        <Link
+        {/* <Link
           to="/login"
           className="border border-yellow-400 px-5 py-2 rounded-lg hover:bg-yellow-400 hover:text-black transition"
         >
           Login
-        </Link>
+        </Link> */}
       </nav>
 
       <main className="flex flex-1 overflow-hidden">
         {/* Decorative Side */}
-        <div className="hidden lg:flex flex-1 relative bg-black p-10">
+        <div className="hidden lg:flex flex-1 relative p-10">
           <div className="absolute inset-0 opacity-20 bg-[url('../assets/fields.jpg')] bg-cover bg-center" />
           <div className="relative z-10 text-white flex items-center justify-center h-full">
             <div className="text-center">
