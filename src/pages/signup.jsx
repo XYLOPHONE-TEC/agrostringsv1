@@ -8,6 +8,7 @@ import 'react-international-phone/style.css';
 import logo from '../assets/logo.png';
 import debounce from 'lodash.debounce';
 import { FaLeaf } from 'react-icons/fa';
+import bgImg from '../assets/hero3.jpeg';
 
 const signupSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -18,7 +19,7 @@ const signupSchema = z.object({
 export default function Signup() {
   const navigate = useNavigate();
   const [phoneValue, setPhoneValue] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('ug'); // Default to Uganda
+  const [selectedCountry, setSelectedCountry] = useState('ug');
   const {
     control,
     handleSubmit,
@@ -33,7 +34,7 @@ export default function Signup() {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const cache = useRef(new Map()).current; // Cache for location suggestions
+  const cache = useRef(new Map()).current;
 
   const debouncedFetch = useRef(
     debounce(async (query, countryCode) => {
@@ -43,7 +44,6 @@ export default function Signup() {
         setError(null);
         return;
       }
-
       const cacheKey = `${query}|${countryCode}`;
       if (cache.has(cacheKey)) {
         setSuggestions(cache.get(cacheKey));
@@ -51,10 +51,8 @@ export default function Signup() {
         setError(null);
         return;
       }
-
       setLoading(true);
       setError(null);
-
       try {
         const res = await fetch(
           `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
@@ -90,47 +88,36 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-b from-[#111] to-[#1a281f] text-white">
-      {/* Navbar */}
-      <nav className="flex items-center justify-between px-6 py-4">
-        <div className="flex items-center space-x-2">
+    <div className="h-screen flex">
+      {/* Left Panel */}
+      <aside className="hidden lg:flex w-1/2 bg-cover bg-center relative" style={{ backgroundImage: `url(${bgImg})` }}>
+        <div className="absolute inset-0 bg-black opacity-70" />
+        <div className="relative z-10 m-auto text-center px-12 space-y-6">
           
-          <img src={logo} alt="Farmer" className="h-5 w-auto" />
-          <span className="text-2xl font-bold italic text-[#fada25]">Farmer</span>
-            <FaLeaf classNmae />
+          
+          <h2 className="text-3xl font-bold text-[#fada25]">Smart Farming Revolution with Agrostrings</h2>
+          <p className="text-gray-400">
+  Join thousands of farmers leveraging cutting-edge technology to boost yields and farm smarter. From optimizing irrigation schedules and analyzing crop health to predicting harvest times and managing resources efficiently, our platform empowers you with data-driven insights. Track your fields, monitor soil moisture and weather patterns, receive real-time alerts on crop stress, collaborate with agronomy experts, and streamline record-keeping—all in one unified dashboard.
+</p>
         </div>
-        {/* <Link
-          to="/login"
-          className="border border-yellow-400 px-5 py-2 rounded-lg hover:bg-yellow-400 hover:text-black transition"
-        >
-          Login
-        </Link> */}
-      </nav>
+      </aside>
 
-      <main className="flex flex-1 overflow-hidden">
-        {/* Decorative Side */}
-        <div className="hidden lg:flex flex-1 relative p-10">
-          <div className="absolute inset-0 opacity-20 bg-[url('../assets/fields.jpg')] bg-cover bg-center" />
-          <div className="relative z-10 text-white flex items-center justify-center h-full">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold mb-2">Smart Farming Revolution</h2>
-              <p className="opacity-75">
-                Join thousands of farmers using technology to impro...
-              </p>
+      {/* Form Panel */}
+      <main className="flex-1 flex items-center justify-center p-8 bg-gradient-to-b from-[#1a281f] to-[#111]">
+        <div className="w-full max-w-md space-y-8 text-white">
+          {/* Logo & Title */}
+          <div className="flex flex-col items-center space-y-2">
+            <img src={logo} alt="Farmer" className="h-12" />
+            <div className="flex items-center space-x-2 text-2xl font-bold italic text-yellow-400">
+              <FaLeaf />
+              <span>Farmer</span>
             </div>
-            <div className="absolute top-1/4 left-10 w-32 h-32 bg-gray-700 rounded-full opacity-50"></div>
-            <div className="absolute bottom-1/4 right-10 w-40 h-40 bg-gray-700 rounded-full opacity-50"></div>
           </div>
-        </div>
 
-        {/* Form Side */}
-        <div className="flex-1 flex flex-col justify-center items-center p-6">
-          <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md space-y-6">
-            <h2 className="text-2xl font-bold text-center mb-6">Get Started</h2>
-            <p className="text-center text-gray-400 mb-6">Join the future of smart farming</p>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Username */}
             <div>
-              <label htmlFor="username" className="block text-sm mb-1">Username</label>
+              <label htmlFor="username" className="block mb-1 text-sm">Username</label>
               <Controller
                 name="username"
                 control={control}
@@ -139,18 +126,16 @@ export default function Signup() {
                     {...field}
                     id="username"
                     placeholder="Enter username"
-                    className="w-full bg-gray-800 rounded py-2 px-4 placeholder-gray-400 focus:outline-none text-white border border-gray-600"
+                    className="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 focus:outline-none"
                   />
                 )}
               />
-              {errors.username && (
-                <p className="text-red-500 text-xs mt-1">{errors.username.message}</p>
-              )}
+              {errors.username && <p className="mt-1 text-xs text-red-500">{errors.username.message}</p>}
             </div>
 
             {/* Phone Input */}
             <div>
-              <label htmlFor="phone" className="block text-sm mb-1">Phone number</label>
+              <label htmlFor="phone" className="block mb-1 text-sm">Phone number</label>
               <PhoneInput
                 defaultCountry="ug"
                 value={phoneValue}
@@ -158,15 +143,14 @@ export default function Signup() {
                   setPhoneValue(value);
                   setSelectedCountry(country.iso2);
                 }}
-                inputClassName="w-full bg-gray-800 rounded py-2 px-4 placeholder-gray-400 text-white focus:outline-none border border-gray-600"
-                className="w-full"
+                inputClassName="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 focus:outline-none"
               />
-              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
+              {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone.message}</p>}
             </div>
 
             {/* Location Autocomplete */}
             <div>
-              <label htmlFor="location" className="block text-sm mb-1">Location</label>
+              <label htmlFor="location" className="block mb-1 text-sm">Location</label>
               <Controller
                 name="location"
                 control={control}
@@ -177,51 +161,44 @@ export default function Signup() {
                       id="location"
                       placeholder="Select location"
                       autoComplete="off"
-                      className="w-full bg-gray-800 rounded py-2 px-4 placeholder-gray-400 focus:outline-none text-white border border-gray-600 appearance-none"
+                      className="w-full px-4 py-2 rounded bg-gray-800	border border-gray-600 focus:outline-none"
                     />
-                    {loading && (
-                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        <div
-                          className="w-5 h-5 border-2 border-t-transparent border-yellow-400 rounded-full animate-spin"
-                          role="status"
-                          aria-label="Loading locations"
-                        />
-                      </div>
-                    )}
+                    {loading && <span className="absolute right-3 top-3 animate-spin text-yellow-400">⏳</span>}
                     {!loading && suggestions.length > 0 && (
-                      <ul className="absolute z-20 bg-gray-800 text-white w-full mt-1 rounded-md shadow-lg max-h-60 overflow-auto border border-yellow-400">
-                        {suggestions.map(item => (
+                      <ul className="absolute z-10 w-full mt-1 bg-gray-800 rounded shadow-lg max-h-40 overflow-auto">
+                        {suggestions.map((item) => (
                           <li
                             key={item.place_id}
                             onClick={() => handleLocationSelect(item.display_name, field.onChange)}
-                            className="cursor-pointer p-2 hover:bg-yellow-400 hover:text-black text-sm transition"
+                            className="px-3 py-2 text-sm hover:bg-yellow-400 hover:text-black cursor-pointer"
                           >
                             {item.display_name}
                           </li>
                         ))}
                       </ul>
                     )}
-                    {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+                    {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
                   </div>
                 )}
               />
-              {errors.location && <p className="text-red-500 text-xs mt-1">{errors.location.message}</p>}
+              {errors.location && <p className="mt-1 text-xs text-red-500">{errors.location.message}</p>}
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-yellow-400 text-black font-semibold rounded-lg py-3 hover:bg-yellow-300 transition"
+              className="w-full py-3 rounded bg-yellow-400 font-semibold text-black hover:bg-yellow-300 transition"
             >
               {isSubmitting ? 'Signing Up...' : 'Get Started'}
             </button>
           </form>
 
-          <p className="text-gray-400 text-xs mt-4 text-center">
-            By continuing you agree to our{' '}
-            <Link to="/terms" className="underline text-yellow-400">Terms of Service</Link> and{' '}
-            <Link to="/privacy" className="underline text-yellow-400">Privacy Policy</Link>.
+          <p className="text-center text-gray-400 text-xs">
+            By continuing, you agree to our{' '}
+            <Link to="/terms" className="underline">Terms of Service</Link>{' '}
+            and{' '}
+            <Link to="/privacy" className="underline">Privacy Policy</Link>.
           </p>
         </div>
       </main>
