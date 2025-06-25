@@ -1,3 +1,4 @@
+// src/components/Signup.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
@@ -7,8 +8,8 @@ import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 import logo from '../assets/logo.png';
 import debounce from 'lodash.debounce';
-import { FaLeaf } from 'react-icons/fa';
-import bgImg from '../assets/hero3.jpeg';
+import { FaLeaf, FaSeedling, FaTractor, FaChartLine } from 'react-icons/fa';
+import bgImg from '../assets/image2.jpeg';
 
 const signupSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -88,36 +89,69 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-screen flex">
-      {/* Left Panel */}
-      <aside className="hidden lg:flex w-1/2 bg-cover bg-center relative" style={{ backgroundImage: `url(${bgImg})` }}>
-        <div className="absolute inset-0 bg-black opacity-70" />
-        <div className="relative z-10 m-auto text-center px-12 space-y-6">
-          
-          
-          <h2 className="text-3xl font-bold text-[#fada25]">Smart Farming Revolution with Agrostrings</h2>
-          <p className="text-gray-400">
-  Join thousands of farmers leveraging cutting-edge technology to boost yields and farm smarter. From optimizing irrigation schedules and analyzing crop health to predicting harvest times and managing resources efficiently, our platform empowers you with data-driven insights. Track your fields, monitor soil moisture and weather patterns, receive real-time alerts on crop stress, collaborate with agronomy experts, and streamline record-keeping—all in one unified dashboard.
-</p>
+    <div className="h-screen flex overflow-hidden">
+      {/* Desktop Left Panel with Shapes */}
+      <aside
+        className="hidden lg:flex w-1/2 relative bg-cover bg-center overflow-hidden"
+        style={{ backgroundImage: `url(${bgImg})` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-transparent to-black opacity-70 backdrop-blur-sm" />
+        {/* Decorative blobs */}
+        <div className="absolute -top-10 -right-16 w-64 h-64 bg-yellow-400 rounded-full opacity-30 transform rotate-45" />
+        <div className="absolute bottom-20 -left-12 w-48 h-48 bg-yellow-500 rounded-full opacity-20 transform rotate-12" />
+        <div className="relative z-10 flex flex-col justify-center items-start h-full px-16 space-y-6">
+          <img src={logo} alt="Agrostrings" className="h-16 w-auto mb-4" />
+          <h1 className="text-4xl lg:text-4xl font-extrabold text-white leading-snug">
+            Modern Agriculture,
+            <br />
+            <span className="text-yellow-400">Smarter Harvests</span>
+          </h1>
+          <p className="max-w-sm text-gray-200 text-lg">
+            Empower your farm with data-driven insights, buyer connections,
+            and yield tracking all on one modern, intuitive platform.
+          </p>
+
+          <div className="grid grid-cols-3 gap-4 mt-6">
+            {[
+              { icon: <FaSeedling />, label: 'Crop Planning' },
+              { icon: <FaTractor />, label: 'Asset Management' },
+              { icon: <FaChartLine />, label: 'Market Analytics' }
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col items-center p-3 bg-opacity-10 rounded-3xl backdrop-blur-sm border border-white border-opacity-20 hover:bg-opacity-20 transition"
+              >
+                <div className="p-2 bg-yellow-400 rounded-full mb-2">
+                  {item.icon}
+                </div>
+                <span className="text-white text-xs font-medium text-center">
+                  {item.label}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </aside>
 
-      {/* Form Panel */}
-      <main className="flex-1 flex items-center justify-center p-8 bg-gradient-to-b from-[#1a281f] to-[#111]">
-        <div className="w-full max-w-md space-y-8 text-white">
-          {/* Logo & Title */}
-          <div className="flex flex-col items-center space-y-2">
-            <img src={logo} alt="Farmer" className="h-12" />
-            <div className="flex items-center space-x-2 text-2xl font-bold italic text-yellow-400">
-              <FaLeaf />
-              <span>Farmer</span>
-            </div>
+      {/* Form Panel with Accents */}
+      <main className="flex-1 flex items-center justify-center p-8 bg-gradient-to-b from-[#1a281f] to-[#111] overflow-auto relative">
+        {/* Accent lines */}
+        <div className="hidden lg:block absolute top-1/4 left-1/3 w-1/2 h-0.5 bg-yellow-400 opacity-50 transform rotate-2" />
+        <div className="hidden lg:block absolute bottom-1/3 right-1/4 w-1/3 h-0.5 bg-yellow-400 opacity-40 transform -rotate-3" />
+
+        <div className="w-full max-w-md space-y-8 text-white  bg-opacity-5 backdrop-blur-sm p-8 rounded-2xl shadow-xl">
+          {/* Mobile Header */}
+          <div className="lg:hidden flex flex-col items-center space-y-2">
+            <img src={logo} alt="Agrostrings" className="h-12" />
+            <h2 className="text-2xl font-bold text-yellow-400 text-center">Modern Agriculture, smarter Harvests</h2>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Username */}
             <div>
-              <label htmlFor="username" className="block mb-1 text-sm">Username</label>
+              <label htmlFor="username" className="block mb-1 text-sm text-gray-500">
+                Username
+              </label>
               <Controller
                 name="username"
                 control={control}
@@ -126,7 +160,7 @@ export default function Signup() {
                     {...field}
                     id="username"
                     placeholder="Enter username"
-                    className="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 focus:outline-none"
+                    className="w-full px-4 py-3 rounded bg-opacity-60 border bg-[#e0e0e0] border-gray-700 focus:outline-none focus:ring-2 focus:ring-white text-black text-[14px]"
                   />
                 )}
               />
@@ -135,7 +169,9 @@ export default function Signup() {
 
             {/* Phone Input */}
             <div>
-              <label htmlFor="phone" className="block mb-1 text-sm">Phone number</label>
+              <label htmlFor="phone" className="block mb-1 text-sm text-gray-500">
+                Phone number
+              </label>
               <PhoneInput
                 defaultCountry="ug"
                 value={phoneValue}
@@ -143,14 +179,16 @@ export default function Signup() {
                   setPhoneValue(value);
                   setSelectedCountry(country.iso2);
                 }}
-                inputClassName="w-full px-4 py-2 rounded bg-gray-800 border border-gray-600 focus:outline-none"
+                inputClassName="w-full px-4 py-3 bg-gray-900 bg-opacity-60 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-white"
               />
               {errors.phone && <p className="mt-1 text-xs text-red-500">{errors.phone.message}</p>}
             </div>
 
             {/* Location Autocomplete */}
             <div>
-              <label htmlFor="location" className="block mb-1 text-sm">Location</label>
+              <label htmlFor="location" className="block mb-1 text-sm text-gray-500">
+                Location
+              </label>
               <Controller
                 name="location"
                 control={control}
@@ -161,16 +199,16 @@ export default function Signup() {
                       id="location"
                       placeholder="Select location"
                       autoComplete="off"
-                      className="w-full px-4 py-2 rounded bg-gray-800	border border-gray-600 focus:outline-none"
+                      className="w-full px-4 py-3 rounded bg-[#e0e0e0] bg-opacity-60 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-white text-black text-[14px]"
                     />
                     {loading && <span className="absolute right-3 top-3 animate-spin text-yellow-400">⏳</span>}
                     {!loading && suggestions.length > 0 && (
-                      <ul className="absolute z-10 w-full mt-1 bg-gray-800 rounded shadow-lg max-h-40 overflow-auto">
+                      <ul className="absolute z-10 w-full mt-1 bg-gray-900 bg-opacity-80 rounded-lg shadow-lg max-h-40 overflow-auto">
                         {suggestions.map((item) => (
                           <li
                             key={item.place_id}
                             onClick={() => handleLocationSelect(item.display_name, field.onChange)}
-                            className="px-3 py-2 text-sm hover:bg-yellow-400 hover:text-black cursor-pointer"
+                            className="px-4 py-2 text-sm hover:bg-yellow-400 hover:text-black cursor-pointer"
                           >
                             {item.display_name}
                           </li>
@@ -188,13 +226,20 @@ export default function Signup() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 rounded bg-yellow-400 font-semibold text-black hover:bg-yellow-300 transition"
+              className="w-full py-3 rounded-lg bg-yellow-400 font-semibold text-black hover:bg-yellow-300 transition focus:ring-2 focus:ring-yellow-500"
             >
               {isSubmitting ? 'Signing Up...' : 'Get Started'}
             </button>
           </form>
 
-          <p className="text-center text-gray-400 text-xs">
+          {/* Progress Dots */}
+          <div className="flex items-center justify-center mt-6 space-x-2">
+            <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-gray-600 opacity-75" />
+            <span className="w-2 h-2 rounded-full bg-gray-600 opacity-75" />
+          </div>
+
+          <p className="text-center text-gray-300 text-xs">
             By continuing, you agree to our{' '}
             <Link to="/terms" className="underline">Terms of Service</Link>{' '}
             and{' '}

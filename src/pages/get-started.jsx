@@ -35,7 +35,7 @@ export default function GetStarted() {
   };
 
   return (
-    <div className="min-h-screen bg-[#222] text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-[#1a281f] to-[#333] text-white flex flex-col">
       {/* Header */}
       <nav className="w-full max-w-5xl mx-auto flex justify-between items-center py-4 px-4 md:py-6">
         <img src={logo} alt="AgroStrings Logo" className="h-15 w-auto" />
@@ -58,16 +58,14 @@ export default function GetStarted() {
           </li>
         </ul>
       </nav>
-     
+
       {/* Main Content */}
-      <main className="mb-20 sm:mb-6 flex-grow flex flex-col items-center justify-center px-4">
-   <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-5xl font-bold mb-2 text-center">
+      <main className="mt-2 sm:mt-6 flex-grow flex flex-col items-center justify-center px-4">
+        <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-5xl font-bold mb-2 text-center">
           <span className="text-white">Welcome to </span>
           <span className="text-yellow-400">AgroStrings</span>
         </h1>
-              
         <p className="text-gray-400 mb-6 text-center">Select your role to get started</p>
-
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-3xl lg:max-w-4xl mb-6">
           {roles.map(({ key, label, description, icon }) => (
@@ -98,7 +96,7 @@ export default function GetStarted() {
           onClick={handleContinue}
           disabled={!selectedRole}
           className={`
-            w-full sm:w-auto px-6 py-2 rounded-full font-medium transition-opacity disabled:opacity-50 mb-4
+            w-full sm:w-auto px-20 py-3 rounded-lg font-medium transition-opacity disabled:opacity-50 mb-4
             ${selectedRole
               ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300'
               : 'bg-yellow-700 text-gray-500'}

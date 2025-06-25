@@ -18,15 +18,15 @@ body {
 
 
 :root {
-    --react-international-phone-height: 40px; /* adjust to your liking */
-  --react-international-phone-background-color: #1f2937; /* bg-gray-800 */
-  --react-international-phone-text-color: #fff;
-  --react-international-phone-border-color: #374151;     /* gray-700 */
-  --react-international-phone-country-selector-background-color: #1f2937;
-  --react-international-phone-country-selector-background-color-hover: #374151;
-  --react-international-phone-dropdown-item-background-color: #1f2937;
-  --react-international-phone-selected-dropdown-item-background-color: #374151;
-  --react-international-phone-dropdown-item-text-color: #fff;
+    --react-international-phone-height: 42px; /* adjust to your liking */
+  --react-international-phone-background-color: #e0e0e0;
+  --react-international-phone-text-color: rgb(121, 120, 120);
+  --react-international-phone-border-color: #b3aeae;     /* gray-700 */
+  --react-international-phone-country-selector-background-color: #e0e0e0;
+  --react-international-phone-country-selector-background-color-hover: #e0e0e0;
+  --react-international-phone-dropdown-item-background-color: #c9cdd1;
+  --react-international-phone-selected-dropdown-item-background-color: #e0e0e0;
+  --react-international-phone-dropdown-item-text-color: #000;
   --react-international-phone-dropdown-item-font-size: 14px;
   --react-international-phone-dropdown-shadow: 0 2px 8px rgba(0,0,0,0.75);
 }
