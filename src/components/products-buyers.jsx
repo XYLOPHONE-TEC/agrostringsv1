@@ -7,17 +7,14 @@ import small2 from '../assets/products-buyer2.jpeg'
 
 export default function FarmersSection() {
   return (
-    <section className="bg-gradient-to-b from-[#1a281f] to-[#222] text-white py-12">
-      
+    <section className="bg-white text-gray-800 py-12">
       {/* Hero: Text + Circles */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-8">
-        
         {/* Left column: text + mobile circles */}
         <div className="relative w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left space-y-4 py-8">
-          
           {/* Mobile-only: Large circle above heading */}
           <div className="lg:hidden mb-6">
-            <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 border-gray-400 overflow-hidden mx-auto">
+            <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 border-gray-200 overflow-hidden mx-auto">
               <img src={farmImg} alt="Farmer" className="w-full h-full object-cover" />
             </div>
           </div>
@@ -32,15 +29,15 @@ export default function FarmersSection() {
             </div>
           </div>
 
-          <h2 className="relative z-10 text-3xl sm:text-4xl font-bold">
+          <h2 className="relative z-10 text-3xl sm:text-4xl font-bold text-gray-900">
             For Farmers
           </h2>
-          <p className="relative z-10 text-sm sm:text-base text-gray-200 px-4">
+          <p className="relative z-10 text-sm sm:text-base text-gray-600 px-4">
             Whether you're a smallholder or large-scale farmer, get the support you need to grow smarter, reduce losses and reach premium markets.
           </p>
           <a
             href="/farmers"
-            className="relative z-10 mt-2 inline-block bg-yellow-400 text-black font-medium px-4 py-2 rounded-full hover:opacity-90 transition"
+            className="relative z-10 mt-2 inline-block bg-green-600 text-white font-medium px-4 py-2 rounded-full hover:opacity-90 transition"
           >
             Farm with confidence →
           </a>
@@ -49,15 +46,15 @@ export default function FarmersSection() {
         {/* Right column: desktop circles */}
         <div className="hidden lg:flex lg:w-1/2 w-full relative justify-end items-center">
           {/* Large circle */}
-          <div className="w-64 h-64 rounded-full border-4 border-gray-400 overflow-hidden">
+          <div className="w-64 h-64 rounded-full border-4 border-gray-200 overflow-hidden">
             <img src={farmImg} alt="Farmer in field" className="w-full h-full object-cover" />
           </div>
           {/* Top small circle */}
-          <div className="absolute -top-4 left-1/4 w-24 h-24 rounded-full border border-white overflow-hidden">
+          <div className="absolute -top-4 left-1/4 w-24 h-24 rounded-full border border-gray-200 overflow-hidden">
             <img src={small1} alt="Gardener" className="w-full h-full object-cover" />
           </div>
           {/* Bottom small circle */}
-          <div className="absolute -bottom-4 right-1/4 w-20 h-20 rounded-full border border-white overflow-hidden">
+          <div className="absolute -bottom-4 right-1/4 w-20 h-20 rounded-full border border-gray-200 overflow-hidden">
             <img src={small2} alt="Crop" className="w-full h-full object-cover" />
           </div>
         </div>
@@ -65,34 +62,34 @@ export default function FarmersSection() {
 
       {/* Feature Cards */}
       <div className="mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h3 className="text-center text-xl font-semibold mb-4">
-          From Seed to Market — It All Starts Here
+        <h3 className="text-center text-xl font-semibold mb-4 text-gray-900">
+          From Seed to Market — It All Starts Here
         </h3>
-        <p className="text-center text-sm text-gray-300 mb-8">
-          Access verified farmlands, skilled farm, and essential inputs and services all through your personalized dashboard.
+        <p className="text-center text-sm text-gray-600 mb-8">
+          Access verified farmlands, skilled farm services, and essential inputs all through your personalized dashboard.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {/* Card 1 */}
-          <div className="bg-[#111] p-6 flex flex-col items-center text-center space-y-4">
-            <FaUserCheck size={32} className="text-white" />
-            <h4 className="text-lg font-medium">Expert Agronomic Support</h4>
-            <p className="text-sm text-gray-300">
+          <div className="bg-gray-50 p-6 flex flex-col items-center text-center space-y-4 rounded-lg shadow">
+            <FaUserCheck size={32} className="text-green-600" />
+            <h4 className="text-lg font-medium text-gray-900">Expert Agronomic Support</h4>
+            <p className="text-sm text-gray-600">
               Get tailored advice from agronomists throughout the farming season.
             </p>
           </div>
           {/* Card 2 */}
-          <div className="bg-[#111] p-6 flex flex-col items-center text-center space-y-4">
-            <FaPlayCircle size={32} className="text-white" />
-            <h4 className="text-lg font-medium">Learn with AgroStrings TV</h4>
-            <p className="text-sm text-gray-300">
+          <div className="bg-gray-50 p-6 flex flex-col items-center text-center space-y-4 rounded-lg shadow">
+            <FaPlayCircle size={32} className="text-green-600" />
+            <h4 className="text-lg font-medium text-gray-900">Learn with AgroStrings TV</h4>
+            <p className="text-sm text-gray-600">
               Watch educational videos on crop production, climate-smart farming, and market access right from your dashboard.
             </p>
           </div>
           {/* Card 3 */}
-          <div className="bg-[#111] p-6 flex flex-col items-center text-center space-y-4">
-            <FaRegCheckSquare size={32} className="text-white" />
-            <h4 className="text-lg font-medium">Farm Smarter with Data</h4>
-            <p className="text-sm text-gray-300">
+          <div className="bg-gray-50 p-6 flex flex-col items-center text-center space-y-4 rounded-lg shadow">
+            <FaRegCheckSquare size={32} className="text-green-600" />
+            <h4 className="text-lg font-medium text-gray-900">Farm Smarter with Data</h4>
+            <p className="text-sm text-gray-600">
               Use weather forecasts, market insights, and crop-specific guides to improve yield.
             </p>
           </div>

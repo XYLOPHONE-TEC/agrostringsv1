@@ -13,7 +13,7 @@ import bgImg from '../assets/image2.jpeg';
 
 const signupSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters'),
-  phone: z.string().min(5, 'Enter a valid phone number'),
+//   phone: z.string().min(10, 'Enter a valid phone number'),
   location: z.string().nonempty('Please select your location'),
 });
 

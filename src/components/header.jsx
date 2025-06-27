@@ -20,7 +20,7 @@ function CircularLeafCircle({ count = 20, radius = 150 }) {
     return (
       <span
         key={i}
-        className="absolute text-yellow-400"
+        className="absolute text-green-500"
         style={{
           fontSize: '24px',
           top: '50%',
@@ -44,14 +44,13 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const bgStyle = {
-    backgroundImage: `linear-gradient(to right, rgb(2, 2, 2), rgba(7, 7, 7, 0.71)), url(${hero})`,
+    backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url(${hero})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
   }
 
   return (
-    <div className="relative font-sans" style={bgStyle}>
+    <div className="relative font-sans bg-white text-gray-800" style={bgStyle}>
       {/* Header */}
       <header className="bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,7 +64,7 @@ export default function Header() {
                 <a
                   key={item.name}
                   href={item.to}
-                  className="text-[12px] font-bold uppercase text-white hover:text-yellow-400 transition-colors"
+                  className="text-sm font-bold uppercase text-gray-700 hover:text-green-600 transition-colors"
                 >
                   {item.name}
                 </a>
@@ -76,13 +75,13 @@ export default function Header() {
             <div className="hidden md:flex items-center space-x-4">
               <a
                 href="/login"
-                className="px-4 py-1 rounded-full bg-yellow-400 text-black text-[12px] font-medium hover:opacity-90 transition"
+                className="px-4 py-1 rounded-full bg-green-600 text-white text-sm font-medium hover:opacity-90 transition"
               >
                 Login
               </a>
               <a
                 href="/signup"
-                className="px-4 py-1 rounded-full border border-white text-white text-[12px] font-medium hover:bg-white hover:text-gray-900 transition"
+                className="px-4 py-1 rounded-full border border-gray-700 text-gray-700 text-sm font-medium hover:bg-green-600 hover:text-white transition"
               >
                 Signup
               </a>
@@ -91,7 +90,7 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden text-white focus:outline-none"
+              className="md:hidden text-gray-700 focus:outline-none"
             >
               {menuOpen ? <HiX size={28} /> : <HiMenuAlt3 size={28} />}
             </button>
@@ -99,13 +98,13 @@ export default function Header() {
 
           {/* Mobile Menu */}
           {menuOpen && (
-            <div className="md:hidden mt-4 space-y-4 px-4">
+            <div className="md:hidden mt-4 space-y-4 px-4 bg-white">
               <nav className="flex flex-col space-y-2">
                 {navItems.map(item => (
                   <a
                     key={item.name}
                     href={item.to}
-                    className="text-sm font-semibold text-white hover:text-yellow-400"
+                    className="text-base font-semibold text-gray-700 hover:text-green-600"
                   >
                     {item.name}
                   </a>
@@ -114,13 +113,13 @@ export default function Header() {
               <div className="flex flex-col space-y-2 mt-4">
                 <a
                   href="/login"
-                  className="px-4 py-2 rounded-full bg-yellow-400 text-black text-sm font-medium text-center"
+                  className="px-4 py-2 rounded-full bg-green-600 text-white text-base font-medium text-center hover:opacity-90"
                 >
                   Login
                 </a>
                 <a
                   href="/signup"
-                  className="px-4 py-2 rounded-full border border-white text-white text-sm font-medium text-center hover:bg-white hover:text-gray-900"
+                  className="px-4 py-2 rounded-full border border-gray-700 text-gray-700 text-base font-medium text-center hover:bg-green-600 hover:text-white"
                 >
                   Signup
                 </a>
@@ -131,28 +130,28 @@ export default function Header() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 md:py-24 font-sans">
+      <section className="py-20 md:py-24">
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-8">
           {/* Left Text */}
           <div className="lg:w-1/2 text-center lg:text-left">
-            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-semibold text-gray-200 mb-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-gray-800 mb-4">
               We Connect Farmers And Buyers Instantly
             </h1>
-            <p className="text-base sm:text-lg text-[#ccc] mb-6">
+            <p className="text-lg text-gray-600 mb-6">
               Join AgroStrings to trade farm produce, access market insights, and educational resources on our exclusive AgroStrings TV.
             </p>
             <a
               href="/get-started"
-              className="inline-block px-6 py-2 bg-yellow-400 text-sm text-black font-medium rounded-full hover:opacity-90 transition"
+              className="inline-block px-6 py-2 bg-green-600 text-white text-base font-medium rounded-full hover:opacity-90 transition"
             >
               Get Started
             </a>
           </div>
 
           {/* Decorative Middle Image + Static Circle of Leaves */}
-          <div className="hidden lg:flex lg:w-1/2 justify-center relative text-white">
-            <img src={MiddleImg} alt="Decorative" className="w-50 h-50" />
-            <CircularLeafCircle count={5} radius={150} />
+          <div className="hidden lg:flex lg:w-1/2 justify-center relative">
+            <img src={MiddleImg} alt="Decorative" className="w-48 h-48" />
+            <CircularLeafCircle count={10} radius={120} />
           </div>
         </div>
       </section>

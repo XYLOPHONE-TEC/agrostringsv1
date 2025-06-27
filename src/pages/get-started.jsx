@@ -1,58 +1,57 @@
 // src/components/GetStarted.jsx
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaShoppingCart, FaUsers } from 'react-icons/fa';
-import logo from '../assets/logo.png';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { FaUser, FaShoppingCart, FaUsers } from 'react-icons/fa'
+import logo from '../assets/logo.png'
 
 const roles = [
   {
     key: 'farmer',
     label: 'Farmer',
     description: 'Sell your produce and manage your farm',
-    icon: <FaUser size={24} className="text-yellow-400" />,
+    icon: <FaUser size={24} className="text-green-600" />,
   },
   {
     key: 'buyer',
     label: 'Buyer',
     description: 'Source quality agricultural products',
-    icon: <FaShoppingCart size={24} className="text-yellow-400" />,
+    icon: <FaShoppingCart size={24} className="text-green-600" />,
   },
   {
     key: 'agroteam',
     label: 'AgroTeam',
     description: 'Manage and oversee operations',
-    icon: <FaUsers size={24} className="text-yellow-400" />,
+    icon: <FaUsers size={24} className="text-green-600" />,
   },
-];
+]
 
 export default function GetStarted() {
-  const [selectedRole, setSelectedRole] = useState(null);
-  const navigate = useNavigate();
+  const [selectedRole, setSelectedRole] = useState(null)
+  const navigate = useNavigate()
 
-  const handleSelect = roleKey => setSelectedRole(roleKey);
+  const handleSelect = roleKey => setSelectedRole(roleKey)
   const handleContinue = () => {
-    if (selectedRole) navigate(`/signup?role=${selectedRole}`);
-  };
+    if (selectedRole) navigate(`/signup?role=${selectedRole}`)
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a281f] to-[#333] text-white flex flex-col">
+    <div className="min-h-screen bg-white text-gray-800 flex flex-col relative">
+      {/* Abstract Circles */}
+      <div className="absolute -top-16 -left-16 w-72 h-72 bg-green-100 rounded-full opacity-50" />
+      <div className="absolute top-32 right-0 w-48 h-48 bg-green-100 rounded-full opacity-50" />
+      <div className="absolute bottom-10 left-1/4 w-56 h-56 bg-green-100 rounded-full opacity-30" />
+
       {/* Header */}
-      <nav className="w-full max-w-5xl mx-auto flex justify-between items-center py-4 px-4 md:py-6">
-        <img src={logo} alt="AgroStrings Logo" className="h-15 w-auto" />
-        <ul className="flex items-center space-x-4 text-xs sm:space-x-6 sm:text-sm">
+      <nav className="w-full max-w-5xl mx-auto flex justify-between items-center py-6 px-4 z-10">
+        <img src={logo} alt="AgroStrings Logo" className="h-12 w-auto" />
+        <ul className="flex items-center space-x-6 text-sm">
           <li>
-            <Link
-              to="/login"
-              className="pb-1 font-medium border-b-2 border-transparent hover:border-yellow-400 transition"
-            >
+            <Link to="/login" className="text-gray-700 hover:text-green-600 transition">
               Login
             </Link>
           </li>
           <li>
-            <Link
-              to="/signup"
-              className="pb-1 font-medium border-b-2 border-yellow-400 transition"
-            >
+            <Link to="/signup" className="text-white bg-green-600 px-3 py-1 rounded-full hover:bg-green-500 transition">
               Signup
             </Link>
           </li>
@@ -60,33 +59,29 @@ export default function GetStarted() {
       </nav>
 
       {/* Main Content */}
-      <main className="mt-2 sm:mt-6 flex-grow flex flex-col items-center justify-center px-4">
-        <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-5xl font-bold mb-2 text-center">
-          <span className="text-white">Welcome to </span>
-          <span className="text-yellow-400">AgroStrings</span>
+      <main className="mt-6 flex-grow flex flex-col items-center justify-center px-4 z-10">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-center">
+          Welcome to <span className="text-green-600">AgroStrings</span>
         </h1>
-        <p className="text-gray-400 mb-6 text-center">Select your role to get started</p>
+        <p className="text-gray-600 mb-8 text-center max-w-xl">
+          Choose your role and dive into a modern agricultural experience tailored just for you.
+        </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-3xl lg:max-w-4xl mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-4xl mb-8">
           {roles.map(({ key, label, description, icon }) => (
             <button
               key={key}
               onClick={() => handleSelect(key)}
-              className={`
-                flex flex-row sm:flex-col items-center sm:items-start
-                p-4 sm:p-6 rounded-lg border-2 transition-colors focus:outline-none w-full
-                ${selectedRole === key
-                  ? 'border-yellow-400 bg-black'
-                  : 'border-transparent bg-[#111] hover:border-yellow-400'}
+              className={`flex items-center p-6 rounded-lg border-2 transition-colors w-full
+                ${selectedRole === key ? 'border-green-600 bg-green-50' : 'border-gray-200 bg-white hover:border-green-600'}
               `}
             >
-              {/* Icon container: right margin on mobile, bottom margin on desktop */}
-              <div className="p-2 bg-[#383422] rounded mr-4 sm:mr-0 sm:mb-3">
+              <div className="p-3 bg-green-100 rounded-full mr-4">
                 {icon}
               </div>
-              <div className="flex-1 text-left">
-                <h2 className="text-lg sm:text-xl font-semibold mb-1">{label}</h2>
-                <p className="text-gray-400 text-xs sm:text-sm">{description}</p>
+              <div className="text-left">
+                <h2 className="text-lg font-semibold mb-1 text-gray-900">{label}</h2>
+                <p className="text-gray-600 text-sm">{description}</p>
               </div>
             </button>
           ))}
@@ -95,23 +90,20 @@ export default function GetStarted() {
         <button
           onClick={handleContinue}
           disabled={!selectedRole}
-          className={`
-            w-full sm:w-auto px-20 py-3 rounded-lg font-medium transition-opacity disabled:opacity-50 mb-4
-            ${selectedRole
-              ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300'
-              : 'bg-yellow-700 text-gray-500'}
+          className={`px-8 py-3 rounded-lg font-medium transition-opacity disabled:opacity-50
+            ${selectedRole ? 'bg-green-600 text-white hover:bg-green-500' : 'bg-gray-300 text-gray-500'}
           `}
         >
           Continue
         </button>
 
-        <p className="text-gray-400 text-sm">
+        <p className="text-gray-600 text-sm mt-4">
           Already have an account?{' '}
-          <Link to="/login" className="text-yellow-400 hover:underline">
+          <Link to="/login" className="text-green-600 hover:underline">
             Login
           </Link>
         </p>
       </main>
     </div>
-  );
+  )
 }

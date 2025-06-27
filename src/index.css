@@ -20,7 +20,7 @@ body {
 :root {
     --react-international-phone-height: 42px; /* adjust to your liking */
   --react-international-phone-background-color: #e0e0e0;
-  --react-international-phone-text-color: rgb(121, 120, 120);
+  --react-international-phone-text-color: #000;
   --react-international-phone-border-color: #b3aeae;     /* gray-700 */
   --react-international-phone-country-selector-background-color: #e0e0e0;
   --react-international-phone-country-selector-background-color-hover: #e0e0e0;
