@@ -28,13 +28,13 @@ export default function Header() {
   )
 
   const bgStyle = {
-    backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url(${hero})`,
+    backgroundImage: `linear-gradient(to right, rgba(2, 2, 2, 0.87), rgba(3, 5, 3, 0.9)), url(${hero})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   }
 
   return (
-    <div className="relative font-sans text-gray-800 bg-white" style={bgStyle}>
+    <div className="relative font-sans text-white" style={bgStyle}>
       <header className="bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
@@ -47,7 +47,7 @@ export default function Header() {
                 <a
                   key={item.name}
                   href={item.to}
-                  className="text-sm font-bold uppercase text-gray-700 hover:text-green-600 transition-colors"
+                  className="text-[12px] font-bold uppercase hover:text-yellow-400 transition-colors"
                 >
                   {item.name}
                 </a>
@@ -58,13 +58,13 @@ export default function Header() {
             <div className="hidden md:flex items-center space-x-4">
               <a
                 href="/login"
-                className="px-4 py-1 rounded-full bg-green-600 text-white text-sm font-medium hover:opacity-90 transition"
+                className="px-4 py-1 rounded-full bg-yellow-400 text-black text-[12px] font-medium hover:opacity-90 transition"
               >
                 Login
               </a>
               <a
                 href="/signup"
-                className="px-4 py-1 rounded-full border border-gray-700 text-gray-700 text-sm font-medium hover:bg-green-600 hover:text-white transition"
+                className="px-4 py-1 rounded-full border border-white text-white text-[12px] font-medium hover:bg-white hover:text-gray-900 transition"
               >
                 Signup
               </a>
@@ -73,7 +73,7 @@ export default function Header() {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden focus:outline-none text-gray-700"
+              className="md:hidden focus:outline-none"
             >
               {menuOpen ? <HiX size={28} /> : <HiMenuAlt3 size={28} />}
             </button>
@@ -81,13 +81,13 @@ export default function Header() {
 
           {/* Mobile Menu Items */}
           {menuOpen && (
-            <div className="md:hidden mt-4 space-y-4 px-4 bg-white">
+            <div className="md:hidden mt-4 space-y-4 px-4">
               <nav className="flex flex-col space-y-2">
                 {navItems.map(item => (
                   <a
                     key={item.name}
                     href={item.to}
-                    className="text-base font-semibold text-gray-700 hover:text-green-600"
+                    className="text-sm font-semibold hover:text-yellow-400"
                   >
                     {item.name}
                   </a>
@@ -96,13 +96,13 @@ export default function Header() {
               <div className="flex flex-col space-y-2 mt-4">
                 <a
                   href="/login"
-                  className="px-4 py-2 rounded-full bg-green-600 text-white text-base font-medium text-center hover:opacity-90"
+                  className="px-4 py-2 rounded-full bg-yellow-400 text-black text-sm font-medium text-center"
                 >
                   Login
                 </a>
                 <a
                   href="/signup"
-                  className="px-4 py-2 rounded-full border border-gray-700 text-gray-700 text-base font-medium text-center hover:bg-green-600 hover:text-white"
+                  className="px-4 py-2 rounded-full border border-white text-white text-sm font-medium text-center hover:bg-white hover:text-gray-900"
                 >
                   Signup
                 </a>
@@ -112,7 +112,7 @@ export default function Header() {
         </div>
       </header>
 
-      <section className="relative py-20 overflow-hidden">
+      <section className="relative py-20 md:py-15 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-8 relative">
           {/* Hero Text with mobile circles behind */}
           <div className="relative lg:w-1/2 text-center lg:text-left z-10">
@@ -123,7 +123,7 @@ export default function Header() {
                   key={idx}
                   src={MiddleImg}
                   alt="Decorative circle"
-                  className="absolute rounded-full border border-gray-300 object-cover"
+                  className="absolute rounded-full border border-white object-cover"
                   style={{
                     width: `${c.size / 2}px`,
                     height: `${c.size / 2}px`,
@@ -136,10 +136,10 @@ export default function Header() {
               ))}
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-medium text-green-600 mb-4">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-medium text-yellow-30 mb-4">
               Grow smart and scale production with experts
             </h1>
-            <p className="text-lg text-gray-600 mb-6">
+            <p className="text-base sm:text-lg text-gray-300 mb-6">
               Whether you're a smallholder or large-scale farmer, get the support you need to grow smarter, reduce losses and reach premium markets.
             </p>
           </div>
@@ -151,7 +151,7 @@ export default function Header() {
                 key={idx}
                 src={MiddleImg}
                 alt="Decorative circle"
-                className="absolute rounded-full border border-gray-300 object-cover"
+                className="absolute rounded-full border border-white object-cover"
                 style={{
                   width: `${c.size}px`,
                   height: `${c.size}px`,
