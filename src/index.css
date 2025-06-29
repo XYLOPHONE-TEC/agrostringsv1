@@ -96,3 +96,32 @@
 .custom-phone-input .PhoneInputCountrySelect::-webkit-scrollbar-thumb:hover {
   background-color: #CBD5E0; /* Chakra gray.300 */
 }
+
+/* index.css */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 2px;
+  transition: background-color 0.2s;
+}
+
+/* On hover anywhere, make the scrollbar thumb yellow */
+:hover::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:window-inactive {
+  background: yellow;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+

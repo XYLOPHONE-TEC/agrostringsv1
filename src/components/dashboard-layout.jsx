@@ -24,17 +24,16 @@ const products = [
   { id: 1, img: Product, title: 'Product One', desc: 'Short lorem ipsum.', price: 'UGX 49,000' },
   { id: 2, img: Product, title: 'Product Two', desc: 'Another lorem ipsum.', price: 'UGX 7,900' },
   { id: 3, img: Product, title: 'Product Three', desc: 'More lorem ipsum.', price: 'UGX 12,500' },
-   { id: 1, img: Product, title: 'Product One', desc: 'Short lorem ipsum.', price: 'UGX 49,000' },
-  { id: 2, img: Product, title: 'Product Two', desc: 'Another lorem ipsum.', price: 'UGX 7,900' },
-  { id: 3, img: Product, title: 'Product Three', desc: 'More lorem ipsum.', price: 'UGX 12,500' },
-   { id: 1, img: Product, title: 'Product One', desc: 'Short lorem ipsum.', price: 'UGX 49,000' },
-  { id: 2, img: Product, title: 'Product Two', desc: 'Another lorem ipsum.', price: 'UGX 7,900' },
-  { id: 3, img: Product, title: 'Product Three', desc: 'More lorem ipsum.', price: 'UGX 12,500' },
-   { id: 1, img: Product, title: 'Product One', desc: 'Short lorem ipsum.', price: 'UGX 49,000' },
-  { id: 2, img: Product, title: 'Product Two', desc: 'Another lorem ipsum.', price: 'UGX 7,900' },
-  { id: 3, img: Product, title: 'Product Three', desc: 'More lorem ipsum.', price: 'UGX 12,500' },
-  // ... more items ...
-  { id: 12, img: Product, title: 'Product Five', desc: 'Yet more lorem ipsum.', price: 'UGX 18,300' },
+   { id: 4, img: Product, title: 'Product One', desc: 'Short lorem ipsum.', price: 'UGX 49,000' },
+  { id: 5, img: Product, title: 'Product Two', desc: 'Another lorem ipsum.', price: 'UGX 7,900' },
+  { id: 6, img: Product, title: 'Product Three', desc: 'More lorem ipsum.', price: 'UGX 12,500' },
+   { id: 7, img: Product, title: 'Product One', desc: 'Short lorem ipsum.', price: 'UGX 49,000' },
+  { id: 8, img: Product, title: 'Product Two', desc: 'Another lorem ipsum.', price: 'UGX 7,900' },
+  { id: 9, img: Product, title: 'Product Three', desc: 'More lorem ipsum.', price: 'UGX 12,500' },
+   { id: 10, img: Product, title: 'Product One', desc: 'Short lorem ipsum.', price: 'UGX 49,000' },
+  { id: 11, img: Product, title: 'Product Two', desc: 'Another lorem ipsum.', price: 'UGX 7,900' },
+  { id: 12, img: Product, title: 'Product Three', desc: 'More lorem ipsum.', price: 'UGX 12,500' },
+ 
 ];
 
 const scrollbarCss = {
