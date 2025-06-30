@@ -19,10 +19,11 @@ import {
   FiBarChart2,
 } from 'react-icons/fi';
 import { MdEco } from 'react-icons/md';
-import MiddleContent from './MiddleContent'; // ← new import
+import MiddleContent from './middle-content-farmer';
+import RightContent from './right-content-farmer'
 
 const MainContent = () => (
-  <Grid templateColumns="repeat(3, 1fr)" gap={4} px={8} py={4}>
+  <Grid templateColumns="2fr 3fr 2fr" gap={4} px={8} py={4}>
     {/* Left section (weather + tools) */}
     <VStack spacing={4} align="stretch">
       {/* Weather Card */}
@@ -85,13 +86,14 @@ const MainContent = () => (
       </Box>
     </VStack>
 
-    {/* Middle section */}
-    <Box bg="gray.800" rounded="lg" p={3} minH="160px">
+    {/* Middle section (now wider) */}
+    <Box bg="gray.800" rounded="lg" p={3} minH="240px">
       <MiddleContent />
     </Box>
 
     {/* Right placeholder */}
-    <Box bg="gray.800" rounded="lg" p={3} minH="160px" />
+    <Box bg="gray.800" rounded="lg" p={3} minH="160px" >     <RightContent /></Box>
+
   </Grid>
 );
 
