@@ -18,23 +18,20 @@ import {
   MessageSquare,
   Volume2,
   VolumeX,
+  Tv,
 } from "lucide-react";
 import demoVideo1 from "../assets/videos/demo.mp4";
 import demoVideo2 from "../assets/videos/demo2.mp4";
 import "../index.css";
 
+// Animation variants
 const iconVariants = {
   hidden: { y: 50, opacity: 0, scale: 0.5 },
   visible: (i) => ({
     y: 0,
     opacity: 1,
     scale: 1,
-    transition: {
-      delay: i * 0.1,
-      type: "spring",
-      stiffness: 100,
-      damping: 10,
-    },
+    transition: { delay: i * 0.1, type: "spring", stiffness: 100, damping: 10 },
   }),
   exit: { y: 50, opacity: 0, scale: 0.5, transition: { duration: 0.2 } },
 };
@@ -63,6 +60,7 @@ const VideoBox = () => {
   const changeIndex = useCallback(
     (delta) => {
       setIndex((i) => (i + delta + videos.length) % videos.length);
+      // reset interaction states
       setLiked(false);
       setFavorites(false);
       setCommentsCount(0);
@@ -105,8 +103,7 @@ const VideoBox = () => {
 
   const handleIconClick = (id, onClick) => {
     setClickedIcon(id);
-    if (id === "comment") setShowCommentInput(true);
-    else setShowCommentInput(false);
+    setShowCommentInput(id === "comment");
     onClick();
     setTimeout(() => setClickedIcon(null), 400);
   };
@@ -165,14 +162,9 @@ const VideoBox = () => {
   return (
     <Box
       {...handlers}
-      w="100%"
-      h="100%"
-      bg="#000"
-      pos="relative"
-      overflow="hidden"
-      touchAction="none"
-      userSelect="none"
-      zIndex={1}
+      w="100%" h="100%"
+      bg="#000" pos="relative" overflow="hidden"
+      touchAction="none" userSelect="none" zIndex={1}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -189,101 +181,96 @@ const VideoBox = () => {
             ref={videoRef}
             src={videos[index]}
             objectFit="cover"
-            w="100%"
-            h="100%"
-            playsInline
-            loop
+            w="100%" h="100%"
+            playsInline loop
             muted={!soundOn}
           />
         </motion.div>
       </AspectRatio>
 
-      <AnimatePresence>
+      {/* TV overlay */}
+      <AnimatePresence initial={false}>
+        {isHovered && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Box pos="absolute" top="10px" left="10px" zIndex={3}>
+              <Flex align="center" bg="rgba(0,0,0,0.5)" p={2} borderRadius="md">
+                <Icon as={Tv} boxSize={5} color="white" mr={1} />
+                <Text color="white" fontWeight="bold">TV</Text>
+              </Flex>
+            </Box>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Action icons */}
+      <AnimatePresence initial={false}>
         {isHovered && (
           <VStack
-            pos="absolute"
-            right="10px"
-            top="50%"
-            transform="translateY(-50%)"
-            spacing={6}
-            zIndex={2}
-            align="flex-end"
+            pos="absolute" right="10px" top="50%"
+            transform="translateY(-50%)" spacing={6}
+            zIndex={2} align="flex-end"
           >
-            {iconsData.map(
-              ({ id, icon, colorActive, active, onClick, count }, i) => (
-                <Flex key={id} align="center">
-                  {showCommentInput && id === "comment" && (
-                    <Box
-                      p={3}
-                      bg="rgba(0,0,0,0.7)"
-                      borderRadius="md"
-                      w="300px"
-                      mr={3}
-                      color="white"
-                      position="relative"
-                    >
-                      <Input
-                        placeholder="Write a comment..."
-                        value={commentText}
-                        onChange={(e) => setCommentText(e.target.value)}
-                        mb={2}
-                        size="sm"
-                        bg="white"
-                        color="black"
-                      />
-                      <Button
-                        size="sm"
-                        colorScheme="blue"
-                        onClick={handleCommentSubmit}
-                        isDisabled={!commentText.trim()}
-                        w="100%"
-                      >
-                        Submit
-                      </Button>
-                    </Box>
-                  )}
-                  <motion.div
-                    custom={i}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    variants={iconVariants}
+            {iconsData.map(({ id, icon, colorActive, active, onClick, count }, i) => (
+              <Flex key={id} align="center">
+                {showCommentInput && id === "comment" && (
+                  <Box
+                    p={3} bg="rgba(0,0,0,0.7)" borderRadius="md"
+                    w="300px" mr={3} color="white"
                   >
-                    <motion.div
-                      animate={
-                        clickedIcon === id ? clickAnimation : { scale: 1, rotate: 0 }
-                      }
-                      style={{ display: "inline-block" }}
+                    <Input
+                      placeholder="Write a comment..."
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      mb={2} size="sm"
+                      bg="white" color="black"
+                    />
+                    <Button
+                      size="sm" colorScheme="blue"
+                      onClick={handleCommentSubmit}
+                      isDisabled={!commentText.trim()} w="100%"
                     >
-                      <Flex
-                        direction="column"
-                        align="center"
-                        cursor="pointer"
-                        onClick={() => handleIconClick(id, onClick)}
-                        userSelect="none"
+                      Submit
+                    </Button>
+                  </Box>
+                )}
+                <motion.div
+                  custom={i}
+                  initial="hidden" animate="visible" exit="exit"
+                  variants={iconVariants}
+                >
+                  <motion.div
+                    animate={
+                      clickedIcon === id ? clickAnimation : { scale: 1, rotate: 0 }
+                    }
+                    style={{ display: "inline-block" }}
+                  >
+                    <Flex
+                      direction="column" align="center"
+                      cursor="pointer"
+                      onClick={() => handleIconClick(id, onClick)}
+                      userSelect="none"
+                    >
+                      <Box
+                        p={2} borderRadius="full"
+                        bg="rgba(0,0,0,0.3)"
+                        _hover={{ bg: "rgba(0,0,0,0.5)" }}
+                        transition="background-color 0.3s"
                       >
-                        <Box
-                          p={2}
-                          borderRadius="full"
-                          bg="rgba(0,0,0,0.3)"
-                          _hover={{ bg: "rgba(0,0,0,0.5)" }}
-                          transition="background-color 0.3s"
-                        >
-                          <Icon
-                            as={icon}
-                            boxSize={6}
-                            color={active ? colorActive : "white"}
-                          />
-                        </Box>
-                        <Text fontSize="sm" color="white" mt={1}>
-                          {count}
-                        </Text>
-                      </Flex>
-                    </motion.div>
+                        <Icon as={icon} boxSize={6} color={active ? colorActive : "white"} />
+                      </Box>
+                      <Text fontSize="sm" color="white" mt={1}>
+                        {count}
+                      </Text>
+                    </Flex>
                   </motion.div>
-                </Flex>
-              )
-            )}
+                </motion.div>
+              </Flex>
+            ))}
           </VStack>
         )}
       </AnimatePresence>

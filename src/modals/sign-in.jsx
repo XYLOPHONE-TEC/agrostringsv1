@@ -14,10 +14,10 @@ import {
 import { HiX, HiEye, HiEyeOff } from 'react-icons/hi';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
-
-import '../index.css';
+import { useNavigate } from 'react-router-dom';
 
 const SignInModal = ({ open, onOpenChange, onSubmit }) => {
+  const navigate = useNavigate();
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -26,12 +26,10 @@ const SignInModal = ({ open, onOpenChange, onSubmit }) => {
     onSubmit({ phone, password });
     setPhone('');
     setPassword('');
-    // Modal only closes on close icon
+    navigate('/dashboard');
   };
 
-  const handleClose = () => {
-    onOpenChange(false);
-  };
+  const handleClose = () => onOpenChange(false);
 
   return (
     <Dialog.Root
@@ -66,8 +64,7 @@ const SignInModal = ({ open, onOpenChange, onSubmit }) => {
                   <Box flex="1">
                     <PhoneInput
                       defaultCountry="UG"
-                      placeholder="phone number"
-                      _placeholder={{ color: 'gray.400' }}
+                      placeholder="Phone number"
                       value={phone}
                       onChange={setPhone}
                       international
@@ -76,15 +73,18 @@ const SignInModal = ({ open, onOpenChange, onSubmit }) => {
                   </Box>
                 </HStack>
 
-                <InputGroup mb={4} endElement={
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <HiEyeOff /> : <HiEye />}
-                  </Button>
-                }>
+                <InputGroup
+                  mb={4}
+                  endElement={
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <HiEyeOff /> : <HiEye />}
+                    </Button>
+                  }
+                >
                   <Input
                     placeholder="Password"
                     type={showPassword ? 'text' : 'password'}
