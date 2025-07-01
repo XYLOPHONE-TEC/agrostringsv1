@@ -1,24 +1,15 @@
-// src/components/VideoBody.jsx
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import {
-  Box,
-  Button,
-  VStack,
-  HStack,
-  Text,
-  Center,
-  Flex,
-  Icon,
+  Box, Button, VStack, HStack, Text,
+  Center, Flex, Icon, Drawer, Portal,
+  CloseButton, useDisclosure
 } from '@chakra-ui/react';
 import {
-  FaFolderOpen,
-  FaVideo,
-  FaThLarge,
-  FaTextHeight,
-  FaUpload,
-  FaPlayCircle,
+  FaFolderOpen, FaVideo, FaThLarge, FaTextHeight,
+  FaUpload, FaPlayCircle, FaMusic
 } from 'react-icons/fa';
 import { MdOndemandVideo } from 'react-icons/md';
+import { toaster } from '../components/ui/toaster';
 
 const sidebarItems = [
   { icon: FaFolderOpen, label: 'Your media' },
@@ -27,104 +18,150 @@ const sidebarItems = [
   { icon: FaTextHeight, label: 'Text' },
 ];
 
-const VideoBody = () => (
-  <HStack h="auto" align="stretch" spacing={0} minH="0">
-    {/* Sidebar */}
-    <VStack
-      w="220px"
-      bg="gray.900"
-      color="gray.200"
-      spacing={4}
-      py={4}
-      minH="0"
-    >
-      {sidebarItems.map((item) => (
-        <VStack
-          key={item.label}
-          as="button"
-          onClick={() => console.log(item.label)}
-          cursor="pointer"
-          spacing={1}
-          align="center"
-          _hover={{ bg: 'gray.700', borderRadius: 'md' }}
-          p={2}
-        >
-          <Icon as={item.icon} boxSize={6} />
-          <Text fontSize="xs">{item.label}</Text>
-        </VStack>
-      ))}
-    </VStack>
+const sounds = ['Piano Loop', 'Ambient Beat', 'Podcast Intro', 'Nature Sounds'];
 
-    {/* Main Content Area */}
-    <Flex flex="1" direction="column" bg="gray.800" p={2} minH="0">
-      {/* Import Media Panel */}
-      <Box
-        border="2px dashed"
-        borderColor="gray.600"
-        borderRadius="md"
-        p={4}
-        mb={4}
+export default function VideoBody() {
+  const [activeTab, setActiveTab] = useState(sidebarItems[0].label);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const firstPlayRef = useRef();
+
+  const handleRecordClick = async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      toaster.create({ title: 'Camera access granted.', type: 'success' });
+    } catch (err) {
+      toaster.create({ title: 'Camera access denied.', description: err.message, type: 'error' });
+    }
+  };
+
+  const handleTabClick = (label) => {
+    setActiveTab(label);
+    if (label === 'Content library') onOpen();
+  };
+
+  return (
+    <>
+      <HStack h="auto" align="stretch" spacing={0} minH="0">
+        <VStack w="220px" bg="gray.900" color="gray.200" spacing={4} py={4}>
+          {sidebarItems.map(item => {
+            const isActive = item.label === activeTab;
+            return (
+              <VStack
+                key={item.label}
+                as="button"
+                onClick={() => handleTabClick(item.label)}
+                cursor="pointer"
+                spacing={1}
+                align="center"
+                px={4} py={2}
+                borderRadius="md"
+                bg={isActive ? 'yellow.600' : 'transparent'}
+                _hover={{ bg: isActive ? 'yellow.600' : 'gray.700' }}
+              >
+                <Icon as={item.icon} boxSize={6} color={isActive ? 'white' : 'gray.200'} />
+                <Text fontSize="xs" color={isActive ? 'white' : 'gray.200'}>
+                  {item.label}
+                </Text>
+              </VStack>
+            );
+          })}
+        </VStack>
+
+        <Flex flex="1" direction="column" bg="gray.800" p={4} minH="0">
+          {activeTab === 'Your media' && (
+            <>
+              <Box border="2px dashed" borderColor="gray.600" borderRadius="md" p={4} mb={4}>
+                <VStack spacing={2}>
+                  <Button leftIcon={<FaUpload />} colorScheme="yellow">
+                    Import media
+                  </Button>
+                  <Text textAlign="center" color="gray.400">Drag & drop media…</Text>
+                  <Text textAlign="center" color="gray.500">Videos, audio, images, GIFs</Text>
+                </VStack>
+              </Box>
+              <Flex flex="1" direction="column" justify="space-between">
+                <Center flex="2" minH="180px" maxH="30vh" bg="black" borderRadius="md" mb={2} />
+                <HStack justify="center" spacing={4} pb={2}>
+                  <Box onClick={() => toaster.create({ title: 'Rewind 5s' })} cursor="pointer">
+                    <Icon as={MdOndemandVideo} boxSize={6} />
+                  </Box>
+                  <Box onClick={() => toaster.create({ title: 'Play/Pause' })} cursor="pointer">
+                    <Icon as={FaPlayCircle} boxSize={8} />
+                  </Box>
+                  <Box onClick={() => toaster.create({ title: 'Forward 5s' })} cursor="pointer" transform="rotate(180deg)">
+                    <Icon as={MdOndemandVideo} boxSize={6} />
+                  </Box>
+                  <Text color="gray.400">0:00 / 0:00</Text>
+                </HStack>
+              </Flex>
+            </>
+          )}
+
+          {activeTab === 'Record & create' && (
+            <Center flex="1" flexDir="column" color="gray.200" py={20}>
+              <Text mb={4}>To record, we need access to camera & mic.</Text>
+              <Button colorScheme="yellow" onClick={handleRecordClick}>
+                Enable Camera & Microphone
+              </Button>
+            </Center>
+          )}
+
+          {activeTab === 'Text' && (
+            <Center flex="1"><Text color="gray.400">“Text” view not implemented yet.</Text></Center>
+          )}
+        </Flex>
+      </HStack>
+
+      <Drawer.Root
+        open={isOpen}
+        onOpenChange={(o) => !o && onClose()}
+        placement="right"
+        size="md"
       >
-        <VStack gap={2}>
-          <Button leftIcon={<FaUpload />} colorScheme="purple">
-            Import media
-          </Button>
-          <Text textAlign="center" color="gray.400">
-            Drag & drop media from your device to import
-          </Text>
-          <Text textAlign="center" color="gray.500">
-            Videos, audio, images, GIFs
-          </Text>
-        </VStack>
-      </Box>
-
-      {/* Preview & Controls */}
-      <Flex flex="1" direction="column" justify="space-between" minH="0">
-        {/* Preview Canvas */}
-        <Center
-          flex="2"
-          minH="180px"
-          maxH="30vh"
-          overflowY="auto"
-          bg="black"
-          borderRadius="md"
-          mb={2}
-        >
-          {/* Video Preview goes here */}
-        </Center>
-
-        {/* Timeline & Controls */}
-        <HStack justify="center" spacing={4} pb={2}>
-          <Box
-            as="span"
-            onClick={() => console.log('Rewind 5s')}
-            cursor="pointer"
-            _hover={{ color: 'white' }}
-          >
-            <Icon as={MdOndemandVideo} boxSize={6} />
-          </Box>
-          <Box
-            as="span"
-            onClick={() => console.log('Play/Pause')}
-            cursor="pointer"
-            _hover={{ color: 'white' }}
-          >
-            <Icon as={FaPlayCircle} boxSize={8} />
-          </Box>
-          <Box
-            as="span"
-            onClick={() => console.log('Forward 5s')}
-            cursor="pointer"
-            transform="rotate(180deg)"
-            _hover={{ color: 'white' }}
-          >
-            <Icon as={MdOndemandVideo} boxSize={6} />
-          </Box>
-          <Text color="gray.400">0:00 / 0:00</Text>
-        </HStack>
-      </Flex>
-    </Flex>
-  </HStack>
-);
-
-export default VideoBody;
+        <Portal>
+          <Drawer.Backdrop />
+          <Drawer.Positioner padding={{ base: 0, md: 4 }}>
+            <Drawer.Content bg="gray.800" color="white" rounded="md">
+              <Drawer.CloseTrigger asChild>
+                <CloseButton pos="absolute" top="1rem" right="1rem" />
+              </Drawer.CloseTrigger>
+              <Drawer.Header>
+                <Drawer.Title>Content Library</Drawer.Title>
+              </Drawer.Header>
+              <Drawer.Body>
+                <VStack spacing={4} mt={4}>
+                  {sounds.map((sound, idx) => (
+                    <HStack key={sound} justify="space-between">
+                      <HStack spacing={2}>
+                        <Icon as={FaMusic} boxSize={5} />
+                        <Text>{sound}</Text>
+                      </HStack>
+                      <Icon
+                        as={FaPlayCircle}
+                        boxSize={6}
+                        cursor="pointer"
+                        ref={idx === 0 ? firstPlayRef : null}
+                        onClick={() =>
+                          toaster.create({
+                            title: `Playing: ${sound}`,
+                            type: 'info',
+                          })
+                        }
+                      />
+                    </HStack>
+                  ))}
+                </VStack>
+              </Drawer.Body>
+              <Drawer.Footer>
+                <Drawer.ActionTrigger asChild>
+                  <Button variant="outline">Cancel</Button>
+                </Drawer.ActionTrigger>
+                <Button colorScheme="yellow">Insert</Button>
+              </Drawer.Footer>
+            </Drawer.Content>
+          </Drawer.Positioner>
+        </Portal>
+      </Drawer.Root>
+    </>
+  );
+}
