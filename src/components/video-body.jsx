@@ -15,9 +15,6 @@ import {
   FaVideo,
   FaThLarge,
   FaTextHeight,
-  FaShapes,
-  FaFilm,
-  FaPalette,
   FaUpload,
   FaPlayCircle,
 } from 'react-icons/fa';
@@ -28,19 +25,18 @@ const sidebarItems = [
   { icon: FaVideo, label: 'Record & create' },
   { icon: FaThLarge, label: 'Content library' },
   { icon: FaTextHeight, label: 'Text' },
- 
-
 ];
 
 const VideoBody = () => (
-  <HStack height="100vh" spacing={0} align="stretch">
+  <HStack h="auto" align="stretch" spacing={0} minH="0">
     {/* Sidebar */}
     <VStack
-      width="220px"
+      w="220px"
       bg="gray.900"
       color="gray.200"
-      spacing={6}
-      paddingY={6}
+      spacing={4}
+      py={4}
+      minH="0"
     >
       {sidebarItems.map((item) => (
         <VStack
@@ -60,16 +56,16 @@ const VideoBody = () => (
     </VStack>
 
     {/* Main Content Area */}
-    <Flex flex="1" direction="column" bg="gray.800" p={6}>
+    <Flex flex="1" direction="column" bg="gray.800" p={2} minH="0">
       {/* Import Media Panel */}
       <Box
         border="2px dashed"
         borderColor="gray.600"
         borderRadius="md"
-        p={8}
-        mb={6}
+        p={4}
+        mb={4}
       >
-        <VStack spacing={4}>
+        <VStack gap={2}>
           <Button leftIcon={<FaUpload />} colorScheme="purple">
             Import media
           </Button>
@@ -83,14 +79,22 @@ const VideoBody = () => (
       </Box>
 
       {/* Preview & Controls */}
-      <Flex flex="1" direction="column" justify="space-between">
+      <Flex flex="1" direction="column" justify="space-between" minH="0">
         {/* Preview Canvas */}
-        <Center flex="1" bg="black" borderRadius="md" mb={4}>
+        <Center
+          flex="2"
+          minH="180px"
+          maxH="30vh"
+          overflowY="auto"
+          bg="black"
+          borderRadius="md"
+          mb={2}
+        >
           {/* Video Preview goes here */}
         </Center>
 
         {/* Timeline & Controls */}
-        <HStack justify="center" spacing={6}>
+        <HStack justify="center" spacing={4} pb={2}>
           <Box
             as="span"
             onClick={() => console.log('Rewind 5s')}

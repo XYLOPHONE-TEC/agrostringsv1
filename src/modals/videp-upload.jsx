@@ -40,7 +40,7 @@ const VideoDialog = () => (
       <Dialog.Positioner>
         <Dialog.Content bg="#222222" color="white" p={0} m={0} borderRadius="none">
           <Dialog.Header display="flex" justifyContent="space-between" px={4} py={2}>
-            <Text fontSize="lg">Add New Video</Text>
+            <Text fontSize="sm">Upload New Video</Text>
             <Dialog.CloseTrigger asChild>
               <CloseButton color="white" border="none" _hover={{ color: 'yellow.400', bg: 'transparent' }} />
             </Dialog.CloseTrigger>
