@@ -40,7 +40,7 @@ const ProductListing = ({ products, onBack, onCreateAccount }) => (
       </HStack>
 
       {/* Products grid */}
-      <Grid w="full" flex="1" templateColumns="repeat(4, 1fr)" gap={4} position="relative">
+      <Grid w="full" flex="1" templateColumns="repeat(5, 1fr)" gap={4} position="relative">
         {products.map((p, idx) => (
           <Box
             key={p.id}

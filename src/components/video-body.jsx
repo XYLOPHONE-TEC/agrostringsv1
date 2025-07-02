@@ -1,3 +1,4 @@
+// src/components/VideoBody.jsx
 import React, { useState, useRef } from 'react';
 import {
   Box, Button, VStack, HStack, Text,
@@ -18,8 +19,6 @@ const sidebarItems = [
   { icon: FaTextHeight, label: 'Text' },
 ];
 
-const sounds = ['Piano Loop', 'Ambient Beat', 'Podcast Intro', 'Nature Sounds'];
-
 export default function VideoBody() {
   const [activeTab, setActiveTab] = useState(sidebarItems[0].label);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,9 +38,11 @@ export default function VideoBody() {
     if (label === 'Content library') onOpen();
   };
 
+  const sounds = ['Piano Loop', 'Ambient Beat', 'Podcast Intro', 'Nature Sounds'];
+
   return (
     <>
-      <HStack h="auto" align="stretch" spacing={0} minH="0">
+      <HStack h="auto" align="stretch" spacing={0} minH="220px">
         <VStack w="220px" bg="gray.900" color="gray.200" spacing={4} py={4}>
           {sidebarItems.map(item => {
             const isActive = item.label === activeTab;
@@ -55,11 +56,10 @@ export default function VideoBody() {
                 align="center"
                 px={4} py={2}
                 borderRadius="md"
-                bg={isActive ? 'yellow.600' : 'transparent'}
-                _hover={{ bg: isActive ? 'yellow.600' : 'gray.700' }}
+               
               >
-                <Icon as={item.icon} boxSize={6} color={isActive ? 'white' : 'gray.200'} />
-                <Text fontSize="xs" color={isActive ? 'white' : 'gray.200'}>
+                <Icon as={item.icon} boxSize={6} color={isActive ? 'yellow.400' : 'gray.200'} />
+                <Text fontSize="xs" color={isActive ? 'yellow.400' : 'gray.200'}>
                   {item.label}
                 </Text>
               </VStack>
@@ -72,7 +72,7 @@ export default function VideoBody() {
             <>
               <Box border="2px dashed" borderColor="gray.600" borderRadius="md" p={4} mb={4}>
                 <VStack spacing={2}>
-                  <Button leftIcon={<FaUpload />} colorScheme="yellow">
+                  <Button leftIcon={<FaUpload />} colorScheme="yellow" fontSize="xs">
                     Import media
                   </Button>
                   <Text textAlign="center" color="gray.400">Drag & drop media…</Text>
@@ -80,7 +80,7 @@ export default function VideoBody() {
                 </VStack>
               </Box>
               <Flex flex="1" direction="column" justify="space-between">
-                <Center flex="2" minH="180px" maxH="30vh" bg="black" borderRadius="md" mb={2} />
+                <Center flex="2" minH="150px" maxH="30vh" bg="black" borderRadius="md" mb={2} />
                 <HStack justify="center" spacing={4} pb={2}>
                   <Box onClick={() => toaster.create({ title: 'Rewind 5s' })} cursor="pointer">
                     <Icon as={MdOndemandVideo} boxSize={6} />
@@ -117,6 +117,7 @@ export default function VideoBody() {
         onOpenChange={(o) => !o && onClose()}
         placement="right"
         size="md"
+        initialFocusEl={() => firstPlayRef.current}
       >
         <Portal>
           <Drawer.Backdrop />
@@ -141,12 +142,7 @@ export default function VideoBody() {
                         boxSize={6}
                         cursor="pointer"
                         ref={idx === 0 ? firstPlayRef : null}
-                        onClick={() =>
-                          toaster.create({
-                            title: `Playing: ${sound}`,
-                            type: 'info',
-                          })
-                        }
+                        onClick={() => toaster.create({ title: `Playing: ${sound}`, type: 'info' })}
                       />
                     </HStack>
                   ))}
