@@ -16,11 +16,6 @@ import {
 import { Home, Search, PlusCircle, Menu } from 'lucide-react';
 import logo from '../assets/images/logo.png';
 import Product from '../assets/images/product1.jpeg';
-import vid1 from '../assets/videos/demo.mp4';
-import vid2 from '../assets/videos/demo2.mp4';
-import vid3 from '../assets/videos/demo3.mp4';
-import vid4 from '../assets/videos/demo.mp4';
-import vid5 from '../assets/videos/demo2.mp4';
 import VideoBox from './videobox';
 import ProductListing from './product-listing';
 import SignInModal from '../modals/sign-in';
@@ -34,11 +29,11 @@ const products = [
 ];
 
 const videos = [
-  { id: 1, title: 'Video One', src: vid1 },
-  { id: 2, title: 'Video Two', src: vid2 },
-  { id: 3, title: 'Video Three', src: vid3 },
-  { id: 4, title: 'Video Four', src: vid4 },
-  { id: 5, title: 'Video Five', src: vid5 },
+  { id: 1, title: 'Video One' },
+  { id: 2, title: 'Video Two' },
+  { id: 3, title: 'Video Three' },
+  { id: 4, title: 'Video Four' },
+  { id: 5, title: 'Video Five' },
 ];
 
 const scrollbarCss = {
@@ -59,7 +54,6 @@ const scrollbarCss = {
 const DashboardLayout = () => {
   const [isSignInOpen, setSignInOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0); // 0: Videos, 1: Products
-  const [selectedVideo, setSelectedVideo] = useState(videos[0]);
 
   const openSignIn = () => setSignInOpen(true);
   const handleSignIn = ({ phone, password }) => {
@@ -172,27 +166,17 @@ const DashboardLayout = () => {
               </Box>
             </>
           ) : (
-            // Videos view with sidebar previews
+            // Videos view
             <>
               <Box flex="1" overflowY="auto" css={scrollbarCss}>
                 {/* Main video display */}
-                <VideoBox src={selectedVideo.src} title={selectedVideo.title} />
+                <VideoBox compact={false} />
               </Box>
               <Box w={{ base: '100%', md: '260px' }} bg="#1a1a1a" p={2} borderRadius="sm" overflowY="auto" css={scrollbarCss}>
                 <Text fontWeight="bold" fontSize="sm">Videos</Text>
                 <VStack spacing={3} mt={2}>
                   {videos.map((v) => (
-                    <Box
-                      key={v.id}
-                      w="full"
-                      borderRadius="sm"
-                      overflow="hidden"
-                      bg={v.id === selectedVideo.id ? 'gray.800' : 'transparent'}
-                      _hover={{ bg: 'gray.700', cursor: 'pointer' }}
-                      onClick={() => setSelectedVideo(v)}
-                    >
-                      <VideoBox src={v.src} title={v.title} compact />
-                    </Box>
+                    <VideoBox key={v.id} title={v.title} compact />
                   ))}
                 </VStack>
               </Box>
