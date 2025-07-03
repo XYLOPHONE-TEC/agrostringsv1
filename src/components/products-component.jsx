@@ -70,7 +70,7 @@ export default function ProductDashboard() {
     <Box w="100%" h="100%">
       {/* Tabs + Add Button */}
       <Flex mb={4} align="center" justify="space-between" borderBottom="1px solid" borderColor="gray.600">
-        <HStack spacing={10}>
+        <HStack gap={10}>
           {['Market', 'My Produce', 'My Orders'].map(label => (
             <Text
               key={label}
