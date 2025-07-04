@@ -210,7 +210,7 @@ const DashboardLayout = () => {
     </Flex>
 
     {/* Centered floating "+" with badge cut-out effect */}
-    <Box pos="absolute" left="50%" top="0" transform="translate(-50%, -50%)" zIndex="100">
+    <Box pos="absolute" left="50%" top="8" transform="translate(-50%, -50%)" zIndex="100">
       <Circle
         size="64px"
         bg="#fada25"
