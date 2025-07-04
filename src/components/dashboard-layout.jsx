@@ -1,204 +1,101 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Flex,
-  VStack,
-  HStack,
-  Input,
-  Icon,
-  Button,
-  Text,
-  Stack,
-  Image,
-  Separator,
-  Drawer,
-} from '@chakra-ui/react';
-import { Home, Search, PlusCircle, Menu } from 'lucide-react';
-import logo from '../assets/images/logo.png';
-import Product from '../assets/images/product1.jpeg';
-import vid1 from '../assets/videos/demo.mp4';
-import vid2 from '../assets/videos/demo2.mp4';
-import vid3 from '../assets/videos/demo3.mp4';
-import vid4 from '../assets/videos/demo.mp4';
-import vid5 from '../assets/videos/demo2.mp4';
-import VideoBox from './videobox';
-import ProductListing from './product-listing';
+import React, { useState, useRef, useEffect } from 'react';
+import { Box, Flex, VStack, HStack, Input, Icon, Button, Image, Circle, Text } from '@chakra-ui/react';
+import { Home, Search, Settings, Menu, CirclePlus } from 'lucide-react';
 import SignInModal from '../modals/sign-in';
-
-const products = [
-  { id: 1, img: Product, title: 'Product One', desc: 'Short lorem ipsum.', price: 'UGX 49,000' },
-  { id: 2, img: Product, title: 'Product Two', desc: 'Another lorem ipsum.', price: 'UGX 7,900' },
-  { id: 3, img: Product, title: 'Product Three', desc: 'More lorem ipsum.', price: 'UGX 12,500' },
-  { id: 4, img: Product, title: 'Product Four', desc: 'Short lorem ipsum.', price: 'UGX 30,000' },
-  { id: 5, img: Product, title: 'Product Five', desc: 'Another lorem ipsum.', price: 'UGX 15,200' },
-];
+import VideoGallery from './videogallery';
+import VideoBox from './videobox';
+import logo from '../assets/images/logo.png';
+import demoVideo1 from '../assets/videos/demo4.mp4';
+import demoVideo2 from '../assets/videos/demo2.mp4';
 
 const videos = [
-  { id: 1, title: 'Video One', src: vid1 },
-  { id: 2, title: 'Video Two', src: vid2 },
-  { id: 3, title: 'Video Three', src: vid3 },
-  { id: 4, title: 'Video Four', src: vid4 },
-  { id: 5, title: 'Video Five', src: vid5 },
+  { src: demoVideo1, title: "Lorem ipsum dolor", subtitle: "Consectetur adipiscing elit" },
+  { src: demoVideo2, title: "Sed do eiusmod", subtitle: "Incididunt ut labore" },
 ];
-
-const scrollbarCss = {
-  scrollbarWidth: 'thin',
-  scrollbarColor: 'transparent transparent',
-  '&::-webkit-scrollbar': { width: '4px' },
-  '&::-webkit-scrollbar-track': { background: 'transparent' },
-  '&::-webkit-scrollbar-thumb': {
-    background: 'transparent',
-    borderRadius: '2px',
-    transition: 'background-color 0.2s',
-  },
-  '&:hover::-webkit-scrollbar-thumb, &::-webkit-scrollbar-thumb:window-inactive': {
-    background: 'yellow',
-  },
-};
 
 const DashboardLayout = () => {
   const [isSignInOpen, setSignInOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0); // 0: Videos, 1: Products, ...
-  const [selectedVideo, setSelectedVideo] = useState(videos[0]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const galleryRef = useRef();
 
   const openSignIn = () => setSignInOpen(true);
-  const handleSignIn = ({ phone, password }) => {
-    console.log('Signing in:', phone, password);
+  const handleSignIn = data => {
+    console.log('Signing in:', data);
     setSignInOpen(false);
   };
 
-  const SidebarContent = () => (
-    <VStack w="180px" bg="#000" p={2} align="start" spacing={2} minH="0">
-      <Image src={logo} alt="Logo" boxSize="32px" mb={1} />
-      <Separator borderColor="gray.700" />
-      {['Videos', 'Products', 'Home 3', 'Home 4', 'Home 5', 'Home 6', 'Home 7'].map((label, idx) => (
-        <React.Fragment key={idx}>
-          <HStack
-            w="full"
-            px={2}
-            py={1}
-            bg={idx === activeIndex ? 'gray.800' : 'transparent'}
-            _hover={{ bg: 'gray.800', cursor: 'pointer' }}
-            borderRadius="md"
-            onClick={() => setActiveIndex(idx)}
-          >
-            <Home size={16} color={idx === activeIndex ? '#fada25' : '#888'} />
-            <Text fontSize="xs" color={idx === activeIndex ? 'white' : 'gray.400'}>
-              {label}
-            </Text>
-          </HStack>
-          {idx < 6 && <Separator borderColor="gray.700" />}
-        </React.Fragment>
-      ))}
-    </VStack>
-  );
+  useEffect(() => {
+    const node = galleryRef.current?.children[currentIndex];
+    node?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [currentIndex]);
 
   return (
     <Flex h="100vh" bg="#111" color="white" fontSize="sm" overflow="hidden">
-      {/* Mobile Sidebar */}
-      <Drawer.Root>
-        <Drawer.Trigger as={Box} display={{ base: 'block', md: 'none' }} p={2}>
-          <Icon as={Menu} boxSize={6} cursor="pointer" />
-        </Drawer.Trigger>
-        <Drawer.Backdrop />
-        <Drawer.Positioner>
-          <Drawer.Content bg="#000" w="180px">
-            <Drawer.CloseTrigger>
-              <Icon as={Menu} boxSize={6} m={2} cursor="pointer" />
-            </Drawer.CloseTrigger>
-            <Drawer.Header>
-              <Text ml={2} fontWeight="bold">Menu</Text>
-            </Drawer.Header>
-            <Drawer.Body p={0}><SidebarContent /></Drawer.Body>
-            <Drawer.Footer>
-              <Button w="full" size="sm" bg="gray.700" onClick={() => Drawer.CloseTrigger()}>
-                Close
-              </Button>
-            </Drawer.Footer>
-          </Drawer.Content>
-        </Drawer.Positioner>
-      </Drawer.Root>
-
-      {/* Desktop Sidebar */}
+      {/* Sidebar */}
       <Box display={{ base: 'none', md: 'block' }}>
-        <SidebarContent />
+        <VStack w="180px" bg="#000" p={2} spacing={2} minH="100vh" align="start">
+          <Image src={logo} alt="Logo" boxSize="32px" mb={1} />
+          {['Home','Products','Settings'].map((label,i) => (
+            <HStack key={i} w="full" px={2} py={1} _hover={{ bg:'gray.800', cursor:'pointer' }} borderRadius="md">
+              <Icon as={[Home,Search,Settings][i]} color="gray.400" />
+              <Text fontSize="xs" color="gray.400">{label}</Text>
+            </HStack>
+          ))}
+          <Box h="1px" w="full" bg="gray.700" />
+          <Button size="xs" w="full" bg="yellow.400" color="black" onClick={openSignIn}>Login</Button>
+        </VStack>
       </Box>
 
-      {/* Main Content */}
-      <Flex flex="1" flexDir="column" p={4} minH="0">
-        {/* Top Bar */}
-        <Flex mb={4} align="center" justify="space-between" flexShrink={0}>
-          <Box position="relative" w={{ base: '60%', md: '45%' }} bg="gray.700" borderRadius="sm" overflow="hidden">
-            <Icon as={Search} boxSize={4} color="gray.300" position="absolute" left="8px" top="50%" transform="translateY(-50%)" />
-            <Input pl="32px" placeholder="Search…" bg="transparent" border="none" fontSize="xs" _placeholder={{ color: 'gray.400', fontSize: 'xs' }} _focus={{ boxShadow: 'none' }} py={1} />
+      {/* Main content */}
+      <Flex flex="1" flexDir="column">
+        {/* Top bar */}
+        <Flex display={{ base: 'none', md: 'flex' }} mb={4} px={4} pt={4} align="center" justify="space-between">
+          <Box pos="relative" w="45%" bg="gray.700" borderRadius="sm">
+            <Icon as={Search} boxSize={4} color="gray.300" pos="absolute" left="8px" top="50%" transform="translateY(-50%)" />
+            <Input pl="32px" placeholder="Search…" bg="transparent" border="none" fontSize="xs" _placeholder={{ color:'gray.400' }} />
           </Box>
           <HStack spacing={2} fontSize="xs">
-            <Box border="2px dashed gray.500" borderRadius="sm" p={1} _hover={{ borderColor: 'gray.400', cursor: 'pointer' }}>
-              <HStack spacing={1} p={1} _hover={{ bg: 'gray.800', cursor: 'pointer' }}>
-                <PlusCircle size={18} color="white" />
-                <Text>Video</Text>
-              </HStack>
-            </Box>
-            <Button size="xs" bg="yellow.400" color="black" _hover={{ bg: 'yellow.300' }} onClick={openSignIn}>Sign In</Button>
-            <Button size="xs" bg="gray.700" _hover={{ bg: 'gray.600' }}>EN</Button>
-            <Button size="xs" bg="gray.700" _hover={{ bg: 'gray.600' }}>Mode</Button>
+            <Box border="2px dashed gray.500" borderRadius="sm" p={1}><CirclePlus size={18} /></Box>
+            <Button size="xs" bg="yellow.400" color="black" onClick={openSignIn}>Sign In</Button>
+            <Button size="xs" bg="gray.700">EN</Button>
+            <Button size="xs" bg="gray.700">Mode</Button>
           </HStack>
         </Flex>
 
-        {/* Content Area */}
-        <Flex flex="1" bg="#222" p={3} borderRadius="sm" overflow="hidden" flexDir={{ base: 'column', md: 'row' }}>
-          {activeIndex === 1 ? (
-            /* Products View */
-            <>
-              <Box flex="1" overflowY="auto" css={scrollbarCss}>
-                <ProductListing products={products} />
-              </Box>
-              <Box w={{ base: '100%', md: '260px' }} bg="#1a1a1a" p={2} borderRadius="sm" overflowY="auto" css={scrollbarCss}>
-                <Text fontWeight="bold" fontSize="sm">Recently Added</Text>
-                <VStack spacing={3} mt={2}>
-                  {products.map((p) => (
-                    <Box key={p.id} bg="gray.700" borderRadius="sm" w="full" overflow="hidden">
-                      <Image src={p.img} alt={p.title} w="100%" h="100px" objectFit="cover" />
-                      <Stack p={2} spacing={1} fontSize="sm">
-                        <Text fontWeight="semibold">{p.title}</Text>
-                        <Text color="gray.300">{p.desc}</Text>
-                        <Text fontWeight="bold" color="green.300">{p.price}</Text>
-                      </Stack>
-                    </Box>
-                  ))}
-                </VStack>
-              </Box>
-            </>
-          ) : (
-            /* Videos View with thumbnails on the RIGHT */
-            <>
-              <Box flex="1" overflowY="auto" css={scrollbarCss}>
-                <VideoBox src={selectedVideo.src} title={selectedVideo.title} />
-              </Box>
-              <Box w={{ base: '100%', md: '260px' }} bg="#1a1a1a" p={2} borderRadius="sm" overflowY="auto" css={scrollbarCss}>
-                <Text fontWeight="bold" fontSize="sm">Videos</Text>
-                <VStack spacing={3} mt={2}>
-                  {videos.map((v) => (
-                    <Box
-                      key={v.id}
-                      w="full"
-                      borderRadius="sm"
-                      overflow="hidden"
-                      bg={v.id === selectedVideo.id ? 'gray.800' : 'transparent'}
-                      _hover={{ bg: 'gray.700', cursor: 'pointer' }}
-                      onClick={() => setSelectedVideo(v)}
-                    >
-                      <VideoBox src={v.src} title={v.title} compact />
-                    </Box>
-                  ))}
-                </VStack>
-              </Box>
-            </>
-          )}
+        {/* Video + Gallery */}
+        <Flex flex="1" overflow="hidden">
+          <Box flex="1" h="100%">
+            <VideoBox videos={videos} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+          </Box>
+          <Box w="200px" display={{ base: 'none', md: 'block' }} bg="#111">
+            <VideoGallery
+              ref={galleryRef}
+              videos={videos}
+              currentIndex={currentIndex}
+              onSelect={setCurrentIndex}
+            />
+          </Box>
         </Flex>
       </Flex>
 
       <SignInModal open={isSignInOpen} onOpenChange={setSignInOpen} onSubmit={handleSignIn} />
+
+      {/* Mobile bottom nav */}
+      <Box display={{ base: 'block', md: 'none' }} pos="fixed" bottom="0" left="0" right="0" h="70px" bg="#000" borderTop="1px solid #333" zIndex="99">
+        <Flex h="100%" align="center">
+          {['Home','Products','Farmer','My hub','My Profile'].map((label,i) => (
+            <Flex key={i} flex="1" direction="column" align="center" justify="center">
+              <Icon as={Menu} boxSize={4} color="white" />
+              <Text fontSize="xs" mt={1}>{label}</Text>
+            </Flex>
+          ))}
+        </Flex>
+        <Box pos="absolute" left="50%" top="8" transform="translate(-50%,-50%)">
+          <Circle size="54px" bg="#fada25" border="4px solid #000" cursor="pointer" onClick={openSignIn}>
+            <Icon as={CirclePlus} boxSize={4} color="black" />
+          </Circle>
+        </Box>
+      </Box>
     </Flex>
   );
 };
