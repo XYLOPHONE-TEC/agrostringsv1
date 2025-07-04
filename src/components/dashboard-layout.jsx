@@ -99,7 +99,8 @@ const VideoBox = () => {
     }
   }, [index, soundOn]);
 
-  const handleIconClick = (id, onClick) => {
+  const handleIconClick = (id, onClick, e) => {
+    if (e) e.stopPropagation(); // Prevent parent click
     setClickedIcon(id);
     if (id === 'comment') setShowCommentInput(true);
     onClick();
@@ -166,24 +167,9 @@ const VideoBox = () => {
       <VStack pos="absolute" right="4" top="50%" transform="translateY(-50%)" spacing={6} zIndex={10}>
         {iconsData.map((d, i) => (
           <Flex key={d.id} align="center" pos="relative">
-            {showCommentInput && d.id === 'comment' && (
-              <Box pos="absolute" right="60" p={4} bg="rgba(0,0,0,0.7)" borderRadius="md" zIndex={20}>
-                <Input
-                  placeholder="Write comment..."
-                  bg="white"
-                  color="black"
-                  size="sm"
-                  value={commentText}
-                  onChange={e => setCommentText(e.target.value)}
-                  mb={2}
-                  autoFocus
-                />
-                <Button size="sm" w="full" onClick={handleCommentSubmit} isDisabled={!commentText.trim()}>Submit</Button>
-              </Box>
-            )}
             <motion.div custom={i} initial="hidden" animate="visible" exit="exit" variants={iconVariants}>
               <motion.div animate={clickedIcon === d.id ? clickAnimation : { scale: 1 }}>
-                <Flex direction="column" align="center" cursor="pointer" onClick={() => handleIconClick(d.id, d.onClick)}>
+                <Flex direction="column" align="center" cursor="pointer" onClick={e => handleIconClick(d.id, d.onClick, e)}>
                   <Box p={2} bg="white" borderRadius="full">
                     <Icon as={d.icon} boxSize={6} color={d.active ? d.colorActive : 'black'} />
                   </Box>
@@ -194,6 +180,64 @@ const VideoBox = () => {
           </Flex>
         ))}
       </VStack>
+
+      {/* TikTok-style comment input at bottom overlay */}
+      {showCommentInput && (
+        <AnimatePresence>
+          <Box
+            as={motion.div}
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            pos="absolute"
+            left={0}
+            bottom={0}
+            w="100%"
+            h="65%"
+            bg="rgba(20,20,20,0.98)"
+            borderTopRadius="2xl"
+            zIndex={120} // Higher than nav bar
+            display="flex"
+            flexDir="column"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Drag bar */}
+            <Flex justify="center" align="center" pt={2} pb={1}>
+              <Box w="40px" h="5px" bg="gray.500" borderRadius="full" />
+            </Flex>
+            {/* No comments message */}
+            <Flex flex={1} align="center" justify="center">
+              <Text color="gray.400" fontSize="lg">No comments yet</Text>
+            </Flex>
+            {/* Input at bottom, with extra padding for nav bar */}
+            <Flex p={2} pb={{ base: '80px', md: 2 }} borderTop="1px solid #333" align="center" bg="rgba(30,30,30,0.95)">
+              <Input
+                placeholder="Add a comment..."
+                bg="white"
+                color="black"
+                size="md"
+                value={commentText}
+                onChange={e => setCommentText(e.target.value)}
+                borderRadius="full"
+                mr={2}
+                flex={1}
+                autoFocus
+              />
+              <Button
+                size="md"
+                colorScheme="yellow"
+                borderRadius="full"
+                onClick={handleCommentSubmit}
+                isDisabled={!commentText.trim()}
+                px={4}
+              >
+                Send
+              </Button>
+            </Flex>
+          </Box>
+        </AnimatePresence>
+      )}
     </Box>
   );
 };
