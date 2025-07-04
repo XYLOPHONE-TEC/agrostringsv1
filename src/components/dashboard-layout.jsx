@@ -196,12 +196,12 @@ const DashboardLayout = () => {
       </Flex>
       <Flex flex="1" direction="column" align="center" justify="center" pt={1}>
         <Icon as={Search} boxSize={6} color="white" />
-        <Text fontSize="xs" mt={1} color="white">Search</Text>
+        <Text fontSize="xs" mt={1} color="white">Products</Text>
       </Flex>
       <Flex flex="1" /> {/* Empty space for FAB */}
       <Flex flex="1" direction="column" align="center" justify="center" pt={1}>
         <Icon as={Menu} boxSize={6} color="white" />
-        <Text fontSize="xs" mt={1} color="white">Cart</Text>
+        <Text fontSize="xs" mt={1} color="white">Farmer</Text>
       </Flex>
       <Flex flex="1" direction="column" align="center" justify="center" pt={1}>
         <Icon as={Menu} boxSize={6} color="white" />
@@ -212,14 +212,14 @@ const DashboardLayout = () => {
     {/* Centered floating "+" with badge cut-out effect */}
     <Box pos="absolute" left="50%" top="0" transform="translate(-50%, -50%)" zIndex="100">
       <Circle
-        size="84px"
+        size="64px"
         bg="#fada25"
         border="4px solid #000"
         shadow="lg"
         cursor="pointer"
         onClick={() => console.log('CirclePlus clicked')}
       >
-        <Icon as={CirclePlus} boxSize={10} color="black" />
+        <Icon as={CirclePlus} boxSize={6} color="black" />
       </Circle>
     </Box>
   </Box>
