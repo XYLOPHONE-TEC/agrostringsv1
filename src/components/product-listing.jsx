@@ -1,110 +1,66 @@
 import React from 'react';
-import {
-  Box,
-  Grid,
-  Image,
-  Stack,
-  Text,
-  Button,
-  VStack,
-  HStack,
-} from '@chakra-ui/react';
+import '../index.css';
+import { Box, Text, Button } from '@chakra-ui/react';
+import MarketProduce from './market-produce-products';
+import product1 from '../assets/images/product.png';
+import product2 from '../assets/images/tomatoes.png';
+import product3 from '../assets/images/brocoli.png';
 
-const scrollbarCss = {
-  scrollbarWidth: 'thin',
-  scrollbarColor: 'transparent transparent',
-  '&::-webkit-scrollbar': { width: '4px' },
-  '&::-webkit-scrollbar-track': { background: 'transparent' },
-  '&::-webkit-scrollbar-thumb': {
-    background: 'yellow',
-    borderRadius: '2px',
-  },
-};
+// Create 12 items, blur from index 6 onward
+const allProduceItems = Array.from({ length: 12 }, (_, idx) => {
+  const base = idx % 4;
+  const images = [product1, product2, product3, product3];
+  const names = ['Fresh Lettuce', 'Organic Tomatoes', 'Carrots', 'Broccoli'];
+  const farms = ['Alta Farm', 'Green Valley', 'Hillside Farm', 'Hillside Farm'];
+  const locations = ['Mubende', 'Wakiso', 'Kabale', 'Kabale'];
+  const quantities = ['12 crates', '20 baskets', '15 sacks', '10 crates'];
 
-const ProductListing = ({ products, onBack, onCreateAccount }) => (
-  <Box position="relative" w="full" h="full">
-    {/* Scrollable main */}
-    <VStack
-      spacing={4}
-      w="full"
-      h="full"
-      overflowY="auto"
-      p={4}
-      css={scrollbarCss}
+  return {
+    id: idx + 1,
+    name: names[base],
+    farm: farms[base],
+    location: locations[base],
+    quantity: quantities[base],
+    image: images[base],
+    isBlurred: idx >= 6, // Blur last 6 items
+  };
+});
+
+export default function ProductDashboard() {
+  return (
+    <Box
+      w="100%"
+      h="100vh"
+      pos="relative"
+      
     >
-      {/* Back button */}
-      <HStack w="full" justify="flex-start">
-        <Button size="sm" onClick={onBack}>
-          ← Back
-        </Button>
-      </HStack>
+      <MarketProduce items={allProduceItems} />
 
-      {/* Products grid */}
-      <Grid w="full" flex="1" templateColumns="repeat(5, 1fr)" gap={4} position="relative">
-        {products.map((p, idx) => (
-          <Box
-            key={p.id}
-            bg="gray.700"
-            borderRadius="md"
-            overflow="hidden"
-            w="100%"
-            // dim last row (last 4 items) by opacity
-            opacity={ idx >= products.length - 4 ? 0.4 : 1 }
-          >
-            {/* Image wrapper with bottom gradient */}
-            <Box position="relative" w="100%" h="120px" overflow="hidden">
-              <Image
-                src={p.img}
-                alt={p.title}
-                w="100%"
-                h="120px"
-                objectFit="cover"
-              />
-              <Box
-                position="absolute"
-                bottom="0"
-                left="0"
-                w="100%"
-                h="40px"
-                bgGradient="linear(to-t, #111, transparent)"
-              />
-            </Box>
-
-            {/* Product info */}
-            <Stack p={3} spacing={1}>
-              <Text fontWeight="semibold">{p.title}</Text>
-              <Text fontSize="sm" color="gray.300">
-                {p.desc}
-              </Text>
-              <Text fontWeight="bold" color="green.300">
-                {p.price}
-              </Text>
-            </Stack>
-          </Box>
-        ))}
-
-        {/* Create Account CTA over the dimmed row */}
-        <Box
-          position="absolute"
-          bottom={0}
-          left="50%"
-          transform="translateX(-50%)"
-          w="100%"
-          bg="rgba(0,0,0,0.6)"
-          borderRadius="md"
-          p={20}
-          textAlign="center"
+      {/* Full-width bottom overlay */}
+      <Box
+        pos="absolute"
+        bottom="-100"
+        left="0"
+        w="100%"
+        py={20}
+        bg="rgba(17, 17, 17, 0.96)"
+        backdropFilter="auto"
+        backdropBlur="20px"
+        textAlign="center"
+      >
+        <Text fontSize="sm" color="gray.300" mb={2}>
+          Enjoy full access to the products
+        </Text>
+        <Button
+          size="sm"
+          bg="#fada25"
+          color="black"
+          _hover={{ bg: '#fada25cc' }}
+          onClick={() => alert('Create Account')}
         >
-          <Text mb={2} fontSize="lg" fontWeight="bold" color="white">
-            Enjoy full access to all products!
-          </Text>
-          <Button colorScheme="yellow" bg='#fada25' color='black' onClick={onCreateAccount}>
-            Create Account
-          </Button>
-        </Box>
-      </Grid>
-    </VStack>
-  </Box>
-);
-
-export default ProductListing;
+          Create Account
+        </Button>
+      </Box>
+    </Box>
+  );
+}

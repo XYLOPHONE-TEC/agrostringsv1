@@ -74,7 +74,7 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
                 <motion.div animate={clickedIcon === d.id ? clickAnim : { scale:1 }}>
                   <Flex direction="column" align="center" cursor="pointer" onClick={() => { setClickedIcon(d.id); d.onClick(); setTimeout(()=>setClickedIcon(null),400); }}>
                     <Box bg="rgba(0, 0, 0, 0.74)" borderRadius="full" p="2">
-                      <Icon as={d.icon} boxSize="4" color={d.active ? d.color : "white"} />
+                      <Icon as={d.icon} boxSize="3" color={d.active ? d.color : "white"} />
                     </Box>
                     <Text color="white" fontSize="sm">{d.count}</Text>
                   </Flex>
@@ -95,3 +95,6 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
 };
 
 export default VideoBox;
+
+
+
