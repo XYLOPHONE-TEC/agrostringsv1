@@ -18,7 +18,7 @@ import VideoBox from './videobox';
 import ProductListing from './product-listing';
 import FarmerChannel from './farmer-channel';
 import logo from '../assets/images/logo.png';
-import demoVideo1 from '../assets/videos/demo3.mp4';
+import demoVideo1 from '../assets/videos/demo.mp4';
 import demoVideo2 from '../assets/videos/demo2.mp4';
 
 const videos = [
