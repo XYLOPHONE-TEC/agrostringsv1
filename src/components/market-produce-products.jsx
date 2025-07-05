@@ -14,21 +14,20 @@ import {
 export default function MarketProduce({ items, onAddPrice }) {
   if (items.length === 0) return <Text color="gray.400">No products available.</Text>;
 
-  // Example unit prices per kg in UGX
   const unitPrices = {
     'Fresh Lettuce': 'UGX 4,250/kg',
     'Organic Tomatoes': 'UGX 4,000/kg',
     'Carrots': 'UGX 4,000/kg',
   };
-  const columnCount = useBreakpointValue({ base: 2, sm: 2, md: 3, lg: 4 });
 
+  const columnCount = useBreakpointValue({ base: 2, sm: 2, md: 3, lg: 4 });
 
   return (
     <Grid
       templateColumns={`repeat(${columnCount}, 1fr)`}
-      gap={{ base: 3, md: 4 }}
-      px={{ base: 3, md: 6 }}
-      py={{ base: 4, md: 6 }}
+      gap={{ base: 2, md: 3 }}             // Reduced gap
+      px={{ base: 2, md: 4 }}              // Smaller horizontal padding
+      py={{ base: 3, md: 4 }}
     >
       {items.map((item) => {
         const blurred = item.isBlurred;
@@ -36,11 +35,11 @@ export default function MarketProduce({ items, onAddPrice }) {
         return (
           <Box
             key={item.id}
-            p={4}
+            p={1}                             // Slightly tighter padding inside each card
             rounded="md"
             shadow="md"
             color="white"
-          
+        
             position="relative"
             filter={blurred ? 'blur(4px)' : 'none'}
             opacity={blurred ? 0.6 : 1}
@@ -53,7 +52,7 @@ export default function MarketProduce({ items, onAddPrice }) {
               alt={item.name}
               borderRadius="md"
               w="100%"
-              h={{ base: '120px', sm: '140px', md: '150px' }}
+              h={{ base: '160px', sm: '180px', md: '200px' }}  // Increased image height
               objectFit="cover"
               mb={2}
             />
