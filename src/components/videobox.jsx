@@ -1,8 +1,12 @@
-// Install: npm install react-swipeable
+// Remember to install react-swipeable:
+// npm install react-swipeable
 
 import React, { useRef, useEffect, useCallback, useState } from "react";
-import { Box, Flex, VStack, Icon, Input, Button, Text } from "@chakra-ui/react";
-import { HeartIcon, Star, Share2, MessageSquare, Volume2, VolumeX } from "lucide-react";
+import { Box, Flex, VStack, Icon, Input, Button, Text, Center } from "@chakra-ui/react";
+import {
+  HeartIcon, Star, Share2, MessageSquare,
+  Volume2, VolumeX, Play, Pause
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
 
@@ -29,8 +33,8 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
   const [clickedIcon, setClickedIcon] = useState(null);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [commentText, setCommentText] = useState("");
+  const [showPlayIcon, setShowPlayIcon] = useState(false);
 
-  // Swipe handlers
   const changeIndex = useCallback(delta => {
     setCurrentIndex(i => (i + delta + videos.length) % videos.length);
   }, [videos.length, setCurrentIndex]);
@@ -71,6 +75,16 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
     { id: "sound", icon: soundOn ? Volume2 : VolumeX, active: soundOn, color: "white", onClick: () => setSoundOn(s => !s), count: 0 },
   ];
 
+  const handleVideoTap = () => {
+    const vid = videoRef.current;
+    if (!vid) return;
+    if (vid.paused) vid.play();
+    else vid.pause();
+
+    setShowPlayIcon(true);
+    setTimeout(() => setShowPlayIcon(false), 600);
+  };
+
   return (
     <Box
       {...handlers}
@@ -84,6 +98,7 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
         setHovered(false);
         setShowCommentInput(false);
       }}
+      onClick={handleVideoTap}
     >
       <Box
         as="video"
@@ -101,6 +116,26 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
         }}
       />
 
+      {/* Play/Pause icon overlay */}
+      <AnimatePresence>
+        {showPlayIcon && (
+          <Center pos="absolute" top="0" left="0" w="100%" h="100%">
+            <motion.div
+              key="play-pause"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Box bg="rgba(0,0,0,0.6)" p="4" borderRadius="full">
+                <Icon as={videoRef.current?.paused ? Play : Pause} boxSize={8} color="white" />
+              </Box>
+            </motion.div>
+          </Center>
+        )}
+      </AnimatePresence>
+
+      {/* Action icons */}
       <AnimatePresence>
         {hovered && (
           <VStack pos="absolute" right="4" top="50%" transform="translateY(-50%)" spacing="6">
@@ -117,12 +152,10 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
                       setTimeout(() => setClickedIcon(null), 400);
                     }}
                   >
-                    <Box bg="rgba(0, 0, 0, 0.74)" borderRadius="full" p="2">
+                    <Box bg="rgba(0,0,0,0.74)" borderRadius="full" p="2">
                       <Icon as={d.icon} boxSize="3" color={d.active ? d.color : "white"} />
                     </Box>
-                    <Text color="white" fontSize="sm">
-                      {d.count}
-                    </Text>
+                    <Text color="white" fontSize="sm">{d.count}</Text>
                   </Flex>
                 </motion.div>
                 {d.id === "comment" && showCommentInput && (
@@ -161,5 +194,3 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
 };
 
 export default VideoBox;
-
-
