@@ -1,7 +1,15 @@
 // src/components/MarketProduce.jsx
 import React from 'react';
-import { Grid, Box, Image, VStack, HStack, Text, Badge } from '@chakra-ui/react';
-import { FiTag } from 'react-icons/fi';
+import {
+  Grid,
+  Box,
+  Image,
+  VStack,
+  HStack,
+  Text,
+  Badge,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 
 export default function MarketProduce({ items, onAddPrice }) {
   if (items.length === 0) return <Text color="gray.400">No products available.</Text>;
@@ -13,10 +21,19 @@ export default function MarketProduce({ items, onAddPrice }) {
     'Carrots': 'UGX 4,000/kg',
   };
 
+  // Dynamically adjust number of columns based on screen size
+  const columnCount = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4 });
+
   return (
-    <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={4} p={4}>
-      {items.map((item, idx) => {
-        const blurred = item.isBlurred;  // Expect `isBlurred` flag on each item
+    <Grid
+      templateColumns={`repeat(${columnCount}, 1fr)`}
+      gap={{ base: 3, md: 4 }}
+      px={{ base: 3, md: 6 }}
+      py={{ base: 4, md: 6 }}
+    >
+      {items.map((item) => {
+        const blurred = item.isBlurred;
+
         return (
           <Box
             key={item.id}
@@ -24,30 +41,31 @@ export default function MarketProduce({ items, onAddPrice }) {
             rounded="md"
             shadow="md"
             color="white"
-          bg="gray.800"
+            bg="gray.800"
             position="relative"
             filter={blurred ? 'blur(4px)' : 'none'}
             opacity={blurred ? 0.6 : 1}
             pointerEvents={blurred ? 'none' : 'auto'}
             _hover={{ bg: blurred ? 'gray.700' : 'gray.800' }}
+            transition="0.3s ease"
           >
             <Image
               src={item.image}
               alt={item.name}
               borderRadius="md"
               w="100%"
-              h="150px"
+              h={{ base: '120px', sm: '140px', md: '150px' }}
               objectFit="cover"
               mb={2}
-             
-
             />
             <VStack align="start" spacing={0}>
               <HStack justify="space-between" w="100%">
                 <Text fontSize="md" fontWeight="semibold">{item.name}</Text>
                 <Badge fontSize="0.7em" colorScheme="green">{item.quantity}</Badge>
               </HStack>
-              <Text fontSize="xs" color="gray.300">{item.farm} – {item.location}</Text>
+              <Text fontSize="xs" color="gray.300">
+                {item.farm} – {item.location}
+              </Text>
               <Text fontSize="sm" color="#fada25" mt={1} fontWeight="bold">
                 {unitPrices[item.name] || 'UGX --/kg'}
               </Text>
@@ -61,6 +79,8 @@ export default function MarketProduce({ items, onAddPrice }) {
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
+                px={2}
+                textAlign="center"
               >
                 <Text fontSize="sm" color="white">
                   More products available after signup
