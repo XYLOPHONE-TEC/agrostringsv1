@@ -24,7 +24,7 @@ export default function MarketProduce({ items, onAddPrice }) {
             rounded="md"
             shadow="md"
             color="white"
-         
+          bg="gray.800"
             position="relative"
             filter={blurred ? 'blur(4px)' : 'none'}
             opacity={blurred ? 0.6 : 1}
@@ -36,9 +36,11 @@ export default function MarketProduce({ items, onAddPrice }) {
               alt={item.name}
               borderRadius="md"
               w="100%"
-              h="120px"
+              h="150px"
               objectFit="cover"
               mb={2}
+             
+
             />
             <VStack align="start" spacing={0}>
               <HStack justify="space-between" w="100%">
