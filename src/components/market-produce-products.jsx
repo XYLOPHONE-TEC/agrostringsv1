@@ -52,7 +52,7 @@ export default function MarketProduce({ items, onAddPrice }) {
               alt={item.name}
               borderRadius="md"
               w="100%"
-              h={{ base: '160px', sm: '180px', md: '200px' }}  // Increased image height
+              h={{ base: '160px', sm: '180px', md: '100px' }}  // Increased image height
               objectFit="cover"
               mb={2}
             />
