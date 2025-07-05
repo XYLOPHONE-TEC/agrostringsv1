@@ -1,4 +1,3 @@
-
 // Don't forget: npm install react-swipeable
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -8,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import {
   Home, Video, Upload, Settings, TvIcon,
-  Search, Menu, CirclePlus
+  Search, Menu, CirclePlus, ShoppingCart
 } from 'lucide-react';
 import { useSwipeable } from 'react-swipeable';
 
@@ -59,6 +58,16 @@ export default function DashboardLayout() {
     node?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, [currentIndex]);
 
+  // Mobile bottom navigation tabs: connect to correct activeIndex sections
+  const mobileTabs = [
+    { label: 'Home', icon: Home, index: 0 },
+    { label: 'Products', icon: ShoppingCart, index: 4 },
+   
+    { label: 'Upload', icon: Upload, index: 3 },
+     { label: 'Videos', icon: Video, index: 2 },
+    { label: 'Settings', icon: Settings, index: 5 },
+  ];
+
   return (
     <Flex h="100vh" bg="#111" color="white" fontSize="sm" overflow="hidden">
       {/* Desktop Sidebar */}
@@ -89,7 +98,7 @@ export default function DashboardLayout() {
       </Box>
 
       {/* Main Content Area */}
-      <Flex {...handlers} flex="1" flexDir="column">
+      <Flex {...handlers} flex="1" flexDir="column" overflow="hidden">
         {/* Desktop Top Bar */}
         <Flex display={{ base: 'none', md: 'flex' }} mb={4} px={4} pt={4} align="center" justify="space-between">
           <Box pos="relative" w="45%" bg="gray.700" borderRadius="sm">
@@ -124,11 +133,21 @@ export default function DashboardLayout() {
 
       <SignInModal open={isSignInOpen} onOpenChange={setSignInOpen} onSubmit={handleSignIn} />
 
+      {/* Mobile Bottom Navigation */}
       <Box display={{ base: 'block', md: 'none' }} pos="fixed" bottom="0" left="0" right="0" h="70px" bg="#000" borderTop="1px solid #333" zIndex="99">
         <Flex h="100%" align="center">
-          {['Home','Live','Farm','Products','Profile'].map((label,i) => (
-            <Flex key={i} flex="1" direction="column" align="center" justify="center">
-              <Icon as={Menu} boxSize={4} color="white" />
+          {mobileTabs.map(({ label, icon, index }) => (
+            <Flex
+              key={index}
+              flex="1"
+              direction="column"
+              align="center"
+              justify="center"
+              cursor="pointer"
+              onClick={() => setActiveIndex(index)}
+              color={activeIndex === index ? 'yellow.400' : 'white'}
+            >
+              <Icon as={icon} boxSize={5} />
               <Text fontSize="xs" mt={1}>{label}</Text>
             </Flex>
           ))}
@@ -142,6 +161,3 @@ export default function DashboardLayout() {
     </Flex>
   );
 }
-
-
- 
