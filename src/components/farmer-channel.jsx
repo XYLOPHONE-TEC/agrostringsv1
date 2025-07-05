@@ -73,7 +73,7 @@ const sampleVideos = [
 
 export default function FarmerChannel() {
   return (
-    <Box p={4} bg="black" h="100%" display="flex" flexDirection="column">
+    <Box p={4} h="100%" display="flex" flexDirection="column">
       <Text fontSize="lg" fontWeight="bold" mb={4} color="white">
         Farmer Channel Videos
       </Text>
