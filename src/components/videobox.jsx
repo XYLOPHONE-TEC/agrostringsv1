@@ -1,5 +1,5 @@
-// Remember to install react-swipeable:
-// npm install react-swipeable
+// Install dependencies:
+// npm install react-swipeable framer-motion
 
 import React, { useRef, useEffect, useCallback, useState } from "react";
 import { Box, Flex, VStack, Icon, Input, Button, Text, Center } from "@chakra-ui/react";
@@ -10,6 +10,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
 
+// Animation settings
 const iconVariants = {
   hidden: { y: 50, opacity: 0, scale: 0.5 },
   visible: i => ({
@@ -22,30 +23,36 @@ const iconVariants = {
 };
 const clickAnim = { scale: [1, 1.4, 1], transition: { duration: 0.4, ease: "easeInOut" } };
 
-const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
+export default function VideoBox({ videos, currentIndex, setCurrentIndex }) {
   const videoRef = useRef();
   const [liked, setLiked] = useState(false);
   const [fav, setFav] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
   const [sharesCount, setSharesCount] = useState(0);
   const [soundOn, setSoundOn] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [clickedIcon, setClickedIcon] = useState(null);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [showPlayIcon, setShowPlayIcon] = useState(false);
 
+  // Change video index based on swipe/wheel
   const changeIndex = useCallback(delta => {
     setCurrentIndex(i => (i + delta + videos.length) % videos.length);
+    setUserInteracted(true);
   }, [videos.length, setCurrentIndex]);
 
+  // Swipe handlers
   const handlers = useSwipeable({
     onSwipedUp: () => changeIndex(1),
     onSwipedDown: () => changeIndex(-1),
+    onTap: () => setUserInteracted(true),
     trackMouse: false,
     preventScrollOnSwipe: true,
   });
 
+  // Start video playback and mute/unmute based on soundOn
   useEffect(() => {
     const vid = videoRef.current;
     if (vid) {
@@ -57,6 +64,14 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
     }
   }, [currentIndex, soundOn]);
 
+  // Automatically unmute on first interaction
+  useEffect(() => {
+    if (userInteracted && !soundOn) {
+      setSoundOn(true);
+    }
+  }, [userInteracted, soundOn]);
+
+  // Mouse wheel navigation
   useEffect(() => {
     const handleWheel = e => {
       e.preventDefault();
@@ -67,20 +82,20 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
     return () => window.removeEventListener("wheel", handleWheel);
   }, [changeIndex]);
 
+  // Icon config
   const icons = [
     { id: "like", icon: HeartIcon, active: liked, color: "red", onClick: () => setLiked(v => !v), count: liked ? 1 : 0 },
     { id: "favorite", icon: Star, active: fav, color: "yellow.400", onClick: () => setFav(v => !v), count: fav ? 1 : 0 },
     { id: "share", icon: Share2, active: false, color: "white", onClick: () => setSharesCount(c => c + 1), count: sharesCount },
     { id: "comment", icon: MessageSquare, active: false, color: "white", onClick: () => setShowCommentInput(v => !v), count: commentsCount },
-    { id: "sound", icon: soundOn ? Volume2 : VolumeX, active: soundOn, color: "white", onClick: () => setSoundOn(s => !s), count: 0 },
+    { id: "sound", icon: soundOn ? Volume2 : VolumeX, active: soundOn, color: "white", onClick: () => setSoundOn(s => !s), count: 0 }
   ];
 
+  // Play/Pause toggle with visual feedback
   const handleVideoTap = () => {
     const vid = videoRef.current;
     if (!vid) return;
-    if (vid.paused) vid.play();
-    else vid.pause();
-
+    vid.paused ? vid.play() : vid.pause();
     setShowPlayIcon(true);
     setTimeout(() => setShowPlayIcon(false), 600);
   };
@@ -94,10 +109,7 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
       bg="#000"
       overflow="hidden"
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => {
-        setHovered(false);
-        setShowCommentInput(false);
-      }}
+      onMouseLeave={() => { setHovered(false); setShowCommentInput(false); }}
       onClick={handleVideoTap}
     >
       <Box
@@ -116,7 +128,7 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
         }}
       />
 
-      {/* Play/Pause icon overlay */}
+      {/* Play/Pause Overlay */}
       <AnimatePresence>
         {showPlayIcon && (
           <Center pos="absolute" top="0" left="0" w="100%" h="100%">
@@ -135,12 +147,19 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
         )}
       </AnimatePresence>
 
-      {/* Action icons */}
+      {/* Action Icons */}
       <AnimatePresence>
         {hovered && (
-          <VStack pos="absolute" right="4" top="50%" transform="translateY(-50%)" spacing="6">
+          <VStack pos="absolute" right="4" top="50%" spacing="6" transform="translateY(-50%)">
             {icons.map((d, i) => (
-              <motion.div key={d.id} initial="hidden" animate="visible" exit="exit" variants={iconVariants} custom={i}>
+              <motion.div
+                key={d.id}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={iconVariants}
+                custom={i}
+              >
                 <motion.div animate={clickedIcon === d.id ? clickAnim : { scale: 1 }}>
                   <Flex
                     direction="column"
@@ -158,6 +177,7 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
                     <Text color="white" fontSize="sm">{d.count}</Text>
                   </Flex>
                 </motion.div>
+
                 {d.id === "comment" && showCommentInput && (
                   <Box pos="absolute" right="12" p="4" bg="rgba(0,0,0,0.7)" borderRadius="md">
                     <Input
@@ -191,6 +211,4 @@ const VideoBox = ({ videos, currentIndex, setCurrentIndex }) => {
       </AnimatePresence>
     </Box>
   );
-};
-
-export default VideoBox;
+}
