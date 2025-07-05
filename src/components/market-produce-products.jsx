@@ -20,9 +20,8 @@ export default function MarketProduce({ items, onAddPrice }) {
     'Organic Tomatoes': 'UGX 4,000/kg',
     'Carrots': 'UGX 4,000/kg',
   };
+  const columnCount = useBreakpointValue({ base: 2, sm: 2, md: 3, lg: 4 });
 
-  // Dynamically adjust number of columns based on screen size
-  const columnCount = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4 });
 
   return (
     <Grid
@@ -41,7 +40,7 @@ export default function MarketProduce({ items, onAddPrice }) {
             rounded="md"
             shadow="md"
             color="white"
-            bg="gray.800"
+          
             position="relative"
             filter={blurred ? 'blur(4px)' : 'none'}
             opacity={blurred ? 0.6 : 1}
