@@ -19,6 +19,7 @@ import FarmerChannel from './farmer-channel';
 import logo from '../assets/images/logo.png';
 import demoVideo1 from '../assets/videos/demo.mp4';
 import demoVideo2 from '../assets/videos/demo2.mp4';
+import Live from './live'
 
 const videos = [
   { src: demoVideo1, title: 'Lorem ipsum dolor', subtitle: 'Consectetur adipiscing elit' },
@@ -124,7 +125,7 @@ export default function DashboardLayout() {
             </Box>
           </Flex>
         )}
-        {activeIndex === 1 && <Box flex="1" p={4}><Text>Live channel coming soon.</Text></Box>}
+        {activeIndex === 1 && <Box flex="1" p={4}><Text><Live /></Text></Box>}
         {activeIndex === 2 && <Box flex="1" p={4}><FarmerChannel /></Box>}
         {activeIndex === 3 && <Box flex="1" p={4}><Text>Upload Video UI placeholder.</Text></Box>}
         {activeIndex === 4 && <Box flex="1" p={4} overflowY="auto" bg="#222"><ProductListing /></Box>}

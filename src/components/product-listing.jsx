@@ -3,8 +3,8 @@ import '../index.css';
 import { Box, Text, Button } from '@chakra-ui/react';
 import MarketProduce from './market-produce-products';
 import product1 from '../assets/images/product.png';
-import product2 from '../assets/images/tomatoes.png';
-import product3 from '../assets/images/brocoli.png';
+import product2 from '../assets/images/toma.jpeg';
+import product3 from '../assets/images/cabb.jpeg';
 
 // Create 12 items, blur from index 6 onward
 const allProduceItems = Array.from({ length: 12 }, (_, idx) => {

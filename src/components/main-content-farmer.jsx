@@ -8,6 +8,7 @@ import {
   SimpleGrid,
   Icon,
   Link,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import {
   FiSun,
@@ -31,18 +32,20 @@ const tools = [
 
 const MainContent = () => {
   const [activeTool, setActiveTool] = useState(null);
+  // Determine grid template based on screen size
+  const gridTemplate = useBreakpointValue({ base: '1fr', md: '2fr 3fr 2fr' });
 
-  // if Produce is active, render it full-width
+  // If Produce is active, render it full-width
   if (activeTool === 'Produce') {
     return (
-      <Box w="100%" h="100%" p={4}>
+      <Box w="100%" h="100%" p={{ base: 4, md: 4 }}>
         <ProductDashboard />
       </Box>
     );
   }
 
   return (
-    <Grid templateColumns="2fr 3fr 2fr" gap={4} px={8} py={4}>
+    <Grid templateColumns={gridTemplate} gap={{ base: 4, md: 4 }} px={{ base: 4, md: 8 }} py={{ base: 4, md: 4 }}>
       {/* Left: Weather + Tools */}
       <VStack spacing={4} align="stretch">
         {/* Weather Card */}
@@ -79,7 +82,7 @@ const MainContent = () => {
           <Text fontSize="md" fontWeight="semibold" mb={2}>
             Access Tools
           </Text>
-          <SimpleGrid columns={2} gapX={4} gapY={4}>
+          <SimpleGrid columns={{ base: 2, sm: 2, md: 2 }} gap={4}>
             {tools.map((item, i) => (
               <VStack
                 key={i}

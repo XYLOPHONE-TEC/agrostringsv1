@@ -27,7 +27,10 @@
     "react-phone-number-input": "^3.4.12",
     "react-router-dom": "^7.6.3",
     "react-slick": "^0.30.3",
+    "react-social-media-embed": "^2.5.18",
     "react-swipeable": "^7.0.2",
+    "react-tiktok": "^1.0.0",
+    "react-youtube": "^10.1.0",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.2.10"
   },
