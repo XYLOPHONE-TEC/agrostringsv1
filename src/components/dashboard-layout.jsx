@@ -1,4 +1,5 @@
-// Don't forget: npm install react-swipeable
+// Install dependencies:
+// npm install react-swipeable react-icons @chakra-ui/react lucide-react
 
 import React, { useState, useRef, useEffect } from 'react';
 import {
@@ -7,8 +8,9 @@ import {
 } from '@chakra-ui/react';
 import {
   Home, Video, Upload, Settings, TvIcon,
-  Search, Menu, CirclePlus, ShoppingCart
+  Search, ShoppingCart, CirclePlus
 } from 'lucide-react';
+import { TbMenu4 } from 'react-icons/tb';
 import { useSwipeable } from 'react-swipeable';
 
 import SignInModal from '../modals/sign-in';
@@ -16,10 +18,11 @@ import VideoGallery from './videogallery';
 import VideoBox from './videobox';
 import ProductListing from './product-listing';
 import FarmerChannel from './farmer-channel';
-import logo from '../assets/images/logo.png';
+import Live from './live';
+
+import logo from '../assets/images/logo2.png';
 import demoVideo1 from '../assets/videos/demo.mp4';
 import demoVideo2 from '../assets/videos/demo2.mp4';
-import Live from './live'
 
 const videos = [
   { src: demoVideo1, title: 'Lorem ipsum dolor', subtitle: 'Consectetur adipiscing elit' },
@@ -41,6 +44,14 @@ export default function DashboardLayout() {
     { label: 'Settings', icon: Settings },
   ];
 
+  const mobileTabs = [
+    { label: 'Home', icon: Home, index: 0 },
+    { label: 'Products', icon: ShoppingCart, index: 4 },
+    { label: 'Upload', icon: Upload, index: 3 },
+    { label: 'Videos', icon: Video, index: 2 },
+    { label: 'Settings', icon: Settings, index: 5 },
+  ];
+
   const handlers = useSwipeable({
     onSwipedLeft: () => setActiveIndex(i => Math.min(i + 1, sidebarItems.length - 1)),
     onSwipedRight: () => setActiveIndex(i => Math.max(i - 1, 0)),
@@ -49,25 +60,12 @@ export default function DashboardLayout() {
   });
 
   const openSignIn = () => setSignInOpen(true);
-  const handleSignIn = data => {
-    console.log('Signing in:', data);
-    setSignInOpen(false);
-  };
+  const handleSignIn = data => { setSignInOpen(false); };
 
   useEffect(() => {
     const node = galleryRef.current?.children[currentIndex];
     node?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, [currentIndex]);
-
-  // Mobile bottom navigation tabs: connect to correct activeIndex sections
-  const mobileTabs = [
-    { label: 'Home', icon: Home, index: 0 },
-    { label: 'Products', icon: ShoppingCart, index: 4 },
-   
-    { label: 'Upload', icon: Upload, index: 3 },
-     { label: 'Videos', icon: Video, index: 2 },
-    { label: 'Settings', icon: Settings, index: 5 },
-  ];
 
   return (
     <Flex h="100vh" bg="#111" color="white" fontSize="sm" overflow="hidden">
@@ -85,9 +83,7 @@ export default function DashboardLayout() {
               borderRadius="md"
             >
               <Icon as={icon} color={activeIndex === i ? 'yellow.400' : 'gray.400'} />
-              <Text fontSize="xs" color={activeIndex === i ? 'yellow.400' : 'gray.400'}>
-                {label}
-              </Text>
+              <Text fontSize="xs" color={activeIndex === i ? 'yellow.400' : 'gray.400'}>{label}</Text>
             </HStack>
           ))}
           <Box h="1px" w="full" bg="gray.700" mt={4} />
@@ -98,8 +94,33 @@ export default function DashboardLayout() {
         </VStack>
       </Box>
 
-      {/* Main Content Area */}
+      {/* Content Area */}
       <Flex {...handlers} flex="1" flexDir="column" overflow="hidden">
+        {/* Mobile Header */}
+        <Flex
+          display={{ base: 'flex', md: 'none' }}
+          align="center"
+          justify="space-between"
+          px={4}
+          py={3}
+          bg="#111"
+          borderBottom="1px solid"
+          borderColor="gray.700"
+          zIndex="10"
+        >
+          <HStack gap={0}>
+            <Image src={logo} alt="Logo" boxSize="40px" />
+            <Text fontSize="sm" fontWeight="bold" color="white">AgroStrings</Text>
+          </HStack>
+          <HStack spacing={2}>
+            <Button size="xs" color="#fada25" bg="transparent" border="1px solid"  onClick={openSignIn}>
+              Create Account
+            </Button>
+            <Icon as={TbMenu4} boxSize={6} color="white" />
+            
+          </HStack>
+        </Flex>
+
         {/* Desktop Top Bar */}
         <Flex display={{ base: 'none', md: 'flex' }} mb={4} px={4} pt={4} align="center" justify="space-between">
           <Box pos="relative" w="45%" bg="gray.700" borderRadius="sm">
@@ -107,14 +128,14 @@ export default function DashboardLayout() {
             <Input pl="32px" placeholder="Search…" bg="transparent" border="none" fontSize="xs" _placeholder={{ color: 'gray.400' }} />
           </Box>
           <HStack spacing={2} fontSize="xs">
-            <Box border="2px dashed gray.500" borderRadius="sm" p={1}><CirclePlus size={18} /></Box>
+            <CirclePlus size={18} color="white" />
             <Button size="xs" bg="yellow.400" color="black" onClick={openSignIn}>Sign In</Button>
             <Button size="xs" bg="gray.700">EN</Button>
             <Button size="xs" bg="gray.700">Mode</Button>
           </HStack>
         </Flex>
 
-        {/* Section Content */}
+        {/* Main Sections */}
         {activeIndex === 0 && (
           <Flex flex="1" overflow="hidden">
             <Box flex="1" h="100%">
@@ -125,7 +146,7 @@ export default function DashboardLayout() {
             </Box>
           </Flex>
         )}
-        {activeIndex === 1 && <Box flex="1" p={4}><Text><Live /></Text></Box>}
+        {activeIndex === 1 && <Box flex="1" p={4}><Live /></Box>}
         {activeIndex === 2 && <Box flex="1" p={4}><FarmerChannel /></Box>}
         {activeIndex === 3 && <Box flex="1" p={4}><Text>Upload Video UI placeholder.</Text></Box>}
         {activeIndex === 4 && <Box flex="1" p={4} overflowY="auto" bg="#222"><ProductListing /></Box>}
@@ -154,7 +175,7 @@ export default function DashboardLayout() {
           ))}
         </Flex>
         <Box pos="absolute" left="50%" top="8" transform="translate(-50%,-50%)">
-          <Circle size="54px" bg="#fada25" border="4px solid #000" cursor="pointer" onClick={openSignIn}>
+          <Circle size="54px" bg="#fada25" border="4px solid #000" cursor="pointer" onClick={() => setActiveIndex(3)}>
             <Icon as={CirclePlus} boxSize={4} color="black" />
           </Circle>
         </Box>
