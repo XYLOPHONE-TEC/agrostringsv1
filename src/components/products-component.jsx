@@ -67,9 +67,16 @@ export default function ProductDashboard() {
   const handleAddPrice = item => alert(`Add price for ${item.name}`);
 
   return (
-    <Box w="100%" h="100%">
-      {/* Tabs + Add Button */}
-      <Flex mb={4} align="center" justify="space-between" borderBottom="1px solid" borderColor="gray.600">
+    <Box w="100%" h="100%" position="relative">
+      {/* Tabs for Desktop */}
+      <Flex
+        mb={4}
+        align="center"
+        justify="space-between"
+        borderBottom="1px solid"
+        borderColor="gray.600"
+        display={{ base: 'none', md: 'flex' }}
+      >
         <HStack gap={10}>
           {['Market', 'My Produce', 'My Orders'].map(label => (
             <Text
@@ -88,20 +95,68 @@ export default function ProductDashboard() {
             </Text>
           ))}
         </HStack>
-        <Button leftIcon={<FiPlus />} colorScheme="yellow" size="sm" onClick={() => alert('Add')}>
+        <Button
+          leftIcon={<FiPlus />}
+          colorScheme="yellow"
+          size="sm"
+          onClick={() => alert('Add')}
+        >
           Add New Product
         </Button>
       </Flex>
+
+      {/* Tabs for Mobile */}
+      <HStack
+        gap={5}
+        justify="center"
+        align="center"
+        py={3}
+        borderBottom="1px solid"
+        borderColor="gray.600"
+        display={{ base: 'flex', md: 'none' }}
+      >
+        {['Market', 'My Produce', 'My Orders'].map(label => (
+          <Text
+            key={label}
+            pb={1}
+            fontSize="sm"
+            fontWeight="medium"
+            color="white"
+            cursor="pointer"
+            borderBottom="2px solid"
+            borderColor={activeTab === label ? 'yellow.400' : 'transparent'}
+            _hover={{ borderColor: 'yellow.400' }}
+            onClick={() => setActiveTab(label)}
+          >
+            {label}
+          </Text>
+        ))}
+      </HStack>
+
+      {/* Floating Add Button for Mobile */}
+      <Button
+        display={{ base: 'flex', md: 'none' }}
+        position="fixed"
+        bottom="4"
+        right="4"
+        bg="#fff"
+        color="black"
+        borderRadius="full"
+        boxShadow="lg"
+        size="lg"
+        onClick={() => alert('Add')}
+        zIndex={10}
+      >
+        <FiPlus />
+      </Button>
 
       {/* Tab Panels */}
       {activeTab === 'Market' && (
         <MarketProduce items={market} onAddPrice={handleAddPrice} />
       )}
-
       {activeTab === 'My Produce' && (
         <MyProduce items={myProduce} onEdit={handleEdit} onDelete={handleDelete} />
       )}
-
       {activeTab === 'My Orders' && (
         <MyOrders orders={sampleOrders} />
       )}
