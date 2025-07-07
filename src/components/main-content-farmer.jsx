@@ -45,8 +45,8 @@ const MainContent = () => {
   }
 
   return (
-    <Box mx={{ base: 0, md: 2 }}>
-      <Grid templateColumns={gridTemplate} gap={{ base: 4, md: 4 }}>
+    <Box mx={{ base: 0, md: 4 }} >
+      <Grid templateColumns={gridTemplate} gap={{ base: 2, md: 2 }} >
         {/* Left: Weather + Tools */}
         <VStack spacing={4} align="stretch">
           {/* Weather Card */}
