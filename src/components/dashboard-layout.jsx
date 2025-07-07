@@ -136,7 +136,7 @@ export default function DashboardLayout() {
         >
           <HStack>
             <Image src={logo} alt="Logo" boxSize="40px" />
-            <VStack align="start" spacing={0}>
+            <VStack align="start" gap={0}>
               <Text fontSize="xs" fontWeight="bold">
                 <Text as="span" color="green.400">Agro</Text>
                 <Text as="span" color="blue.400">Strings</Text>
