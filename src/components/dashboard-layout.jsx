@@ -1,3 +1,4 @@
+// src/components/DashboardLayout.jsx
 // Install dependencies:
 // npm install react-swipeable react-icons @chakra-ui/react lucide-react
 
@@ -8,11 +9,10 @@ import {
 } from '@chakra-ui/react';
 import {
   Home, Video, Upload, Settings, TvIcon,
-  Search, ShoppingCart, CirclePlus
+  Search, ShoppingCart, CirclePlus, Sun, Moon
 } from 'lucide-react';
-import { TbMenu4 } from 'react-icons/tb';
 import { useSwipeable } from 'react-swipeable';
-
+import { TbMenu4 } from 'react-icons/tb';
 import SignInModal from '../modals/sign-in';
 import VideoGallery from './videogallery';
 import VideoBox from './videobox';
@@ -26,14 +26,36 @@ import demoVideo2 from '../assets/videos/demo2.mp4';
 
 const videos = [
   { src: demoVideo1, title: 'Lorem ipsum dolor', subtitle: 'Consectetur adipiscing elit' },
-  { src: demoVideo2, title: 'Sed do eiusmod', subtitle: 'Incididunt ut labore' },
+  { src: demoVideo2, title: 'Sed do eiusmod', subtitle: 'Incididunt ut labore' }
 ];
 
+// Theme helper
+const getInitialTheme = () => {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const stored = window.localStorage.getItem('theme');
+    if (stored) return stored;
+    const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return prefers ? 'dark' : 'light';
+  }
+  return 'light';
+};
+
 export default function DashboardLayout() {
+  const [theme, setTheme] = useState(getInitialTheme);
   const [isSignInOpen, setSignInOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const galleryRef = useRef();
+
+  // Apply theme to <html>
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    window.localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
 
   const sidebarItems = [
     { label: 'Home', icon: Home },
@@ -41,7 +63,7 @@ export default function DashboardLayout() {
     { label: 'Farm Channel Videos', icon: Video },
     { label: 'Upload Video', icon: Upload },
     { label: 'Products', icon: Settings },
-    { label: 'Settings', icon: Settings },
+    { label: 'Settings', icon: Settings }
   ];
 
   const mobileTabs = [
@@ -49,18 +71,18 @@ export default function DashboardLayout() {
     { label: 'Products', icon: ShoppingCart, index: 4 },
     { label: 'Upload', icon: Upload, index: 3 },
     { label: 'Videos', icon: Video, index: 2 },
-    { label: 'Settings', icon: Settings, index: 5 },
+    { label: 'Settings', icon: Settings, index: 5 }
   ];
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setActiveIndex(i => Math.min(i + 1, sidebarItems.length - 1)),
     onSwipedRight: () => setActiveIndex(i => Math.max(i - 1, 0)),
     trackMouse: true,
-    preventScrollOnSwipe: true,
+    preventScrollOnSwipe: true
   });
 
   const openSignIn = () => setSignInOpen(true);
-  const handleSignIn = data => { setSignInOpen(false); };
+  const handleSignIn = data => setSignInOpen(false);
 
   useEffect(() => {
     const node = galleryRef.current?.children[currentIndex];
@@ -68,33 +90,37 @@ export default function DashboardLayout() {
   }, [currentIndex]);
 
   return (
-    <Flex h="100vh" bg="#111" color="white" fontSize="sm" overflow="hidden">
+    <Flex h="100vh" bg={theme === 'light' ? '#f9f9f9' : '#111'} color={theme === 'light' ? 'black' : 'white'} fontSize="sm" overflow="hidden">
       {/* Desktop Sidebar */}
       <Box display={{ base: 'none', md: 'block' }}>
-        <VStack w="220px" bg="#000" p={2} spacing={2} minH="100vh" align="start">
+        <VStack w="220px" bg={theme === 'light' ? '#fff' : '#000'} p={2} spacing={2} minH="100vh">
           <Image src={logo} alt="Logo" boxSize="32px" mb={2} />
           {sidebarItems.map(({ label, icon }, i) => (
             <HStack
               key={i}
-              w="full" px={3} py={2}
+              w="full"
+              px={3}
+              py={2}
               onClick={() => setActiveIndex(i)}
               bg={activeIndex === i ? 'gray.700' : 'transparent'}
               _hover={{ bg: 'gray.800', cursor: 'pointer' }}
               borderRadius="md"
             >
               <Icon as={icon} color={activeIndex === i ? 'yellow.400' : 'gray.400'} />
-              <Text fontSize="xs" color={activeIndex === i ? 'yellow.400' : 'gray.400'}>{label}</Text>
+              <Text fontSize="xs" color={activeIndex === i ? 'yellow.400' : 'gray.400'}>
+                {label}
+              </Text>
             </HStack>
           ))}
           <Box h="1px" w="full" bg="gray.700" mt={4} />
           <Spacer />
-          <Link fontSize="xs" color="gray.400" mb={1}>Company</Link>
-          <Link fontSize="xs" color="gray.400" mb={1}>Terms & Conditions</Link>
+          <Link fontSize="xs" color="gray.400">Company</Link>
+          <Link fontSize="xs" color="gray.400">Terms & Conditions</Link>
           <Text fontSize="xs" color="gray.600">@XylophoneTechnologies Uganda</Text>
         </VStack>
       </Box>
 
-      {/* Content Area */}
+      {/* Main Content */}
       <Flex {...handlers} flex="1" flexDir="column" overflow="hidden">
         {/* Mobile Header */}
         <Flex
@@ -103,30 +129,26 @@ export default function DashboardLayout() {
           justify="space-between"
           px={4}
           py={3}
-          bg="#111"
+          bg={theme === 'light' ? '#fff' : '#111'}
           borderBottom="1px solid"
           borderColor="gray.700"
           zIndex="10"
         >
-          <HStack gap={0}>
+          <HStack>
             <Image src={logo} alt="Logo" boxSize="40px" />
-           <VStack gap={0} align="start">
-      <Text fontSize="xs" fontWeight="bold">
-        <Text as="span" color="green.400">Agro</Text>
-        <Text as="span" color="blue.400">Strings</Text>
-      </Text>
-      {/* This will sit directly below, in white */}
-      <Text fontSize="5px" color="gray.300">
-        XYLOPHONE TECHNOLOGIES
-      </Text>
-    </VStack>
+            <VStack align="start" spacing={0}>
+              <Text fontSize="xs" fontWeight="bold">
+                <Text as="span" color="green.400">Agro</Text>
+                <Text as="span" color="blue.400">Strings</Text>
+              </Text>
+              <Text fontSize="5px" color="gray.300">XYLOPHONE TECHNOLOGIES</Text>
+            </VStack>
           </HStack>
           <HStack spacing={2}>
-            <Button size="xs" color="#fada25" bg="transparent" border="1px solid"  onClick={openSignIn}>
+            <Button size="xs" color="#fada25" bg="transparent" border="1px solid" onClick={openSignIn}>
               Create Account
             </Button>
-            <Icon as={TbMenu4} boxSize={6} color="white" />
-            
+            <Icon as={TbMenu4} boxSize={6} />
           </HStack>
         </Flex>
 
@@ -140,16 +162,16 @@ export default function DashboardLayout() {
             <CirclePlus size={18} color="white" />
             <Button size="xs" bg="yellow.400" color="black" onClick={openSignIn}>Sign In</Button>
             <Button size="xs" bg="gray.700">EN</Button>
-            <Button size="xs" bg="gray.700">Mode</Button>
+            <Button size="xs" bg="gray.700" onClick={toggleTheme}>
+              {theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}
+            </Button>
           </HStack>
         </Flex>
 
         {/* Main Sections */}
         {activeIndex === 0 && (
           <Flex flex="1" overflow="hidden">
-            <Box flex="1" h="100%">
-              <VideoBox videos={videos} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
-            </Box>
+            <VideoBox videos={videos} currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
             <Box w="200px" display={{ base: 'none', md: 'block' }} bg="#111">
               <VideoGallery ref={galleryRef} videos={videos} currentIndex={currentIndex} onSelect={setCurrentIndex} />
             </Box>
@@ -162,6 +184,7 @@ export default function DashboardLayout() {
         {activeIndex === 5 && <Box flex="1" p={4}><Text fontSize="lg" color="gray.300">Settings (Coming soon).</Text></Box>}
       </Flex>
 
+      {/* Sign In Modal */}
       <SignInModal open={isSignInOpen} onOpenChange={setSignInOpen} onSubmit={handleSignIn} />
 
       {/* Mobile Bottom Navigation */}

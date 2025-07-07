@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import App from './App'
 import { system } from './theme'
+
 import { BrowserRouter } from 'react-router-dom'
 
 const container = document.getElementById('root')

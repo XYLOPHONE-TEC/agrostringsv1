@@ -106,7 +106,7 @@ export default function VideoBox({ videos, currentIndex, setCurrentIndex }) {
       w="100%"
       h="80vh"
       pos="relative"
-      bg="#000"
+    
       overflow="hidden"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => { setHovered(false); setShowCommentInput(false); }}
@@ -119,6 +119,7 @@ export default function VideoBox({ videos, currentIndex, setCurrentIndex }) {
         objectFit="cover"
         w="100%"
         h="100%"
+    
         playsInline
         muted={!soundOn}
         onDoubleClick={() => {
