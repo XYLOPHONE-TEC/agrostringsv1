@@ -21,7 +21,7 @@ import FarmerChannel from './farmer-channel';
 import Live from './live';
 
 import logo from '../assets/images/logo2.png';
-import demoVideo1 from '../assets/videos/demo4.mp4';
+import demoVideo1 from '../assets/videos/demo5.mp4';
 import demoVideo2 from '../assets/videos/demo2.mp4';
 
 const videos = [
