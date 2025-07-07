@@ -110,7 +110,16 @@ export default function DashboardLayout() {
         >
           <HStack gap={0}>
             <Image src={logo} alt="Logo" boxSize="40px" />
-            <Text fontSize="sm" fontWeight="bold" color="white">AgroStrings</Text>
+           <VStack gap={0} align="start">
+      <Text fontSize="xs" fontWeight="bold">
+        <Text as="span" color="green.400">Agro</Text>
+        <Text as="span" color="blue.400">Strings</Text>
+      </Text>
+      {/* This will sit directly below, in white */}
+      <Text fontSize="5px" color="gray.300">
+        XYLOPHONE TECHNOLOGIES
+      </Text>
+    </VStack>
           </HStack>
           <HStack spacing={2}>
             <Button size="xs" color="#fada25" bg="transparent" border="1px solid"  onClick={openSignIn}>
