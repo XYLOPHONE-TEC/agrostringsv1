@@ -35,7 +35,7 @@ export default function MarketProduce({ items, onAddPrice }) {
         return (
           <Box
             key={item.id}
-            p={3}
+            p={2}
             rounded="md"
             shadow="md"
             color="white"
@@ -59,6 +59,7 @@ export default function MarketProduce({ items, onAddPrice }) {
                 boxSize={{ base: '100%', sm: '120px' }}
                 objectFit="cover"
                 flexShrink={0}
+                
               />
               <VStack align="start" spacing={1} flex="1">
                 <HStack justify="space-between" w="100%">

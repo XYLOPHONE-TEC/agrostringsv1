@@ -107,7 +107,7 @@ export default function ProductDashboard() {
 
       {/* Tabs for Mobile */}
       <HStack
-        gap={5}
+        gap={10}
         justify="center"
         align="center"
         py={3}
