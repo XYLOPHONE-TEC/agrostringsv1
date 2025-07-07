@@ -12,12 +12,13 @@ import {
 } from '@chakra-ui/react';
 
 export default function MarketProduce({ items, onAddPrice }) {
-  if (items.length === 0) return <Text color="gray.400">No products available.</Text>;
+  if (items.length === 0)
+    return <Text color="gray.400">No products available.</Text>;
 
   const unitPrices = {
     'Fresh Lettuce': 'UGX 4,250/kg',
     'Organic Tomatoes': 'UGX 4,000/kg',
-    'Carrots': 'UGX 4,000/kg',
+    Carrots: 'UGX 4,000/kg',
   };
 
   const columnCount = useBreakpointValue({ base: 1, sm: 1, md: 2, lg: 3 });
@@ -26,7 +27,7 @@ export default function MarketProduce({ items, onAddPrice }) {
     <Grid
       templateColumns={`repeat(${columnCount}, 1fr)`}
       gap={{ base: 2, md: 3 }}
-      px={{ base: 2, md: 4 }}
+      px={{ base: 0, md: 4 }}
       py={{ base: 3, md: 4 }}
     >
       {items.map((item) => {
@@ -48,23 +49,29 @@ export default function MarketProduce({ items, onAddPrice }) {
             transition="0.3s ease"
           >
             <Flex
-              direction={{ base: 'column', sm: 'row' }}
+              // On mobile (base) layout items in a row: name/description on left, crate badge on right
+              direction={{ base: 'row', sm: 'row', md: 'column', lg: 'row' }}
               align="center"
+              justify="space-between"
               gap={4}
             >
               <Image
                 src={item.image}
                 alt={item.name}
                 borderRadius="md"
-                boxSize={{ base: '100%', sm: '120px' }}
+                boxSize={{ base: '80px', sm: '100px', md: '120px' }}
                 objectFit="cover"
                 flexShrink={0}
-                
               />
+
               <VStack align="start" spacing={1} flex="1">
                 <HStack justify="space-between" w="100%">
-                  <Text fontSize="md" fontWeight="semibold">{item.name}</Text>
-                  <Badge fontSize="0.7em" colorScheme="green">{item.quantity}</Badge>
+                  <Text fontSize="md" fontWeight="semibold" noOfLines={1} flex="1">
+                    {item.name}
+                  </Text>
+                  <Badge fontSize="0.7em" colorScheme="green">
+                    {item.quantity}
+                  </Badge>
                 </HStack>
                 <Text fontSize="xs" color="gray.300">
                   {item.farm} – {item.location}
