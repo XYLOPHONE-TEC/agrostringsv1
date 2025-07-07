@@ -20,7 +20,6 @@ export default function MarketProduce({ items, onAddPrice }) {
     'Carrots': 'UGX 4,000/kg',
   };
 
-  // Fewer columns to fit wider horizontal cards
   const columnCount = useBreakpointValue({ base: 1, sm: 1, md: 2, lg: 3 });
 
   return (
@@ -48,7 +47,11 @@ export default function MarketProduce({ items, onAddPrice }) {
             _hover={{ bg: blurred ? 'gray.700' : 'gray.900' }}
             transition="0.3s ease"
           >
-            <Flex direction={{ base: 'column', sm: 'row' }} align="center" gap={4}>
+            <Flex
+              direction={{ base: 'column', sm: 'row' }}
+              align="center"
+              gap={4}
+            >
               <Image
                 src={item.image}
                 alt={item.name}
