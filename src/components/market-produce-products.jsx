@@ -1,4 +1,3 @@
-// src/components/MarketProduce.jsx
 import React from 'react';
 import {
   Grid,
@@ -9,6 +8,7 @@ import {
   Text,
   Badge,
   useBreakpointValue,
+  Flex,
 } from '@chakra-ui/react';
 
 export default function MarketProduce({ items, onAddPrice }) {
@@ -20,13 +20,14 @@ export default function MarketProduce({ items, onAddPrice }) {
     'Carrots': 'UGX 4,000/kg',
   };
 
-  const columnCount = useBreakpointValue({ base: 2, sm: 2, md: 3, lg: 4 });
+  // Fewer columns to fit wider horizontal cards
+  const columnCount = useBreakpointValue({ base: 1, sm: 1, md: 2, lg: 3 });
 
   return (
     <Grid
       templateColumns={`repeat(${columnCount}, 1fr)`}
-      gap={{ base: 2, md: 3 }}             // Reduced gap
-      px={{ base: 2, md: 4 }}              // Smaller horizontal padding
+      gap={{ base: 2, md: 3 }}
+      px={{ base: 2, md: 4 }}
       py={{ base: 3, md: 4 }}
     >
       {items.map((item) => {
@@ -35,39 +36,40 @@ export default function MarketProduce({ items, onAddPrice }) {
         return (
           <Box
             key={item.id}
-            p={1}                             // Slightly tighter padding inside each card
+            p={3}
             rounded="md"
             shadow="md"
             color="white"
-        
+            bg="gray.800"
             position="relative"
             filter={blurred ? 'blur(4px)' : 'none'}
             opacity={blurred ? 0.6 : 1}
             pointerEvents={blurred ? 'none' : 'auto'}
-            _hover={{ bg: blurred ? 'gray.700' : 'gray.800' }}
+            _hover={{ bg: blurred ? 'gray.700' : 'gray.900' }}
             transition="0.3s ease"
           >
-            <Image
-              src={item.image}
-              alt={item.name}
-              borderRadius="md"
-              w="100%"
-              h={{ base: '160px', sm: '180px', md: '100px' }}  // Increased image height
-              objectFit="cover"
-              mb={2}
-            />
-            <VStack align="start" spacing={0}>
-              <HStack justify="space-between" w="100%">
-                <Text fontSize="md" fontWeight="semibold">{item.name}</Text>
-                <Badge fontSize="0.7em" colorScheme="green">{item.quantity}</Badge>
-              </HStack>
-              <Text fontSize="xs" color="gray.300">
-                {item.farm} – {item.location}
-              </Text>
-              <Text fontSize="sm" color="#fada25" mt={1} fontWeight="bold">
-                {unitPrices[item.name] || 'UGX --/kg'}
-              </Text>
-            </VStack>
+            <Flex direction={{ base: 'column', sm: 'row' }} align="center" gap={4}>
+              <Image
+                src={item.image}
+                alt={item.name}
+                borderRadius="md"
+                boxSize={{ base: '100%', sm: '120px' }}
+                objectFit="cover"
+                flexShrink={0}
+              />
+              <VStack align="start" spacing={1} flex="1">
+                <HStack justify="space-between" w="100%">
+                  <Text fontSize="md" fontWeight="semibold">{item.name}</Text>
+                  <Badge fontSize="0.7em" colorScheme="green">{item.quantity}</Badge>
+                </HStack>
+                <Text fontSize="xs" color="gray.300">
+                  {item.farm} – {item.location}
+                </Text>
+                <Text fontSize="sm" color="#fada25" fontWeight="bold" mt={1}>
+                  {unitPrices[item.name] || 'UGX --/kg'}
+                </Text>
+              </VStack>
+            </Flex>
 
             {blurred && (
               <Box

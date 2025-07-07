@@ -135,10 +135,12 @@ export default function ProductDashboard() {
 
       {/* Floating Add Button for Mobile */}
       <Button
+      
         display={{ base: 'flex', md: 'none' }}
         position="fixed"
         bottom="4"
         right="4"
+        w="40px"
         bg="#fff"
         color="black"
         borderRadius="full"
@@ -148,6 +150,7 @@ export default function ProductDashboard() {
         zIndex={10}
       >
         <FiPlus />
+  
       </Button>
 
       {/* Tab Panels */}
