@@ -104,7 +104,7 @@ export default function VideoBox({ videos, currentIndex, setCurrentIndex }) {
     <Box
       {...handlers}
       w="100%"
-      h="100vh"
+      h="80vh"
       pos="relative"
       bg="#000"
       overflow="hidden"
