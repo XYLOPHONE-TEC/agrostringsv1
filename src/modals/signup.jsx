@@ -348,7 +348,7 @@ export default function CreateAccountWizard({ open, onClose }) {
               <div style={animatedStep}>
                 <input
                   style={input}
-                  className="whitePlaceholder"
+                    className="whitePlaceholder"
                   placeholder="Username"
                   value={values.username}
                   onChange={handleChange("username")}
@@ -357,9 +357,10 @@ export default function CreateAccountWizard({ open, onClose }) {
                   required
                 />
                 <Box w="100%" maxW="sm" marginLeft="3em" marginTop="20px">
-                  <HStack w="90%" spacing={2} mt={5}>
+                  <HStack w="90%" spacing={2} mt={5} >
                     <Box flex="1">
                       <PhoneInput
+                    
                         defaultCountry="UG"
                         placeholder="Phone number"
                         value={values.phone}
@@ -374,7 +375,7 @@ export default function CreateAccountWizard({ open, onClose }) {
                 </Box>
                 <input
                   style={input}
-                  className="whitePlaceholder"
+                    className="whitePlaceholder"
                   placeholder="District"
                   value={values.district}
                   onChange={handleChange("district")}
@@ -382,11 +383,52 @@ export default function CreateAccountWizard({ open, onClose }) {
                   required
                 />
               </div>
-              
             )}
-            
 
-           
+            {step === 3 && (
+              <div style={animatedStep}>
+                <div style={{ position: "relative", marginBottom: "20px" }}>
+                  <input
+                    style={input}
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={values.password}
+                    onChange={handleChange("password")}
+                    aria-label="Password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((s) => !s)}
+                    style={{
+                      position: "absolute",
+                      right: "16px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "#aaa",
+                    }}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showPassword ? "🙈" : "👁️"}
+                  </button>
+                </div>
+                <input
+                  style={input}
+                  type="password"
+                  placeholder="Confirm password"
+                  value={values.confirmPassword}
+                  onChange={handleChange("confirmPassword")}
+                  aria-label="Confirm password"
+                  required
+                />
+              </div>
+            )}
+
             {step === 4 && (
               <div style={animatedStep}>
                 <input
