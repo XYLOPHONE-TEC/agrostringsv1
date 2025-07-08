@@ -146,3 +146,7 @@
 }
 
 
+.whitePlaceholder::placeholder {
+  color: rgba(237, 232, 235, 0.667); /* Chakra green.500 */
+  opacity: 1; /* ensures full color in Firefox */
+}
