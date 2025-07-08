@@ -356,11 +356,11 @@ export default function CreateAccountWizard({ open, onClose }) {
                   aria-label="Username"
                   required
                 />
-                <Box w="100%" maxW="sm" marginLeft="3em" marginTop="20px">
+                <Box w="90%" maxW="sm" marginLeft="3em" marginTop="20px">
                   <HStack w="90%" spacing={2} mt={5} >
                     <Box flex="1">
                       <PhoneInput
-                    
+
                         defaultCountry="UG"
                         placeholder="Phone number"
                         value={values.phone}
