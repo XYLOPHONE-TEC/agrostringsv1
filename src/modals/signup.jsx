@@ -135,20 +135,28 @@ export default function CreateAccountWizard({ open, onClose }) {
     zIndex: 1000,
     marginBottom: 100,
   };
-  const modal = {
-    background: "#1a1a1a",
-    borderRadius: "5px",
-    width: "90%",
-    maxWidth: "500px",
-    height: "60vh",
-    padding: "32px",
-    position: "relative",
-    color: "#eee",
-    boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
-    overflow: "hidden",
-    display: "flex",
-    flexDirection: "column",
-  };
+ // Within your component or CSS-in-JS
+const modal = {
+  background: "#1a1a1a",
+  borderRadius: "5px",
+  width: "90%",
+  maxWidth: "500px",
+  // Use a default height for desktop, and reduced height on mobile via media query:
+  height: "60vh",
+  padding: "32px",
+  position: "relative",
+  color: "#eee",
+  boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+  overflow: "hidden",
+  display: "flex",
+  flexDirection: "column",
+  /* Inline mobile CSS override */
+  // ideally, you'd extract this into your CSS/Emotion/Styled-component
+  '@media (max-width: 600px)': {
+    height: "40vh",  // increased height for mobile screens
+  },
+};
+
   const input = {
     width: "80%",
     padding: "10px",
