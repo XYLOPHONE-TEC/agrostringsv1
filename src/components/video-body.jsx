@@ -42,32 +42,47 @@ export default function VideoBody() {
 
   return (
     <>
-      <HStack h="auto" align="stretch" spacing={0} minH="220px">
-        <VStack w="220px" bg="gray.900" color="gray.200" spacing={4} py={4}>
+      <HStack
+        h="80vh"
+        align="stretch"
+        spacing={0}
+        w="100%"
+        overflow="hidden"
+      >
+        <VStack
+          w="220px"
+          bg="gray.900"
+          spacing={2}
+          py={4}
+          overflowY="auto"
+        >
           {sidebarItems.map(item => {
             const isActive = item.label === activeTab;
             return (
-              <VStack
-                key={item.label}
+              <HStack
                 as="button"
+                key={item.label}
                 onClick={() => handleTabClick(item.label)}
-                cursor="pointer"
-                spacing={1}
+                px={4}
+                py={3}
+                spacing={3}
                 align="center"
-                px={4} py={2}
+                w="100%"
+                bg={isActive ? 'gray.700' : 'transparent'}
+                _hover={{ bg: 'gray.700' }}
                 borderRadius="md"
-               
               >
-                <Icon as={item.icon} boxSize={6} color={isActive ? 'yellow.400' : 'gray.200'} />
-                <Text fontSize="xs" color={isActive ? 'yellow.400' : 'gray.200'}>
+                <Box w="4px" h="full" bg={isActive ? 'yellow.400' : 'transparent'} borderRadius="full" />
+                <Icon as={item.icon} boxSize={5} color={isActive ? 'yellow.400' : 'gray.200'} />
+                <Text fontSize="sm" fontWeight="medium" color={isActive ? 'yellow.400' : 'gray.200'}>
                   {item.label}
                 </Text>
-              </VStack>
+              </HStack>
             );
           })}
         </VStack>
 
-        <Flex flex="1" direction="column" bg="gray.800" p={4} minH="0">
+        <Flex flex="1" direction="column" bg="gray.800" p={4} minH="0" overflow="hidden">
           {activeTab === 'Your media' && (
             <>
               <Box border="2px dashed" borderColor="gray.600" borderRadius="md" p={4} mb={4}>

@@ -1,4 +1,4 @@
-// SignInModal.jsx
+// src/modals/SignInModal.jsx
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -16,7 +16,12 @@ import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { useNavigate } from 'react-router-dom';
 
-const SignInModal = ({ open, onOpenChange, onSubmit }) => {
+const SignInModal = ({
+  open,
+  onOpenChange,
+  onSubmit,
+  onCreateAccountClick, // callback to open account creation
+}) => {
   const navigate = useNavigate();
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -32,12 +37,7 @@ const SignInModal = ({ open, onOpenChange, onSubmit }) => {
   const handleClose = () => onOpenChange(false);
 
   return (
-    <Dialog.Root
-      open={open}
-      onOpenChange={() => {}}
-      closeOnEsc={false}
-      closeOnOverlayClick={false}
-    >
+    <Dialog.Root open={open} onOpenChange={() => {}} closeOnEsc={false} closeOnOverlayClick={false}>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
@@ -46,7 +46,6 @@ const SignInModal = ({ open, onOpenChange, onSubmit }) => {
             <Dialog.CloseTrigger asChild>
               <CloseButton
                 aria-label="Close"
-                size="md"
                 variant="ghost"
                 color="white"
                 pos="absolute"
@@ -58,9 +57,9 @@ const SignInModal = ({ open, onOpenChange, onSubmit }) => {
               </CloseButton>
             </Dialog.CloseTrigger>
 
-            <Dialog.Body px={6} py={4}>
+            <Dialog.Body px={10} py={4}>
               <Box w="100%" maxW="sm">
-                <HStack w="100%" spacing={2} mb={4}>
+                 <HStack w="100%" spacing={2} mb={4}>
                   <Box flex="1">
                     <PhoneInput
                       defaultCountry="UG"
@@ -73,18 +72,11 @@ const SignInModal = ({ open, onOpenChange, onSubmit }) => {
                   </Box>
                 </HStack>
 
-                <InputGroup
-                  mb={4}
-                  endElement={
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <HiEyeOff /> : <HiEye />}
-                    </Button>
-                  }
-                >
+                <InputGroup mb={4} endElement={
+                  <Button variant="ghost" size="sm" onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <HiEyeOff /> : <HiEye />}
+                  </Button>
+                }>
                   <Input
                     placeholder="Password"
                     type={showPassword ? 'text' : 'password'}
@@ -92,25 +84,27 @@ const SignInModal = ({ open, onOpenChange, onSubmit }) => {
                     border="none"
                     _placeholder={{ color: 'gray.400' }}
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={e => setPassword(e.target.value)}
                   />
                 </InputGroup>
 
                 <Dialog.Footer px={0} py={4}>
-                  <Button
-                    colorScheme="yellow"
-                    bg="#fff"
-                    color="black"
-                    w="100%"
-                    onClick={handleSubmit}
-                  >
+                  <Button colorScheme="yellow" bg="#fff" color="black" w="100%" onClick={handleSubmit}>
                     Sign In
                   </Button>
                 </Dialog.Footer>
 
                 <Text fontSize="sm" color="gray.400" textAlign="center">
                   Don’t have an account?{' '}
-                  <Button variant="link" colorScheme="yellow">
+                  <Button
+                    variant="link"
+                    color="#fada25"
+                    _hover={{ textDecoration: 'underline' }}
+                    onClick={() => {
+                      handleClose();
+                      onCreateAccountClick();
+                    }}
+                  >
                     Create one
                   </Button>
                 </Text>
