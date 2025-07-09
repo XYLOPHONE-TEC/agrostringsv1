@@ -127,33 +127,33 @@ export default function CreateAccountWizard({ open, onClose }) {
   });
 
   const overlay = {
-    position: "fixed",
-    inset: 0,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 1000,
-    marginBottom: 120,
-  };
+  position: "fixed",
+  inset: 0,
+  display: "flex",
+  alignItems: "flex-start",  // Align at top instead of center
+  justifyContent: "center",
+  zIndex: 1000,
+  paddingTop: "4rem",         // Adds space from the top edge
+};
 
-  // Updated modal sizing to auto height + maxHeight
-  const modal = {
-    background: "#1a1a1a",
-    borderRadius: "5px",
-    width: "90%",
-    maxWidth: "500px",
-    height: "auto",
-    maxHeight: "90vh",
-    padding: "32px",
-    position: "relative",
-    color: "#eee",
-    display: "flex",
-    flexDirection: "column",
-    overflow: "hidden",
-    '@media (max-width: 600px)': {
-      maxHeight: "70vh",
-    },
-  };
+const modal = {
+  background: "#1a1a1a",
+  borderRadius: "5px",
+  width: "100%",
+  maxWidth: "500px",
+  height: "auto",
+  maxHeight: "90vh",
+  padding: "32px",
+  color: "#eee",
+  display: "flex",
+  flexDirection: "column",
+  overflow: "hidden",
+  position: "relative",       // Change to relative since overlay handles positioning
+  '@media (max-width: 600px)': {
+    maxHeight: "70vh",
+  },
+};
+
 
   const input = {
     width: "80%",
