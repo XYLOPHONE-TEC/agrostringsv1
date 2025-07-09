@@ -150,3 +150,8 @@
   color: rgba(237, 232, 235, 0.667); /* Chakra green.500 */
   opacity: 1; /* ensures full color in Firefox */
 }
+
+ .whitePlaceholder:focus {
+       outline: none;
+      border: 1px solid #fada25; /* Chakra yellow.400 */
+      }
