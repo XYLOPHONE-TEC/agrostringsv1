@@ -1,9 +1,10 @@
-// src/components/CreateAccountWizard.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { FaTractor, FaShoppingCart, FaChevronLeft } from "react-icons/fa";
 import { Box, HStack } from "@chakra-ui/react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import MTN from "../assets/images/mtn.jpg";
+import AIRTEL from "../assets/images/airtel.jpg";
 
 export default function CreateAccountWizard({ open, onClose }) {
   const [step, setStep] = useState(1);
@@ -23,14 +24,13 @@ export default function CreateAccountWizard({ open, onClose }) {
 
   useEffect(() => {
     if (step !== 1) return;
-    const fullIntro =
-      "Hello! Welcome to AgroStrings. Are you joining us as a Farmer or a Buyer?";
+    const fullIntro = "Hello! Welcome to AgroStrings. Are you joining us as a Farmer or a Buyer?";
     setIntroText("");
     typingRef.current = { currentText: "", index: 0, intervalId: null };
     typingRef.current.intervalId = setInterval(() => {
-      const { index } = typingRef.current;
-      if (index < fullIntro.length) {
-        typingRef.current.currentText += fullIntro.charAt(index);
+      const idx = typingRef.current.index;
+      if (idx < fullIntro.length) {
+        typingRef.current.currentText += fullIntro[idx];
         typingRef.current.index++;
         setIntroText(typingRef.current.currentText);
       } else {
@@ -59,434 +59,203 @@ export default function CreateAccountWizard({ open, onClose }) {
         setError("Passwords must match.");
         return false;
       }
+      if (password.length < 8) {
+        setError("Password must be at least 8 characters.");
+        return false;
+      }
     }
     return true;
   };
-
-  useEffect(() => {
-    if (step === 2) {
-      const { username, phone, district } = values;
-      if (username && phone && district && validateCurrent()) {
-        const timeout = setTimeout(() => {
-          setStep(3);
-          setError("");
-        }, 500);
-        return () => clearTimeout(timeout);
-      }
-    }
-    if (step === 3) {
-      const { password, confirmPassword } = values;
-      if (
-        password &&
-        confirmPassword &&
-        password === confirmPassword &&
-        validateCurrent()
-      ) {
-        const timeout = setTimeout(() => {
-          setStep(4);
-          setError("");
-        }, 500);
-        return () => clearTimeout(timeout);
-      }
-    }
-  }, [values, step]);
 
   const next = () => {
     if (!validateCurrent()) return;
     setError("");
     setStep((s) => Math.min(5, s + 1));
   };
-
   const back = () => {
     setError("");
     setStep((s) => Math.max(1, s - 1));
   };
-
-  const finish = () => {
-    alert(`Welcome ${role}! Your registration is complete.`);
+  const activate = () => {
+    alert(`Welcome ${role}! Your account is now active.`);
     onClose();
   };
 
   if (!open) return null;
 
   const handleChange = (field) => (e) => {
-    const value = e && e.target ? e.target.value : e;
-    setValues((v) => ({ ...v, [field]: value }));
+    const val = e?.target ? e.target.value : e;
+    setValues((v) => ({ ...v, [field]: val }));
   };
 
-  const roleCard = (r) => ({
-    flex: 1,
-    margin: "0 12px",
-    padding: "20px",
-    background: role === r ? "#f4c430" : "#333",
-    color: role === r ? "#000" : "#eee",
-    borderRadius: "8px",
-    textAlign: "center",
-    cursor: "pointer",
-    transition: "transform 0.2s ease",
-  });
-
-  const overlay = {
-  position: "fixed",
-  inset: 0,
-  display: "flex",
-  alignItems: "flex-start",  // Align at top instead of center
-  justifyContent: "center",
-  zIndex: 1000,
-  paddingTop: "4rem",         // Adds space from the top edge
-};
-
-const modal = {
-  background: "#1a1a1a",
-  borderRadius: "5px",
-  width: "100%",
-  maxWidth: "500px",
-  height: "auto",
-  maxHeight: "90vh",
-  padding: "32px",
-  color: "#eee",
-  display: "flex",
-  flexDirection: "column",
-  overflow: "hidden",
-  position: "relative",       // Change to relative since overlay handles positioning
-  '@media (max-width: 600px)': {
-    maxHeight: "70vh",
-  },
-};
-
-
-  const input = {
-    width: "80%",
-    padding: "10px",
-    marginTop: "20px",
-    marginLeft: "3em",
-    borderRadius: "6px",
-    border: "1px solid #444",
-    background: "#3b3b41",
-    color: "#fff",
-    fontSize: "13px",
+  const getOperator = (phone) => {
+    const m = phone.match(/^\+256\s*(\d{2})/);
+    if (!m) return null;
+    const code = m[1];
+    if (/^(70|74|75)/.test(code)) return "airtel";
+    if (/^(76|77|78|79)/.test(code)) return "mtn";
+    return null;
   };
+  const operator = getOperator(values.phone);
 
-  const successBox = {
-    background: "#074",
-    color: "#cfc",
-    padding: "20px",
-    borderRadius: "8px",
-    fontSize: "16px",
-    textAlign: "center",
-    boxShadow: "0 4px 12px rgba(0,128,0,0.5)",
+  const styles = {
+    overlay: {
+      position: "fixed", inset: 0, display: "flex",
+      alignItems: "flex-start", justifyContent: "center",
+      zIndex: 1000, paddingTop: "4rem",
+    },
+    modal: {
+      background: "#222", borderRadius: 5, width: "100%",
+      maxWidth: 500, maxHeight: "90vh", padding: 32,
+      color: "#eee", display: "flex", flexDirection: "column",
+      overflow: "hidden", position: "relative",
+    },
+    closeBtn: { position: "absolute", top: 16, right: 16, fontSize: 20, background: "transparent", border: "none", color: "#aaa", cursor: "pointer" },
+    backBtn: { position: "absolute", top: 16, left: 16, fontSize: 18, background: "transparent", border: "none", color: "#eee", cursor: "pointer" },
+    introBox: { background: "#2a2a2a", padding: 16, borderRadius: 12, color: "#eee", lineHeight: 2.5, fontSize: 11, whiteSpace: "pre-wrap", minHeight: 40 },
+    roleCard: (r) => ({
+      flex: 1, margin: "0 12px", padding: 20,
+      background: role === r ? "#f4c430" : "#333",
+      color: role === r ? "#000" : "#eee",
+      borderRadius: 8, textAlign: "center", cursor: "pointer", transition: "transform 0.2s",
+    }),
+    input: {
+      width: "80%", padding: 10, marginTop: 20, marginLeft: "3em",
+      borderRadius: 6, border: "1px solid #444", background: "#3b3b41", color: "#fff", fontSize: 13,
+    },
+    animatedStep: { animation: "slideIn 0.3s ease" },
+    infoBox: {
+      marginLeft: "3em", width: "80%", display: "flex",
+      alignItems: "center", padding: "12px", background: "#444", color: "#fADA25",
+      borderRadius: 6, marginBottom: 8, marginTop: 20,
+    },
+    successBox: {
+      background: "#074", color: "#cfc", padding: 20, borderRadius: 8,
+      fontSize: 16, textAlign: "center", boxShadow: "0 4px 12px rgba(0,128,0,0.5)",
+    },
+    activateBtn: {
+      background: "#f4c430", color: "#000", padding: "8px 20px",
+      border: "none", borderRadius: 4, cursor: "pointer", fontSize: 11,
+    },
+    stepLines: { display: "flex", gap: 6, justifyContent: "center", marginTop: 16 },
+    stepLine: (i) => ({
+      height: 4, width: 40, background: i < step ? "#f4c430" : "#555", borderRadius: 2,
+    }),
+    nextBtn: {
+      background: "#f4c430", color: "#000", padding: "8px 16px",
+      border: "none", borderRadius: 4, cursor: "pointer",
+    },
   };
-
-  const animatedStep = {
-    animation: "slideIn 0.3s ease",
-  };
-
-  const stepLines = {
-    display: "flex",
-    gap: "6px",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "16px",
-  };
-
-  const stepLine = (index) => ({
-    height: "4px",
-    width: "40px",
-    background: index < step ? "#f4c430" : "#555",
-    borderRadius: "2px",
-    transition: "all 0.3s ease",
-  });
 
   return (
-    <>
-      <style>{`
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
+    <div style={styles.overlay}>
+      <div style={styles.modal}>
+        <style>{`
+          @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
+        `}</style>
 
-      <div style={overlay}>
-        <div style={modal}>
-          <h2
-            style={{
-              margin: 0,
-              marginBottom: 16,
-              fontWeight: "bold",
-              fontSize: "16px",
-              color: "#fff",
-              textAlign: "center",
-              userSelect: "none",
-            }}
-          >
-            Create Account
-          </h2>
+        <h2 style={{ textAlign: "center", fontSize: 16 }}>Create Account</h2>
+        {step > 1 && step < 5 && (
+          <p style={{ textAlign: "center", fontSize: 11, color: "#ccc" }}>
+            {step === 2
+              ? "Enter your details to continue"
+              : step === 3
+              ? "Password must be at least 8 characters"
+              : "Secure one-time payment of UGX 5 000 is required to activate your account."
+            }
+          </p>
+        )}
 
-          <button
-            onClick={onClose}
-            style={{
-              position: "absolute",
-              top: "16px",
-              right: "16px",
-              fontSize: "20px",
-              background: "transparent",
-              border: "none",
-              color: "#aaa",
-              cursor: "pointer",
-            }}
-            aria-label="Close"
-          >
-            ×
+        <button onClick={onClose} style={styles.closeBtn}>×</button>
+        {step > 1 && step < 5 && (
+          <button onClick={back} style={styles.backBtn}>
+            <FaChevronLeft size={11} />
           </button>
+        )}
 
-          {step > 1 && step < 5 && (
-            <button
-              onClick={back}
-              style={{
-                position: "absolute",
-                top: "16px",
-                left: "16px",
-                fontSize: "18px",
-                background: "transparent",
-                border: "none",
-                color: "#eee",
-                cursor: "pointer",
-              }}
-              title="Back"
-              aria-label="Back"
-            >
-              <FaChevronLeft size={11} />
-            </button>
-          )}
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              step === 5 ? finish() : next();
-            }}
-            style={{
-              overflowY: "auto",
-              paddingRight: "8px",
-            }}
-            noValidate
-          >
-            {step === 1 && (
-              <div style={animatedStep}>
-                <p
-                  style={{
-                    background: "#2a2a2a",
-                    padding: "16px",
-                    borderRadius: "12px",
-                    color: "#eee",
-                    lineHeight: 2.5,
-                    fontSize: "11px",
-                    whiteSpace: "pre-wrap",
-                    minHeight: "40px",
-                  }}
-                >
-                  {introText || <span>&nbsp;</span>}
-                </p>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    marginTop: "24px",
-                  }}
-                >
-                  {["Farmer", "Buyer"].map((r) => (
-                    <div
-                      key={r}
-                      style={{
-                        ...roleCard(r),
-                      }}
-                      onClick={() => {
-                        setRole(r);
-                        setStep(2);
-                        setError("");
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.transform = "scale(1.05)";
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.transform = "scale(1)";
-                      }}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          setRole(r);
-                          setStep(2);
-                          setError("");
-                        }
-                      }}
-                      aria-pressed={role === r}
-                      aria-label={r}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          fontSize: "11px",
-                        }}
-                      >
-                        {r === "Farmer" ? (
-                          <FaTractor size={32} style={{ marginBottom: 8 }} />
-                        ) : (
-                          <FaShoppingCart
-                            size={32}
-                            style={{ marginBottom: 8 }}
-                          />
-                        )}
-                        <span>{r}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+        <form onSubmit={(e) => e.preventDefault()} style={{ flexGrow: 1, overflowY: "auto" }}>
+          {step === 1 && (
+            <div style={styles.animatedStep}>
+              <p style={styles.introBox}>{introText || "\u00A0"}</p>
+              <div style={{ display: "flex", justifyContent: "space-around", marginTop: 24 }}>
+                {["Farmer", "Buyer"].map((r) => (
+                  <div key={r} style={styles.roleCard(r)} onClick={() => { setRole(r); setStep(2); setError(""); }}>
+                    {r === "Farmer" ? <FaTractor size={32} /> : <FaShoppingCart size={32} />}
+                    <span>{r}</span>
+                  </div>
+                ))}
               </div>
-            )}
-
-            {step === 2 && (
-              <div style={animatedStep}>
-                <input
-                  style={input}
-                  placeholder="Username"
-                  className="whitePlaceholder"
-                  value={values.username}
-                  onChange={handleChange("username")}
-                  autoFocus
-                  aria-label="Username"
-                  required
-                />
-                <Box w="90%" maxW="sm" marginLeft="3em" marginTop="20px">
-                  <HStack w="90%" spacing={2} mt={5}>
-                    <Box flex="1">
-                      <PhoneInput
-                        defaultCountry="UG"
-                        placeholder="Phone number"
-                        value={values.phone}
-                        onChange={(value) =>
-                          setValues((v) => ({ ...v, phone: value || "" }))
-                        }
-                        international
-                        className="custom-phone-input"
-                      />
-                    </Box>
-                  </HStack>
-                </Box>
-                <input
-                     className="whitePlaceholder"
-                  style={input}
-                  placeholder="District"
-                  value={values.district}
-                  onChange={handleChange("district")}
-                  aria-label="District"
-                  required
-                />
-              </div>
-            )}
-
-            {step === 3 && (
-              <div style={animatedStep}>
-                <div style={{ position: "relative", marginBottom: "20px" }}>
-                  <input
-                    style={input}
-                         className="whitePlaceholder"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    value={values.password}
-                    onChange={handleChange("password")}
-                    aria-label="Password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((s) => !s)}
-                    style={{
-                      position: "absolute",
-                      right: "16px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      color: "#aaa",
-                    }}
-                    aria-label={
-                      showPassword ? "Hide password" : "Show password"
-                    }
-                  >
-                    {showPassword ? "🙈" : "👁️"}
-                  </button>
-                </div>
-                <input
-                  style={input}
-                  type="password"
-                  placeholder="Confirm password"
-                  value={values.confirmPassword}
-                  onChange={handleChange("confirmPassword")}
-                  aria-label="Confirm password"
-                  required
-                />
-              </div>
-            )}
-
-            {step === 4 && (
-              <div style={animatedStep}>
-                <input
-                  style={input}
-                  readOnly
-                  value={values.phone}
-                  aria-label="Phone (readonly)"
-                />
-                <input
-                  style={input}
-                  readOnly
-                  value={values.payment}
-                  aria-label="Payment (readonly)"
-                />
-              </div>
-            )}
-
-            {step === 5 && (
-              <div style={successBox}>
-                🎉 Registration complete!
-                <br />
-                Welcome, <b>{role}</b>!
-              </div>
-            )}
-          </form>
-
-          {error && (
-            <div
-              style={{
-                color: "tomato",
-                textAlign: "center",
-                marginTop: 8,
-                userSelect: "none",
-              }}
-              role="alert"
-            >
-              {error}
             </div>
           )}
 
-          {step < 5 && (
-            <div style={stepLines}>
+          {step === 2 && (
+            <div style={styles.animatedStep}>
+              <input style={styles.input} placeholder="Username" value={values.username} onChange={handleChange("username")} autoFocus />
+              <Box w="90%" maxW="sm" ml="3em" mt="20px">
+                <PhoneInput defaultCountry="UG" placeholder="Phone number" value={values.phone} onChange={handleChange("phone")} international />
+              </Box>
+              <input style={styles.input} placeholder="District" value={values.district} onChange={handleChange("district")} />
+            </div>
+          )}
+
+          {step === 3 && (
+            <div style={styles.animatedStep}>
+              <div style={{ position: "relative", marginBottom: 20 }}>
+                <input style={styles.input} type={showPassword ? "text" : "password"} placeholder="Password" value={values.password} onChange={handleChange("password")} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#aaa", cursor: "pointer" }}>
+                  {showPassword ? "🙈" : "👁️"}
+                </button>
+              </div>
+              <input style={styles.input} type="password" placeholder="Confirm password" value={values.confirmPassword} onChange={handleChange("confirmPassword")} />
+            </div>
+          )}
+
+          {step === 4 && (
+            <div style={styles.animatedStep}>
+              {operator && (
+                <div style={styles.infoBox}>
+                  <img src={operator === "mtn" ? MTN : AIRTEL} alt={operator} style={{ width: 24, marginRight: 8 }} />
+                  <span>{values.phone}</span>
+                </div>
+              )}
+              <div style={styles.infoBox}>
+                <span>UGX {values.payment}</span>
+              </div>
+              <Box mt={6} display="flex" justifyContent="center">
+                <button onClick={activate} style={styles.activateBtn}>Activate Account</button>
+              </Box>
+            </div>
+          )}
+
+          {step === 5 && (
+            <div style={styles.successBox}>
+              🎉 Account ready!<br />
+              Hello, <b>{role}</b>.<br />
+              <Box mt={4} display="flex" justifyContent="center">
+                <button onClick={onClose} style={styles.activateBtn}>Go to Dashboard</button>
+              </Box>
+            </div>
+          )}
+        </form>
+
+        {error && <div style={{ color: "tomato", textAlign: "center", marginTop: 8 }}>{error}</div>}
+
+        {step < 4 && (
+          <>
+            <div style={styles.stepLines}>
               {[1, 2, 3, 4].map((_, i) => (
-                <div key={i} style={stepLine(i + 1)} />
+                <div key={i} style={styles.stepLine(i + 1)} />
               ))}
             </div>
-          )}
-        </div>
+            <Box mt="auto" pt={2} display="flex" justifyContent="flex-end">
+              <button onClick={next} style={styles.nextBtn}>Next</button>
+            </Box>
+          </>
+        )}
       </div>
-    </>
+    </div>
   );
 }

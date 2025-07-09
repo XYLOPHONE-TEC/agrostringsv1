@@ -152,6 +152,6 @@
 }
 
  .whitePlaceholder:focus {
-       outline: none;
-      border: 1px solid #fada25; /* Chakra yellow.400 */
+       outline:none;
+
       }
