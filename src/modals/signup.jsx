@@ -4,7 +4,7 @@ import { FaTractor, FaShoppingCart, FaChevronLeft } from "react-icons/fa";
 import { Box, HStack } from "@chakra-ui/react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import MTN from "../assets/images/mtn.jpg";
+import MTN from "../assets/images/mtn2.jpg";
 import AIRTEL from "../assets/images/airtel.jpg";
 import { HiEye, HiEyeOff, HiX } from 'react-icons/hi';
 export default function CreateAccountWizard({ open, onOpenChange }) {
