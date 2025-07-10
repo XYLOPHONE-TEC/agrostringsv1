@@ -22,6 +22,7 @@ import { MdEco } from 'react-icons/md';
 import MiddleContent from './middle-content-farmer';
 import ProductDashboard from './products-component';
 import RightContent from './right-content-farmer';
+import CarbonTracker from './carbon-tracker-farmer';
 
 const tools = [
   { icon: MdEco, label: 'Produce' },
@@ -40,6 +41,13 @@ const MainContent = () => {
     return (
       <Box w="100%" h="100%" p={{ base: 4, md: 4 }} mx={{ base: 0, md: 2 }}>
         <ProductDashboard />
+      </Box>
+    );
+  }
+  if (activeTool === 'Carbon Tracker') {
+    return (
+      <Box w="100%" h="100%" p={{ base: 4, md: 4 }} mx={{ base: 0, md: 2 }}>
+        <CarbonTracker />
       </Box>
     );
   }
