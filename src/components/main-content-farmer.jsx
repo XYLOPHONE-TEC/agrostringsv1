@@ -44,13 +44,13 @@ const MainContent = () => {
       </Box>
     );
   }
-  if (activeTool === 'Carbon Tracker') {
-    return (
-      <Box w="100%" h="100%" p={{ base: 4, md: 4 }} mx={{ base: 0, md: 2 }}>
-        <CarbonTracker />
-      </Box>
-    );
-  }
+ if (activeTool === 'Carbon Tracker') {
+  return (
+   
+      <CarbonTracker />
+   
+  );
+}
 
   return (
     <Box mx={{ base: 0, md: 4 }} >

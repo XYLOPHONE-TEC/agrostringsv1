@@ -2,72 +2,102 @@
 import React, { useState } from 'react';
 import {
   Grid,
-  Box,
+  GridItem,
   Container,
   Button,
   VStack,
+  Box,
+  Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 import CarbonLeftSection from './carbon-left-section';
-import CarbonRightSection from './carbon-right-section';
+import CarbonMiddleSection from './carbon-right-section';
+import CarbonRightSection from './carbon-other-section';
+
+const Panel = ({ title, children }) => (
+  <Box bg="gray.800" rounded="lg" overflow="hidden" h="100%">
+    {/* Header */}
+    <Box bg="gray.700" px={4} py={2}>
+      <Text fontSize="sm" fontWeight="semibold" color="white">
+        {title}
+      </Text>
+    </Box>
+    {/* Body */}
+    <Box p={4} h="calc(100% - 3rem)" overflowY="auto">
+      {children}
+    </Box>
+  </Box>
+);
 
 const CarbonTracker = () => {
-  const [showDetails, setShowDetails] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
 
-  // Mobile layout: always show right section first with button on top
+  // ——— Mobile layout ———
   if (isMobile) {
     return (
-      <Container maxW="container.sm" px={1} py={4} m="0">
-        <VStack spacing={4} align="stretch">
-          {/* Toggle button */}
+      <Container maxW="container.sm" px={4} py={6}>
+        <VStack spacing={6} align="stretch">
+          {/* Insights first */}
+          <Panel title="Satellite Insights">
+            <CarbonMiddleSection />
+          </Panel>
+
+          {/* Recommendations */}
+          <Panel title="Recommendations">
+            <CarbonRightSection />
+          </Panel>
+
+          {/* Toggle Farm Form */}
           <Button
             leftIcon={<FaPlus />}
-            rightIcon={showDetails ? <FaChevronUp /> : <FaChevronDown />}
+            rightIcon={showForm ? <FaChevronUp /> : <FaChevronDown />}
             size="lg"
-            onClick={() => setShowDetails(prev => !prev)}
+            onClick={() => setShowForm((prev) => !prev)}
           >
-            Add Farm Details
+            Farm Details
           </Button>
 
-          {/* Right Section (dominant) */}
-          <Box bg="gray.800" rounded="lg" px={-1} py={4} boxShadow="base">
-            <CarbonRightSection />
-          </Box>
-
-          {/* Left Section (conditionally shown) */}
-          {showDetails && (
-            <Box bg="gray.800" rounded="sm" px={4} py={6} mt={2}>
+          {showForm && (
+            <Panel title="Your Farm Details">
               <CarbonLeftSection />
-            </Box>
+            </Panel>
           )}
         </VStack>
       </Container>
     );
   }
 
-  // Desktop layout: two-column grid
+  // ——— Desktop layout: 3 columns ———
   return (
-    <Container maxW="container.xl" p={0} h="100vh" overflowY="hidden">
+    <Container maxW="container.xl" p={4} h="100vh">
       <Grid
-        templateColumns="2fr 3fr"
-        templateRows="1fr auto"
-        h="100%"
-        overflow="hidden"
-        gap={4}
-        p={4}
+        templateColumns="2fr 4fr 1.5fr"
+        gap={6}
+        h="full"
       >
-        {/* Left Section */}
-        <Box bg="gray.800" rounded="sm" p={6} gridColumn="1" gridRow="1">
-          <CarbonLeftSection />
-        </Box>
+        {/* Left: Farm Form */}
+        <GridItem maxH="90vh">
+          <Panel>
+            <CarbonLeftSection />
+          </Panel>
+        </GridItem>
 
-        {/* Right Section */}
-        <Box bg="gray.800" rounded="lg" p={4} boxShadow="base" gridColumn="2" gridRow="1">
-          <CarbonRightSection />
-        </Box>
+        {/* Middle: Satellite Insights */}
+        <GridItem maxH="90vh">
+          <Panel>
+            <CarbonMiddleSection />
+          </Panel>
+        </GridItem>
+
+        {/* Right: Recommendations */}
+        <GridItem maxH="90vh">
+          <Panel title="Recommendations">
+            <CarbonRightSection />
+          </Panel>
+        </GridItem>
       </Grid>
     </Container>
   );

@@ -29,9 +29,7 @@ const data = [
 export default function SatelliteInsights() {
   return (
     <Box p={4} >
-      <Heading size="sm" mb={3} color="gray.100">
-        Satellite Insights
-      </Heading>
+     
 
       {/* Top stats */}
       <Flex
@@ -80,7 +78,7 @@ export default function SatelliteInsights() {
         </Box>
       </SimpleGrid>
 
-      {/* Vegetation Trend */}
+     
       <Box bg="gray.700" border="1px" borderColor="gray.200" borderRadius="md" p={3} mb={3} height="280px">
         <Text fontSize="xs" color="gray.100" mb={2}>
           Vegetation Trend
@@ -111,13 +109,13 @@ export default function SatelliteInsights() {
         </ResponsiveContainer>
       </Box>
 
-      {/* Crop Recommendation */}
-      {/* <Box bg="blue.50" borderRadius="md" p={3}>
+    
+       {/* <Box bg="blue.50" borderRadius="md" p={3}>
         <Text fontSize="xs" color="gray.700">
-          Crop Recommendation
+         Recommendation
         </Text>
         <Text mt={1} fontSize="sm">
-          Try sorghum instead of maize this season for better drought resistance.
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Est tempora ea dicta adipisci, fuga sit voluptas officia! Repellat aliquid
         </Text>
       </Box> */}
     </Box>

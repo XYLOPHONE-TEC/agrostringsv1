@@ -1,28 +1,29 @@
+// src/components/CarbonLeftSection.jsx
 "use client";
 
 import React, { useState } from "react";
 import {
   Box,
-  Text,
-  
-  Flex,
+  HStack,
+  VStack,
   Stack,
+  Text,
   Input,
   Button,
-  useBreakpointValue,
   Separator,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { RiMedalLine } from "react-icons/ri";
 import toast from "react-hot-toast";
 import { Select, createListCollection } from "@chakra-ui/react";
 
+// Select collections
 const fertilizerOptions = createListCollection({
   items: [
     { label: "Organic", value: "Organic" },
     { label: "Inorganic", value: "Inorganic" },
   ],
 });
-
 const machineryOptions = createListCollection({
   items: [
     { label: "Low", value: "Low" },
@@ -30,7 +31,6 @@ const machineryOptions = createListCollection({
     { label: "High", value: "High" },
   ],
 });
-
 const irrigationOptions = createListCollection({
   items: [
     { label: "Traditional", value: "Traditional" },
@@ -38,7 +38,6 @@ const irrigationOptions = createListCollection({
     { label: "Sprinkler", value: "Sprinkler" },
   ],
 });
-
 const compostingOptions = createListCollection({
   items: [
     { label: "Yes", value: "Yes" },
@@ -48,7 +47,6 @@ const compostingOptions = createListCollection({
 
 const CarbonLeftSection = () => {
   const badgeSize = useBreakpointValue({ base: "sm", md: "md" });
-
   const [values, setValues] = useState({
     landSize: "",
     fertilizerType: "",
@@ -58,22 +56,21 @@ const CarbonLeftSection = () => {
     composting: "",
   });
 
-  const handleChange = (key) => (e) => {
+  const handleChange = (key) => (e) =>
     setValues((prev) => ({ ...prev, [key]: e.target.value }));
-  };
-
-  const handleSelectChange = (key) => (val) => {
+  const handleSelectChange = (key) => (val) =>
     setValues((prev) => ({ ...prev, [key]: val }));
-  };
 
   const handleSubmit = () => {
     console.log("Form values:", values);
     toast.success("Practices updated successfully!", { duration: 3000 });
   };
 
+  // Score graphic values
   const score = 75;
   const radius = 15.9155;
 
+  // Helper to render a select control
   const renderSelect = (label, key, collection) => (
     <Box w="100%">
       <Text mb={1} fontSize="xs" color="white">
@@ -83,12 +80,18 @@ const CarbonLeftSection = () => {
         collection={collection}
         selectedItem={collection.items.find((i) => i.value === values[key])}
         onValueChange={(item) => handleSelectChange(key)(item.value)}
-        bg={"gray.700"}
-        color={"white"}
+        bg="gray.700"
+        color="white"
       >
         <Select.HiddenSelect />
         <Select.Control>
-          <Select.Trigger minH="30px" fontSize="sm" px={1} py={2}  borderColor="gray.600" color= "whiteAlpha.400">
+          <Select.Trigger
+            minH="30px"
+            fontSize="sm"
+            px={2}
+            py={2}
+            borderColor="gray.600"
+          >
             <Select.ValueText placeholder={`Select ${label.toLowerCase()}`} />
             <Select.IndicatorGroup>
               <Select.Indicator />
@@ -98,7 +101,13 @@ const CarbonLeftSection = () => {
         <Select.Positioner>
           <Select.Content maxH="160px" fontSize="sm">
             {collection.items.map((item) => (
-              <Select.Item item={item} key={item.value} px={2} py={1} bg="gray.800" >
+              <Select.Item
+                item={item}
+                key={item.value}
+                px={2}
+                py={1}
+                bg="gray.800"
+              >
                 {item.label}
                 <Select.ItemIndicator />
               </Select.Item>
@@ -110,13 +119,14 @@ const CarbonLeftSection = () => {
   );
 
   return (
-    <Box  borderRadius="xl" mt={-1} >
-       
-     
-      <Flex justify="center" mb={1}>
-        
+    <Box bg="gray.800" rounded="xl" p={4}>
+      {/* Top row: progress circle, score details, badge */}
+      <HStack spacing={4} align="center" mb={4}>
+        {/* 1) Progress circle */}
         <Box position="relative" w="80px" h="80px">
+          
           <svg viewBox="0 0 36 36" width="100%" height="100%">
+            
             <circle
               cx="18"
               cy="18"
@@ -136,125 +146,90 @@ const CarbonLeftSection = () => {
               transform="rotate(-90 18 18)"
             />
           </svg>
-          <Flex
-            position="absolute"
-            top="0"
-            left="0"
-            w="100%"
-            h="100%"
-            align="center"
-            justify="center"
-          >
-            <Text fontSize="xl" fontWeight="bold" color="yellow.400" lineHeight={1}>
-              {score}
-              <Text as="span" fontSize="xs" color="gray.300" ml={1}>
-                /100
-              </Text>
-            </Text>
-          </Flex>
+          
         </Box>
-      </Flex>
 
-      <Stack direction="row" spacing={4} justify="center" mb={-5}>
-        {["Tree Planter"].map((label) => (
-          <Box
-            key={label}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            p={0.5}
-            borderRadius="full"
-            boxShadow="md"
-            w={badgeSize === "md" ? 70 : 60}
-            h={badgeSize === "md" ? 70 : 50}
-            cursor="default"
-            userSelect="none"
-          >
-            <RiMedalLine size={badgeSize === "md" ? 24 : 20} color="#a7b80bff" />
-            <Text
-              mt={1}
-              fontWeight="bold"
-              fontSize="9px"
-              textAlign="center"
-              color="white"
-              lineHeight={2}
-            >
-              {label}
+        {/* 2) Score details */}
+        <VStack align="start" spacing={0}>
+          <Text fontSize="2xl" fontWeight="bold" color="yellow.400" lineHeight={1}>
+            {score}
+            <Text as="span" fontSize="sm" color="gray.300" ml={1}>
+              /100
             </Text>
-          </Box>
-        ))}
-      </Stack>
- 
-        <Separator orientation="horizontal" borderColor="gray.600" my={3} />
+          </Text>
+          <Text fontSize="sm" color="gray.300">
+            Your Carbon Score
+          </Text>
+        </VStack>
+
+        {/* 3) Badge */}
+        <VStack spacing={1} align="center">
+          <RiMedalLine
+            size={badgeSize === "md" ? 28 : 24}
+            color="#a7b80bff"
+          />
+          <Text fontSize="xs" fontWeight="bold" color="white">
+            Tree Planter
+          </Text>
+        </VStack>
+      </HStack>
+
+      <Separator borderColor="gray.600" mb={4} />
+
+      {/* Form inputs */}
       <Stack spacing={3} align="stretch">
-       
-        <Box mb={3}>
-          <Text mb={1} fontSize="xs" color="white">
+        <Box>
+          <Text fontSize="xs" color="white" mb={1}>
             Land Size (ha)
           </Text>
           <Input
             placeholder="e.g. 2.5"
             value={values.landSize}
             onChange={handleChange("landSize")}
-            color="white"
-            _placeholder={{ color: "whiteAlpha.700" }}
             bg="gray.700"
-            borderColor="gray.600"
-            _focus={{
-              borderColor: "yellow.400",
-              boxShadow: "0 0 0 1px yellow.400",
-            }}
+            color="white"
             size="sm"
+            borderColor="gray.600" 
+            _placeholder={{ color: "whiteAlpha.700" }}
+            _focus={{ borderColor: "yellow.400", boxShadow: "0 0 0 1px yellow.400" }}
           />
         </Box>
 
-
         {renderSelect("Fertilizer Type", "fertilizerType", fertilizerOptions)}
 
-        <Stack direction="row" spacing={3} w="100%" mt={2} >
+        <Stack direction="row" spacing={3}>
           {renderSelect("Machinery Usage", "machineryUsage", machineryOptions)}
           {renderSelect("Irrigation Method", "irrigationMethod", irrigationOptions)}
         </Stack>
 
-        <Stack direction="row" spacing={3} w="100%" mt={2}>
-  {/* Trees Planted input takes equal space */}
-  <Box flex={1}>
-    <Text mb={1} fontSize="xs" color="white">
-      Trees Planted
-    </Text>
-    <Input
-      placeholder="e.g. 10"
-      value={values.treesPlanted}
-      onChange={handleChange("treesPlanted")}
-      color="white"
-      _placeholder={{ color: "whiteAlpha.700" }}
-      bg="gray.700"
-      borderColor="gray.600"
-      _focus={{
-        borderColor: "yellow.400",
-        boxShadow: "0 0 0 1px yellow.400",
-      }}
-      size="sm"
-      width="100%"       // Ensure it fills parent
-      minW="0"           // Allow shrinking if needed
-    />
-  </Box>
-
-  {/* Composting select also takes equal space */}
-  <Box flex={1} minW="0">
-    {renderSelect("Composting Used", "composting", compostingOptions)}
-  </Box>
-</Stack>
-
+        <Stack direction="row" spacing={3}>
+          <Box flex={1}>
+            <Text fontSize="xs" color="white" mb={1} >
+              Trees Planted
+            </Text>
+            <Input
+              placeholder="e.g. 10"
+              value={values.treesPlanted}
+              onChange={handleChange("treesPlanted")}
+              bg="gray.700"
+              color="white"
+              size="sm"
+              borderColor="gray.600" 
+              _placeholder={{ color: "whiteAlpha.700" }}
+              _focus={{ borderColor: "yellow.400", boxShadow: "0 0 0 1px yellow.400" }}
+            />
+          </Box>
+          <Box flex={1}>
+            {renderSelect("Composting Used", "composting", compostingOptions)}
+          </Box>
+        </Stack>
 
         <Button
           bg="#fada25"
           color="gray.800"
-          variant="solid"
-          onClick={handleSubmit}
-          isFullWidth
           size="sm"
-          mt={4}
+          isFullWidth
+          onClick={handleSubmit}
         >
           Submit
         </Button>
