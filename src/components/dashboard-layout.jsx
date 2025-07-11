@@ -146,9 +146,9 @@ export default function DashboardLayout() {
             <CirclePlus size={18} color="white" />
             <Button size="xs" bg="yellow.400" color="black" onClick={() => setSignInOpen(true)}>Sign In</Button>
             <Button size="xs" bg="gray.700">EN</Button>
-            <Button size="xs" bg="gray.700" onClick={toggleTheme}>
-              {theme === 'light' ? <Moon size={14}/> : <Sun size={14}/>}
-            </Button>
+             <Button size="xs" bg="gray.700" _hover={{ bg: 'gray.600' }}>
+                      Mode
+                    </Button>
           </HStack>
         </Flex>
 
