@@ -42,9 +42,9 @@ const CarbonTracker = () => {
         mx={0}    // remove auto-margins
       >
         <VStack spacing={4} align="stretch">
-          <Panel title="Satellite Insights">
+        
             <CarbonMiddleSection />
-          </Panel>
+     
 
           <Panel title="Recommendations">
             <CarbonRightSection />
