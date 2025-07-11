@@ -155,3 +155,20 @@
        outline:none;
 
       }
+
+      /* Default tab styles */
+/* src/styles/tabs.css */
+.react-tabs__tab {
+  background-color: transparent; /* gray.200 */
+  border: 1px solid transparent;
+  color: rgb(185, 184, 184);
+}
+
+
+.react-tabs__tab:focus {
+  outline: none;
+  background-color: transparent;
+  color: #ffffff;
+  border-color: transparent;
+
+}

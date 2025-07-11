@@ -2,12 +2,9 @@
 "use client";
 
 import React, { useState } from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-  TabsIndicator,
   Container,
   VStack,
   Box,
@@ -37,32 +34,31 @@ const Panel = ({ title, children }) => (
 );
 
 const CarbonTracker = () => {
-  const [activeTab, setActiveTab] = useState('insights');
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   if (isMobile) {
     return (
       <Container maxW="container.sm" px={0} py={2} mx={0}>
-        <VStack spacing={4} align="stretch">
+        <VStack gap={10} align="stretch">
           {/* Mobile Tabs */}
-          <Tabs.Root value={activeTab} onChange={setActiveTab}>
-            <TabsList borderBottom="1px solid" borderColor="gray.600">
-              <TabsTrigger value="insights">Insights</TabsTrigger>
-              <TabsTrigger value="farm">Farm Details</TabsTrigger>
-              <TabsIndicator />
-            </TabsList>
+          <Tabs>
+            <TabList >
+              <Tab>Insights</Tab>
+              <Tab>Farm Details</Tab>
+            </TabList>
 
-            <TabsContent value="insights" asChild>
+            <TabPanel>
               <Panel title="Satellite Insights">
                 <CarbonMiddleSection />
               </Panel>
-            </TabsContent>
-            <TabsContent value="farm" asChild>
+            </TabPanel>
+
+            <TabPanel>
               <Panel title="Your Farm Details">
                 <CarbonLeftSection />
               </Panel>
-            </TabsContent>
-          </Tabs.Root>
+            </TabPanel>
+          </Tabs>
 
           {/* Always-last Recommendations */}
           <Panel title="Recommendations">
