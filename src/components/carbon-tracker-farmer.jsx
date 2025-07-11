@@ -18,13 +18,11 @@ import CarbonRightSection from './carbon-other-section';
 
 const Panel = ({ title, children }) => (
   <Box bg="gray.800" rounded="lg" overflow="hidden" h="100%">
-    {/* Header */}
     <Box bg="gray.700" px={4} py={2}>
       <Text fontSize="sm" fontWeight="semibold" color="white">
         {title}
       </Text>
     </Box>
-    {/* Body */}
     <Box p={4} h="calc(100% - 3rem)" overflowY="auto">
       {children}
     </Box>
@@ -35,27 +33,29 @@ const CarbonTracker = () => {
   const [showForm, setShowForm] = useState(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
 
-  // ——— Mobile layout ———
   if (isMobile) {
     return (
-      <Container maxW="container.sm" px={4} py={6}>
-        <VStack spacing={6} align="stretch">
-          {/* Insights first */}
+      <Container
+        maxW="container.sm"
+        px={0}     // remove horizontal padding on mobile
+        py={2}
+        mx={0}    // remove auto-margins
+      >
+        <VStack spacing={4} align="stretch">
           <Panel title="Satellite Insights">
             <CarbonMiddleSection />
           </Panel>
 
-          {/* Recommendations */}
           <Panel title="Recommendations">
             <CarbonRightSection />
           </Panel>
 
-          {/* Toggle Farm Form */}
           <Button
             leftIcon={<FaPlus />}
             rightIcon={showForm ? <FaChevronUp /> : <FaChevronDown />}
             size="lg"
-            onClick={() => setShowForm((prev) => !prev)}
+            onClick={() => setShowForm(prev => !prev)}
+            mx={2}  // optional inline margin
           >
             Farm Details
           </Button>
@@ -70,7 +70,6 @@ const CarbonTracker = () => {
     );
   }
 
-  // ——— Desktop layout: 3 columns ———
   return (
     <Container maxW="container.xl" p={4} h="100vh">
       <Grid
@@ -78,21 +77,18 @@ const CarbonTracker = () => {
         gap={6}
         h="full"
       >
-        {/* Left: Farm Form */}
         <GridItem maxH="90vh">
-          <Panel>
+          <Panel title="Your Farm Details">
             <CarbonLeftSection />
           </Panel>
         </GridItem>
 
-        {/* Middle: Satellite Insights */}
         <GridItem maxH="90vh">
-          <Panel>
+          <Panel title="Satellite Insights">
             <CarbonMiddleSection />
           </Panel>
         </GridItem>
 
-        {/* Right: Recommendations */}
         <GridItem maxH="90vh">
           <Panel title="Recommendations">
             <CarbonRightSection />

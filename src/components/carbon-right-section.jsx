@@ -28,7 +28,7 @@ const data = [
 
 export default function SatelliteInsights() {
   return (
-    <Box p={4} >
+    <Box p={0}  >
      
 
       {/* Top stats */}
@@ -38,6 +38,7 @@ export default function SatelliteInsights() {
         borderColor="gray.200"
         borderRadius="md"
         p={3}
+      
         align="center"
         justify="space-between"
         mb={3}
