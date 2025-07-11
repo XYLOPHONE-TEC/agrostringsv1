@@ -158,10 +158,18 @@
 
       /* Default tab styles */
 /* src/styles/tabs.css */
+.react-tabs__tab-list {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .react-tabs__tab {
-  background-color: transparent; /* gray.200 */
+  background-color: transparent;
   border: 1px solid transparent;
   color: rgb(185, 184, 184);
+  font-size: small;
+  margin-right: 5em;
 }
 
 

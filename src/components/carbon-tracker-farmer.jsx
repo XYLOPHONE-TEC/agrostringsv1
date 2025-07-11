@@ -39,7 +39,7 @@ const CarbonTracker = () => {
   if (isMobile) {
     return (
       <Container maxW="container.sm" px={0} py={2} mx={0}>
-        <VStack gap={10} align="stretch">
+        <VStack spacing={5} align="stretch">
           {/* Mobile Tabs */}
           <Tabs>
             <TabList >
@@ -48,13 +48,13 @@ const CarbonTracker = () => {
             </TabList>
 
             <TabPanel>
-              <Panel title="Satellite Insights">
+              <Panel>
                 <CarbonMiddleSection />
               </Panel>
             </TabPanel>
 
             <TabPanel>
-              <Panel title="Your Farm Details">
+              <Panel>
                 <CarbonLeftSection />
               </Panel>
             </TabPanel>
