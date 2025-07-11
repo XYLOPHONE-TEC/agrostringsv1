@@ -119,7 +119,7 @@ const CarbonLeftSection = () => {
   );
 
   return (
-    <Box bg="gray.800" rounded="xl" p={4}>
+    <Box bg="gray.800" rounded="xl" p={4} border="2px solid" borderColor="gray.700">
       {/* Top row: progress circle, score details, badge */}
       <HStack spacing={4} align="center" mb={4}>
         {/* 1) Progress circle */}
