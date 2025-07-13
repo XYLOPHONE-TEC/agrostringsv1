@@ -1,15 +1,32 @@
 // VideoEditor.jsx
-import React, { useRef, useState, useEffect } from 'react'
+"use client";
+
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import {
-  Box, Flex, Stack, Text, Spacer, Input,
-} from '@chakra-ui/react'
+  Box,
+  Flex,
+  Stack,
+  Text,
+  Spacer,
+  Input,
+  Image,
+} from '@chakra-ui/react';
 import {
-  Plus, Crop, Cuboid, Mic,
-  Undo2 as Undo, Redo2 as Redo, Trash2 as Trash,
-  SkipBack, PlayCircle, SkipForward,
-  Expand, Info, Circle,
-} from 'lucide-react'
-import { FaFont } from 'react-icons/fa6' // FontAwesome 6 font icon
+  Plus,
+  Crop,
+  Cuboid,
+  Mic,
+  Undo2 as Undo,
+  Redo2 as Redo,
+  Trash2 as Trash,
+  SkipBack,
+  PlayCircle,
+  SkipForward,
+  Expand,
+  Info,
+  Circle,
+} from 'lucide-react';
+import { FaFont } from 'react-icons/fa6';
 
 function IconBtn({ children, onClick }) {
   return (
@@ -22,100 +39,199 @@ function IconBtn({ children, onClick }) {
     >
       {children}
     </Box>
-  )
+  );
 }
 
 export default function VideoEditor() {
-  const videoRef = useRef(null)
-  const [file, setFile] = useState(null)
-  const [src, setSrc] = useState(null)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const [selectedClip, setSelectedClip] = useState(0)
+  const videoRef = useRef(null);
+  const [file, setFile] = useState(null);
+  const [src, setSrc] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
-  const timelineMarks = [20, 50, 70, 90]
-  const clips = [
-    { label: 'Clip 1', icon: Circle },
-    { label: 'Clip 2', icon: Circle },
-    { label: 'Clip 3', icon: Circle },
-  ]
+  // Trim UI state
+  const [thumbnails, setThumbnails] = useState([]);
+  const [trimStart, setTrimStart] = useState(0);
+  const [trimEnd, setTrimEnd] = useState(0);
+  const [dragging, setDragging] = useState(null);
 
-  const iconSize = 16
-  const iconStroke = 1.5
+  const iconSize = 16;
+  const iconStroke = 1.5;
 
+  // Load file → blob URL
   useEffect(() => {
     if (!file) {
-      setSrc(null)
-      return
+      setSrc(null);
+      return;
     }
-    const url = URL.createObjectURL(file)
-    setSrc(url)
-    return () => URL.revokeObjectURL(url)
-  }, [file])
+    const url = URL.createObjectURL(file);
+    setSrc(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
 
+  // When metadata loads, init duration, trims, and thumbs
+  const onLoadedMetadata = () => {
+    const v = videoRef.current;
+    setDuration(v.duration);
+    setTrimEnd(v.duration);
+    generateThumbnails(v);
+  };
+
+  // Extract ~12 thumbnails evenly across the video
+  const generateThumbnails = async (video) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const count = 12;
+    canvas.width = 120;
+    canvas.height = 68;
+
+    const thumbs = [];
+    for (let i = 0; i < count; i++) {
+      const t = (video.duration * i) / (count - 1);
+      await new Promise((res) => {
+        video.currentTime = t;
+        const handler = () => {
+          video.removeEventListener('seeked', handler);
+          res();
+        };
+        video.addEventListener('seeked', handler);
+      });
+      ctx.drawImage(video, 0, 0, 120, 68);
+      thumbs.push(canvas.toDataURL());
+    }
+    setThumbnails(thumbs);
+  };
+
+  // Play / Pause toggle
   const togglePlay = () => {
-    const v = videoRef.current
-    if (!v) return
-    if (v.paused) { v.play(); setIsPlaying(true) }
-    else { v.pause(); setIsPlaying(false) }
-  }
-
-  const skip = dt => {
-    const v = videoRef.current
-    if (v) {
-      const t = Math.max(0, Math.min(duration, currentTime + dt))
-      v.currentTime = t
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.play();
+      setIsPlaying(true);
+    } else {
+      v.pause();
+      setIsPlaying(false);
     }
-  }
+  };
 
-  const onTimeUpdate = () => setCurrentTime(videoRef.current.currentTime)
-  const onLoaded = () => setDuration(videoRef.current.duration)
-  const handleSeek = e => {
-    videoRef.current.currentTime = parseFloat(e.target.value)
-  }
+  // Update currentTime on playback
+  const onTimeUpdate = () => {
+    setCurrentTime(videoRef.current.currentTime);
+  };
 
-  const formatTime = t => {
-    const mm = String(Math.floor(t / 60)).padStart(2, '0')
-    const ss = String(Math.floor(t % 60)).padStart(2, '0')
-    return `${mm}:${ss}`
-  }
+  // Skip forward/backward
+  const skip = (dt) => {
+    const v = videoRef.current;
+    if (!v) return;
+    let t = v.currentTime + dt;
+    t = Math.max(0, Math.min(duration, t));
+    v.currentTime = t;
+  };
+
+  // Map global mouse moves to trim handle drags
+  const onMouseMove = useCallback(
+    (e) => {
+      if (!dragging) return;
+      const strip = document.getElementById('thumb-strip');
+      if (!strip) return;
+      const rect = strip.getBoundingClientRect();
+      let pct = (e.clientX - rect.left) / rect.width;
+      pct = Math.max(0, Math.min(1, pct));
+      const time = pct * duration;
+      if (dragging === 'start') {
+        setTrimStart(Math.min(time, trimEnd - 0.1));
+      } else {
+        setTrimEnd(Math.max(time, trimStart + 0.1));
+      }
+    },
+    [dragging, duration, trimStart, trimEnd]
+  );
+
+  const onMouseUp = () => {
+    setDragging(null);
+  };
+
+  useEffect(() => {
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, [onMouseMove]);
+
+  const startPct = duration ? (trimStart / duration) * 100 : 0;
+  const endPct = duration ? (trimEnd / duration) * 100 : 0;
+  const playPct = duration ? (currentTime / duration) * 100 : 0;
+
+  const formatTime = (t) => {
+    const mm = String(Math.floor(t / 60)).padStart(2, '0');
+    const ss = String(Math.floor(t % 60)).padStart(2, '0');
+    return `${mm}:${ss}`;
+  };
 
   return (
     <Flex direction="column" height="100vh" bg="#2B2B2B" color="white">
       {/* Top toolbar */}
-      <Flex as="header" px={6} py={2} bg="#3A3A3A" align="center" justify="space-between">
+      <Flex
+        as="header"
+        px={6}
+        py={2}
+        bg="#3A3A3A"
+        align="center"
+        justify="space-between"
+      >
         <Stack direction="row" spacing={4} align="center">
-          <IconBtn><Plus size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn>
+            <Plus size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
           <Text fontSize="xs">Add Music</Text>
         </Stack>
         <Stack direction="row" spacing={3} align="center">
-          <IconBtn onClick={togglePlay}><Mic color="#F75A3F" size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn><Crop size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn><FaFont size={iconSize} /></IconBtn>
+          <IconBtn onClick={togglePlay}>
+            <Mic color="#F75A3F" size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
+          <IconBtn>
+            <Crop size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
+          <IconBtn>
+            <FaFont size={iconSize} />
+          </IconBtn>
         </Stack>
         <Stack direction="row" spacing={3}>
-          <IconBtn><Cuboid size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn>
+            <Cuboid size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
         </Stack>
       </Flex>
 
-      {/* Video area */}
+      {/* Video display */}
       <Box position="relative" flex={1} overflow="hidden">
         {src ? (
           <video
             ref={videoRef}
             src={src}
             onTimeUpdate={onTimeUpdate}
-            onLoadedMetadata={onLoaded}
+            onLoadedMetadata={onLoadedMetadata}
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
         ) : (
-          <Flex direction="column" align="center" justify="center" height="100%" bg="#1F1F1F">
+          <Flex
+            direction="column"
+            align="center"
+            justify="center"
+            height="100%"
+            bg="#1F1F1F"
+          >
             <Text mb={4}>Upload a video to begin editing</Text>
             <Input
               type="file"
               accept="video/*"
-              onChange={e => e.target.files && setFile(e.target.files[0])}
+              onChange={(e) =>
+                e.target.files && setFile(e.target.files[0])
+              }
               width="auto"
             />
           </Flex>
@@ -125,83 +241,114 @@ export default function VideoEditor() {
       {/* Bottom controls + timeline */}
       <Box bg="#3A3A3A">
         <Flex px={6} py={2} align="center">
-          <IconBtn><Undo size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn><Redo size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn><Trash size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn>
+            <Undo size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
+          <IconBtn>
+            <Redo size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
+          <IconBtn>
+            <Trash size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
           <Spacer />
-          <IconBtn onClick={() => skip(-5)}><SkipBack size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn onClick={togglePlay}><PlayCircle size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn onClick={() => skip(5)}><SkipForward size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn onClick={() => skip(-5)}>
+            <SkipBack size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
+          <IconBtn onClick={togglePlay}>
+            <PlayCircle size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
+          <IconBtn onClick={() => skip(5)}>
+            <SkipForward size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
           <Spacer />
-          <IconBtn><Expand size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn><Info size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn>
+            <Expand size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
+          <IconBtn>
+            <Info size={iconSize} strokeWidth={iconStroke} />
+          </IconBtn>
         </Flex>
 
-        {/* Timeline + clips */}
-        <Box px={6} py={4} position="relative">
-          <Box position="relative" height="24px" mb={2}>
-            {timelineMarks.map((sec, i) => {
-              const pct = duration ? (sec / duration) * 100 : 0
-              return (
-                <Box key={i} position="absolute" left={`${pct}%`} top={0} transform="translateX(-1px)">
-                  <Box w="2px" h="8px" bg="white" opacity={0.8} />
-                  <Text fontSize="xx-small" pt={2} opacity={0.8}>{formatTime(sec)}</Text>
-                </Box>
-              )
-            })}
-            <Box position="absolute" left={`${(currentTime / duration) * 100}%`} top={0} transform="translateX(-1px)">
-              <Box w="2px" h="8px" bg="#F9FF66" />
-            </Box>
-          </Box>
-
-          <Box position="relative">
-            <input
-              type="range"
-              min={0}
-              max={duration}
-              step="0.01"
-              value={currentTime}
-              onChange={handleSeek}
-              style={{
-                width: '100%',
-                appearance: 'none',
-                background: 'transparent',
-                position: 'relative',
-                zIndex: 2,
-              }}
+        {/* Thumbnail strip + trim handles + playhead */}
+        <Box px={6} py={4}>
+          <Box
+            id="thumb-strip"
+            position="relative"
+            h="68px"
+            overflowX="auto"
+            bg="rgba(255,255,255,0.05)"
+            borderRadius="md"
+          >
+            <Flex>
+              {thumbnails.map((src, i) => (
+                <Image
+                  key={i}
+                  src={src}
+                  w="120px"
+                  h="68px"
+                  objectFit="cover"
+                  flexShrink={0}
+                />
+              ))}
+            </Flex>
+            {/* Dimmed overlays */}
+            <Box
+              position="absolute"
+              top={0}
+              left="0"
+              w={`${startPct}%`}
+              h="100%"
+              bg="rgba(0,0,0,0.6)"
             />
-            <Box position="absolute" top="6px" left={0} right={0} h="4px" bg="rgba(255,255,255,0.3)" />
-            <Box position="absolute" top="6px" left={0} w={`${(currentTime / duration) * 100}%`} h="4px" bg="#F9FF66" />
+            <Box
+              position="absolute"
+              top={0}
+              left={`${endPct}%`}
+              w={`${100 - endPct}%`}
+              h="100%"
+              bg="rgba(0,0,0,0.6)"
+            />
+            {/* Start handle */}
+            <Box
+              position="absolute"
+              top={0}
+              left={`${startPct}%`}
+              transform="translateX(-50%)"
+              w="8px"
+              h="100%"
+              bg="yellow.400"
+              cursor="ew-resize"
+              onMouseDown={() => setDragging('start')}
+            />
+            {/* End handle */}
+            <Box
+              position="absolute"
+              top={0}
+              left={`${endPct}%`}
+              transform="translateX(-50%)"
+              w="8px"
+              h="100%"
+              bg="yellow.400"
+              cursor="ew-resize"
+              onMouseDown={() => setDragging('end')}
+            />
+            {/* Playhead overlay */}
+            <Box
+              position="absolute"
+              top={0}
+              left={`${playPct}%`}
+              transform="translateX(-50%)"
+              w="2px"
+              h="100%"
+              bg="yellow.400"
+            />
           </Box>
-
-          <Text textAlign="center" fontSize="xs" mt={2}>
-            {formatTime(currentTime)} / {formatTime(duration)}
+          {/* Trim time display */}
+          <Text fontSize="xs" color="gray.300" mt={2} textAlign="center">
+            Trim: {formatTime(trimStart)} – {formatTime(trimEnd)}
           </Text>
-
-          <Flex gap={3} overflowX="auto" mt={4} px={6}>
-            {clips.map((c, idx) => {
-              const IconComp = c.icon
-              const selected = idx === selectedClip
-              return (
-                <Flex
-                  key={idx}
-                  align="center"
-                  px={3}
-                  py={1}
-                  bg={selected ? 'transparent' : '#4A4A4A'}
-                  border={selected ? '2px solid #F9FF66' : 'none'}
-                  borderRadius="full"
-                  onClick={() => setSelectedClip(idx)}
-                  cursor="pointer"
-                >
-                  <IconComp size={iconSize} strokeWidth={iconStroke} opacity={selected ? 1 : 0.8} />
-                  <Text fontSize="xs" opacity={selected ? 1 : 0.8} ml={2}>{c.label}</Text>
-                </Flex>
-              )
-            })}
-          </Flex>
         </Box>
       </Box>
     </Flex>
-  )
+  );
 }

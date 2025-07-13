@@ -51,11 +51,7 @@ const VideoDialog = () => (
             <VideoBody />
           </Dialog.Body>
 
-          <Dialog.Footer px={4} py={0}>
-            <Button colorScheme="yellow" ml="auto">
-              Upload
-            </Button>
-          </Dialog.Footer>
+        
         </Dialog.Content>
       </Dialog.Positioner>
     </Portal>
