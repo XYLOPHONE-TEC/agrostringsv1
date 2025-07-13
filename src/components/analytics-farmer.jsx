@@ -66,7 +66,7 @@ export default function AnalyticsFarmer() {
   };
 
   return (
-    <Container maxW="container.xl" py={4} color='white'>
+    <Container maxW="container.xl" p={0} color='white'>
      
       <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} mb={6}>
         <EarningsCard
