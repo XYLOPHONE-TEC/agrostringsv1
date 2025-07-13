@@ -1,9 +1,10 @@
-// src/components/VideoBody.jsx
+"use client";
+
 import React, { useState, useRef } from 'react';
 import {
   Box, Button, VStack, HStack, Text,
   Center, Flex, Icon, Drawer, Portal,
-  CloseButton, useDisclosure
+  CloseButton, useDisclosure, useBreakpointValue
 } from '@chakra-ui/react';
 import {
   FaFolderOpen, FaVideo, FaThLarge, FaTextHeight,
@@ -23,6 +24,7 @@ export default function VideoBody() {
   const [activeTab, setActiveTab] = useState(sidebarItems[0].label);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstPlayRef = useRef();
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   const handleRecordClick = async () => {
     try {
@@ -40,6 +42,134 @@ export default function VideoBody() {
 
   const sounds = ['Piano Loop', 'Ambient Beat', 'Podcast Intro', 'Nature Sounds'];
 
+  if (isMobile) {
+    return (
+      <Flex direction="column" h="100vh" bg="gray.800" color="white" overflow="hidden">
+        {/* Video editing area */}
+        <Box flex="1" bg="black" pos="relative">
+          <Center h="100%" color="gray.400" fontSize="lg" userSelect="none">
+            {activeTab === 'Your media' && 'Your media preview here'}
+            {activeTab === 'Record & create' && 'Record & create interface here'}
+            {activeTab === 'Content library' && 'Content library drawer is open'}
+            {activeTab === 'Text' && 'Text editor coming soon...'}
+          </Center>
+
+          {/* Overlay video controls */}
+          {activeTab === 'Your media' && (
+            <HStack
+              pos="absolute"
+              bottom="72px"
+              left="50%"
+              transform="translateX(-50%)"
+              spacing={6}
+              bg="rgba(0,0,0,0.6)"
+              py={2} px={4}
+              borderRadius="full"
+            >
+              <Box onClick={() => toaster.create({ title: 'Rewind 5s' })} cursor="pointer">
+                <Icon as={MdOndemandVideo} boxSize={6} />
+              </Box>
+              <Box onClick={() => toaster.create({ title: 'Play/Pause' })} cursor="pointer">
+                <Icon as={FaPlayCircle} boxSize={10} />
+              </Box>
+              <Box onClick={() => toaster.create({ title: 'Forward 5s' })} cursor="pointer" transform="rotate(180deg)">
+                <Icon as={MdOndemandVideo} boxSize={6} />
+              </Box>
+            </HStack>
+          )}
+        </Box>
+
+        {/* Bottom tab bar */}
+        <HStack
+          justify="space-around"
+          bg="gray.900"
+          py={2}
+          borderTop="1px solid"
+          borderColor="gray.700"
+        >
+          {sidebarItems.map(item => {
+            const isActive = item.label === activeTab;
+            return (
+              <Flex
+                key={item.label}
+                direction="column"
+                align="center"
+                justify="center"
+                flex="1"
+                py={2}
+                cursor="pointer"
+                bg={isActive ? 'gray.800' : 'transparent'}
+                onClick={() => handleTabClick(item.label)}
+              >
+                <Icon
+                  as={item.icon}
+                  boxSize={6}
+                  color={isActive ? 'yellow.400' : 'gray.400'}
+                />
+                <Text
+                  mt={1}
+                  fontSize="xs"
+                  color={isActive ? 'yellow.400' : 'gray.400'}
+                >
+                  {item.label}
+                </Text>
+              </Flex>
+            );
+          })}
+        </HStack>
+
+        {/* Content Library drawer */}
+        <Drawer.Root
+          open={isOpen}
+          onOpenChange={(open) => !open && onClose()}
+          placement="right"
+          size="full"
+          initialFocusEl={() => firstPlayRef.current}
+        >
+          <Portal>
+            <Drawer.Backdrop />
+            <Drawer.Positioner padding={0}>
+              <Drawer.Content bg="gray.800" color="white" rounded="none" height="100vh">
+                <Drawer.CloseTrigger asChild>
+                  <CloseButton pos="absolute" top="1rem" right="1rem" />
+                </Drawer.CloseTrigger>
+                <Drawer.Header>
+                  <Drawer.Title>Content Library</Drawer.Title>
+                </Drawer.Header>
+                <Drawer.Body>
+                  <VStack spacing={4} mt={4}>
+                    {sounds.map((sound, idx) => (
+                      <HStack key={sound} justify="space-between">
+                        <HStack spacing={2}>
+                          <Icon as={FaMusic} boxSize={5} />
+                          <Text>{sound}</Text>
+                        </HStack>
+                        <Icon
+                          as={FaPlayCircle}
+                          boxSize={6}
+                          cursor="pointer"
+                          ref={idx === 0 ? firstPlayRef : null}
+                          onClick={() => toaster.create({ title: `Playing: ${sound}`, type: 'info' })}
+                        />
+                      </HStack>
+                    ))}
+                  </VStack>
+                </Drawer.Body>
+                <Drawer.Footer>
+                  <Drawer.ActionTrigger asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </Drawer.ActionTrigger>
+                  <Button colorScheme="yellow">Insert</Button>
+                </Drawer.Footer>
+              </Drawer.Content>
+            </Drawer.Positioner>
+          </Portal>
+        </Drawer.Root>
+      </Flex>
+    );
+  }
+
+  // ✅ Desktop unchanged from your original version
   return (
     <>
       <HStack
