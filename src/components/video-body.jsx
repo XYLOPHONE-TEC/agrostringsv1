@@ -1,308 +1,207 @@
-"use client";
-
-import React, { useState, useRef } from 'react';
+// VideoEditor.jsx
+import React, { useRef, useState, useEffect } from 'react'
 import {
-  Box, Button, VStack, HStack, Text,
-  Center, Flex, Icon, Drawer, Portal,
-  CloseButton, useDisclosure, useBreakpointValue
-} from '@chakra-ui/react';
+  Box, Flex, Stack, Text, Spacer, Input,
+} from '@chakra-ui/react'
 import {
-  FaFolderOpen, FaVideo, FaThLarge, FaTextHeight,
-  FaUpload, FaPlayCircle, FaMusic
-} from 'react-icons/fa';
-import { MdOndemandVideo } from 'react-icons/md';
-import { toaster } from '../components/ui/toaster';
+  Plus, Crop, Cuboid, Mic,
+  Undo2 as Undo, Redo2 as Redo, Trash2 as Trash,
+  SkipBack, PlayCircle, SkipForward,
+  Expand, Info, Circle,
+} from 'lucide-react'
+import { FaFont } from 'react-icons/fa6' // FontAwesome 6 font icon
 
-const sidebarItems = [
-  { icon: FaFolderOpen, label: 'Your media' },
-  { icon: FaVideo, label: 'Record & create' },
-  { icon: FaThLarge, label: 'Content library' },
-  { icon: FaTextHeight, label: 'Text' },
-];
+function IconBtn({ children, onClick }) {
+  return (
+    <Box
+      onClick={onClick}
+      cursor="pointer"
+      p={2}
+      borderRadius="md"
+      _hover={{ bg: 'rgba(255,255,255,0.1)' }}
+    >
+      {children}
+    </Box>
+  )
+}
 
-export default function VideoBody() {
-  const [activeTab, setActiveTab] = useState(sidebarItems[0].label);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const firstPlayRef = useRef();
-  const isMobile = useBreakpointValue({ base: true, md: false });
+export default function VideoEditor() {
+  const videoRef = useRef(null)
+  const [file, setFile] = useState(null)
+  const [src, setSrc] = useState(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [selectedClip, setSelectedClip] = useState(0)
 
-  const handleRecordClick = async () => {
-    try {
-      await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      toaster.create({ title: 'Camera access granted.', type: 'success' });
-    } catch (err) {
-      toaster.create({ title: 'Camera access denied.', description: err.message, type: 'error' });
+  const timelineMarks = [20, 50, 70, 90]
+  const clips = [
+    { label: 'Clip 1', icon: Circle },
+    { label: 'Clip 2', icon: Circle },
+    { label: 'Clip 3', icon: Circle },
+  ]
+
+  const iconSize = 16
+  const iconStroke = 1.5
+
+  useEffect(() => {
+    if (!file) {
+      setSrc(null)
+      return
     }
-  };
+    const url = URL.createObjectURL(file)
+    setSrc(url)
+    return () => URL.revokeObjectURL(url)
+  }, [file])
 
-  const handleTabClick = (label) => {
-    setActiveTab(label);
-    if (label === 'Content library') onOpen();
-  };
-
-  const sounds = ['Piano Loop', 'Ambient Beat', 'Podcast Intro', 'Nature Sounds'];
-
-  if (isMobile) {
-    return (
-      <Flex direction="column" h="100vh" bg="gray.800" color="white" overflow="hidden">
-        {/* Video editing area */}
-        <Box flex="1" bg="black" pos="relative">
-          <Center h="100%" color="gray.400" fontSize="lg" userSelect="none">
-            {activeTab === 'Your media' && 'Your media preview here'}
-            {activeTab === 'Record & create' && 'Record & create interface here'}
-            {activeTab === 'Content library' && 'Content library drawer is open'}
-            {activeTab === 'Text' && 'Text editor coming soon...'}
-          </Center>
-
-          {/* Overlay video controls */}
-          {activeTab === 'Your media' && (
-            <HStack
-              pos="absolute"
-              bottom="72px"
-              left="50%"
-              transform="translateX(-50%)"
-              spacing={6}
-              bg="rgba(0,0,0,0.6)"
-              py={2} px={4}
-              borderRadius="full"
-            >
-              <Box onClick={() => toaster.create({ title: 'Rewind 5s' })} cursor="pointer">
-                <Icon as={MdOndemandVideo} boxSize={6} />
-              </Box>
-              <Box onClick={() => toaster.create({ title: 'Play/Pause' })} cursor="pointer">
-                <Icon as={FaPlayCircle} boxSize={10} />
-              </Box>
-              <Box onClick={() => toaster.create({ title: 'Forward 5s' })} cursor="pointer" transform="rotate(180deg)">
-                <Icon as={MdOndemandVideo} boxSize={6} />
-              </Box>
-            </HStack>
-          )}
-        </Box>
-
-        {/* Bottom tab bar */}
-        <HStack
-          justify="space-around"
-          bg="gray.900"
-          py={2}
-          borderTop="1px solid"
-          borderColor="gray.700"
-        >
-          {sidebarItems.map(item => {
-            const isActive = item.label === activeTab;
-            return (
-              <Flex
-                key={item.label}
-                direction="column"
-                align="center"
-                justify="center"
-                flex="1"
-                py={2}
-                cursor="pointer"
-                bg={isActive ? 'gray.800' : 'transparent'}
-                onClick={() => handleTabClick(item.label)}
-              >
-                <Icon
-                  as={item.icon}
-                  boxSize={6}
-                  color={isActive ? 'yellow.400' : 'gray.400'}
-                />
-                <Text
-                  mt={1}
-                  fontSize="xs"
-                  color={isActive ? 'yellow.400' : 'gray.400'}
-                >
-                  {item.label}
-                </Text>
-              </Flex>
-            );
-          })}
-        </HStack>
-
-        {/* Content Library drawer */}
-        <Drawer.Root
-          open={isOpen}
-          onOpenChange={(open) => !open && onClose()}
-          placement="right"
-          size="full"
-          initialFocusEl={() => firstPlayRef.current}
-        >
-          <Portal>
-            <Drawer.Backdrop />
-            <Drawer.Positioner padding={0}>
-              <Drawer.Content bg="gray.800" color="white" rounded="none" height="100vh">
-                <Drawer.CloseTrigger asChild>
-                  <CloseButton pos="absolute" top="1rem" right="1rem" />
-                </Drawer.CloseTrigger>
-                <Drawer.Header>
-                  <Drawer.Title>Content Library</Drawer.Title>
-                </Drawer.Header>
-                <Drawer.Body>
-                  <VStack spacing={4} mt={4}>
-                    {sounds.map((sound, idx) => (
-                      <HStack key={sound} justify="space-between">
-                        <HStack spacing={2}>
-                          <Icon as={FaMusic} boxSize={5} />
-                          <Text>{sound}</Text>
-                        </HStack>
-                        <Icon
-                          as={FaPlayCircle}
-                          boxSize={6}
-                          cursor="pointer"
-                          ref={idx === 0 ? firstPlayRef : null}
-                          onClick={() => toaster.create({ title: `Playing: ${sound}`, type: 'info' })}
-                        />
-                      </HStack>
-                    ))}
-                  </VStack>
-                </Drawer.Body>
-                <Drawer.Footer>
-                  <Drawer.ActionTrigger asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </Drawer.ActionTrigger>
-                  <Button colorScheme="yellow">Insert</Button>
-                </Drawer.Footer>
-              </Drawer.Content>
-            </Drawer.Positioner>
-          </Portal>
-        </Drawer.Root>
-      </Flex>
-    );
+  const togglePlay = () => {
+    const v = videoRef.current
+    if (!v) return
+    if (v.paused) { v.play(); setIsPlaying(true) }
+    else { v.pause(); setIsPlaying(false) }
   }
 
-  // ✅ Desktop unchanged from your original version
+  const skip = dt => {
+    const v = videoRef.current
+    if (v) {
+      const t = Math.max(0, Math.min(duration, currentTime + dt))
+      v.currentTime = t
+    }
+  }
+
+  const onTimeUpdate = () => setCurrentTime(videoRef.current.currentTime)
+  const onLoaded = () => setDuration(videoRef.current.duration)
+  const handleSeek = e => {
+    videoRef.current.currentTime = parseFloat(e.target.value)
+  }
+
+  const formatTime = t => {
+    const mm = String(Math.floor(t / 60)).padStart(2, '0')
+    const ss = String(Math.floor(t % 60)).padStart(2, '0')
+    return `${mm}:${ss}`
+  }
+
   return (
-    <>
-      <HStack
-        h="80vh"
-        align="stretch"
-        spacing={0}
-        w="100%"
-        overflow="hidden"
-      >
-        <VStack
-          w="220px"
-          bg="gray.900"
-          spacing={2}
-          py={4}
-          overflowY="auto"
-        >
-          {sidebarItems.map(item => {
-            const isActive = item.label === activeTab;
-            return (
-              <HStack
-                as="button"
-                key={item.label}
-                onClick={() => handleTabClick(item.label)}
-                px={4}
-                py={3}
-                spacing={3}
-                align="center"
-                w="100%"
-                bg={isActive ? 'gray.700' : 'transparent'}
-                _hover={{ bg: 'gray.700' }}
-                borderRadius="md"
-              >
-                <Box w="4px" h="full" bg={isActive ? 'yellow.400' : 'transparent'} borderRadius="full" />
-                <Icon as={item.icon} boxSize={5} color={isActive ? 'yellow.400' : 'gray.200'} />
-                <Text fontSize="sm" fontWeight="medium" color={isActive ? 'yellow.400' : 'gray.200'}>
-                  {item.label}
-                </Text>
-              </HStack>
-            );
-          })}
-        </VStack>
+    <Flex direction="column" height="100vh" bg="#2B2B2B" color="white">
+      {/* Top toolbar */}
+      <Flex as="header" px={6} py={2} bg="#3A3A3A" align="center" justify="space-between">
+        <Stack direction="row" spacing={4} align="center">
+          <IconBtn><Plus size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <Text fontSize="xs">Add Music</Text>
+        </Stack>
+        <Stack direction="row" spacing={3} align="center">
+          <IconBtn onClick={togglePlay}><Mic color="#F75A3F" size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn><Crop size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn><FaFont size={iconSize} /></IconBtn>
+        </Stack>
+        <Stack direction="row" spacing={3}>
+          <IconBtn><Cuboid size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+        </Stack>
+      </Flex>
 
-        <Flex flex="1" direction="column" bg="gray.800" p={4} minH="0" overflow="hidden">
-          {activeTab === 'Your media' && (
-            <>
-              <Box border="2px dashed" borderColor="gray.600" borderRadius="md" p={4} mb={4}>
-                <VStack spacing={2}>
-                  <Button leftIcon={<FaUpload />} colorScheme="yellow" fontSize="xs">
-                    Import media
-                  </Button>
-                  <Text textAlign="center" color="gray.400">Drag & drop media…</Text>
-                  <Text textAlign="center" color="gray.500">Videos, audio, images, GIFs</Text>
-                </VStack>
-              </Box>
-              <Flex flex="1" direction="column" justify="space-between">
-                <Center flex="2" minH="150px" maxH="30vh" bg="black" borderRadius="md" mb={2} />
-                <HStack justify="center" spacing={4} pb={2}>
-                  <Box onClick={() => toaster.create({ title: 'Rewind 5s' })} cursor="pointer">
-                    <Icon as={MdOndemandVideo} boxSize={6} />
-                  </Box>
-                  <Box onClick={() => toaster.create({ title: 'Play/Pause' })} cursor="pointer">
-                    <Icon as={FaPlayCircle} boxSize={8} />
-                  </Box>
-                  <Box onClick={() => toaster.create({ title: 'Forward 5s' })} cursor="pointer" transform="rotate(180deg)">
-                    <Icon as={MdOndemandVideo} boxSize={6} />
-                  </Box>
-                  <Text color="gray.400">0:00 / 0:00</Text>
-                </HStack>
-              </Flex>
-            </>
-          )}
+      {/* Video area */}
+      <Box position="relative" flex={1} overflow="hidden">
+        {src ? (
+          <video
+            ref={videoRef}
+            src={src}
+            onTimeUpdate={onTimeUpdate}
+            onLoadedMetadata={onLoaded}
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          />
+        ) : (
+          <Flex direction="column" align="center" justify="center" height="100%" bg="#1F1F1F">
+            <Text mb={4}>Upload a video to begin editing</Text>
+            <Input
+              type="file"
+              accept="video/*"
+              onChange={e => e.target.files && setFile(e.target.files[0])}
+              width="auto"
+            />
+          </Flex>
+        )}
+      </Box>
 
-          {activeTab === 'Record & create' && (
-            <Center flex="1" flexDir="column" color="gray.200" py={20}>
-              <Text mb={4}>To record, we need access to camera & mic.</Text>
-              <Button colorScheme="yellow" onClick={handleRecordClick}>
-                Enable Camera & Microphone
-              </Button>
-            </Center>
-          )}
-
-          {activeTab === 'Text' && (
-            <Center flex="1"><Text color="gray.400">“Text” view not implemented yet.</Text></Center>
-          )}
+      {/* Bottom controls + timeline */}
+      <Box bg="#3A3A3A">
+        <Flex px={6} py={2} align="center">
+          <IconBtn><Undo size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn><Redo size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn><Trash size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <Spacer />
+          <IconBtn onClick={() => skip(-5)}><SkipBack size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn onClick={togglePlay}><PlayCircle size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn onClick={() => skip(5)}><SkipForward size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <Spacer />
+          <IconBtn><Expand size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn><Info size={iconSize} strokeWidth={iconStroke} /></IconBtn>
         </Flex>
-      </HStack>
 
-      <Drawer.Root
-        open={isOpen}
-        onOpenChange={(o) => !o && onClose()}
-        placement="right"
-        size="md"
-        initialFocusEl={() => firstPlayRef.current}
-      >
-        <Portal>
-          <Drawer.Backdrop />
-          <Drawer.Positioner padding={{ base: 0, md: 4 }}>
-            <Drawer.Content bg="gray.800" color="white" rounded="md">
-              <Drawer.CloseTrigger asChild>
-                <CloseButton pos="absolute" top="1rem" right="1rem" />
-              </Drawer.CloseTrigger>
-              <Drawer.Header>
-                <Drawer.Title>Content Library</Drawer.Title>
-              </Drawer.Header>
-              <Drawer.Body>
-                <VStack spacing={4} mt={4}>
-                  {sounds.map((sound, idx) => (
-                    <HStack key={sound} justify="space-between">
-                      <HStack spacing={2}>
-                        <Icon as={FaMusic} boxSize={5} />
-                        <Text>{sound}</Text>
-                      </HStack>
-                      <Icon
-                        as={FaPlayCircle}
-                        boxSize={6}
-                        cursor="pointer"
-                        ref={idx === 0 ? firstPlayRef : null}
-                        onClick={() => toaster.create({ title: `Playing: ${sound}`, type: 'info' })}
-                      />
-                    </HStack>
-                  ))}
-                </VStack>
-              </Drawer.Body>
-              <Drawer.Footer>
-                <Drawer.ActionTrigger asChild>
-                  <Button variant="outline">Cancel</Button>
-                </Drawer.ActionTrigger>
-                <Button colorScheme="yellow">Insert</Button>
-              </Drawer.Footer>
-            </Drawer.Content>
-          </Drawer.Positioner>
-        </Portal>
-      </Drawer.Root>
-    </>
-  );
+        {/* Timeline + clips */}
+        <Box px={6} py={4} position="relative">
+          <Box position="relative" height="24px" mb={2}>
+            {timelineMarks.map((sec, i) => {
+              const pct = duration ? (sec / duration) * 100 : 0
+              return (
+                <Box key={i} position="absolute" left={`${pct}%`} top={0} transform="translateX(-1px)">
+                  <Box w="2px" h="8px" bg="white" opacity={0.8} />
+                  <Text fontSize="xx-small" pt={2} opacity={0.8}>{formatTime(sec)}</Text>
+                </Box>
+              )
+            })}
+            <Box position="absolute" left={`${(currentTime / duration) * 100}%`} top={0} transform="translateX(-1px)">
+              <Box w="2px" h="8px" bg="#F9FF66" />
+            </Box>
+          </Box>
+
+          <Box position="relative">
+            <input
+              type="range"
+              min={0}
+              max={duration}
+              step="0.01"
+              value={currentTime}
+              onChange={handleSeek}
+              style={{
+                width: '100%',
+                appearance: 'none',
+                background: 'transparent',
+                position: 'relative',
+                zIndex: 2,
+              }}
+            />
+            <Box position="absolute" top="6px" left={0} right={0} h="4px" bg="rgba(255,255,255,0.3)" />
+            <Box position="absolute" top="6px" left={0} w={`${(currentTime / duration) * 100}%`} h="4px" bg="#F9FF66" />
+          </Box>
+
+          <Text textAlign="center" fontSize="xs" mt={2}>
+            {formatTime(currentTime)} / {formatTime(duration)}
+          </Text>
+
+          <Flex gap={3} overflowX="auto" mt={4} px={6}>
+            {clips.map((c, idx) => {
+              const IconComp = c.icon
+              const selected = idx === selectedClip
+              return (
+                <Flex
+                  key={idx}
+                  align="center"
+                  px={3}
+                  py={1}
+                  bg={selected ? 'transparent' : '#4A4A4A'}
+                  border={selected ? '2px solid #F9FF66' : 'none'}
+                  borderRadius="full"
+                  onClick={() => setSelectedClip(idx)}
+                  cursor="pointer"
+                >
+                  <IconComp size={iconSize} strokeWidth={iconStroke} opacity={selected ? 1 : 0.8} />
+                  <Text fontSize="xs" opacity={selected ? 1 : 0.8} ml={2}>{c.label}</Text>
+                </Flex>
+              )
+            })}
+          </Flex>
+        </Box>
+      </Box>
+    </Flex>
+  )
 }

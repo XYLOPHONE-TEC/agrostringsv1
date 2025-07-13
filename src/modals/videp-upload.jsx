@@ -16,7 +16,7 @@ import { PlusCircle } from 'lucide-react';
 import VideoBody from '../components/video-body';
 
 const VideoDialog = () => (
-  <Dialog.Root size="cover" placement="center" motionPreset="slide-in-bottom">
+  <Dialog.Root size="xl" placement="center" motionPreset="slide-in-bottom">
     <Dialog.Trigger asChild>
       <Box
         border="2px dashed gray.500"
@@ -39,8 +39,8 @@ const VideoDialog = () => (
       <Dialog.Backdrop />
       <Dialog.Positioner>
         <Dialog.Content bg="#222222" color="white" p={0} m={0} borderRadius="none">
-          <Dialog.Header display="flex" justifyContent="space-between" px={4} py={2}>
-            <Text fontSize="sm">Upload New Video</Text>
+          <Dialog.Header display="flex" justifyContent="space-between" px={4} py={4}>
+            
             <Dialog.CloseTrigger asChild>
               <CloseButton color="white" border="none" _hover={{ color: 'yellow.400', bg: 'transparent' }} />
             </Dialog.CloseTrigger>
@@ -51,7 +51,7 @@ const VideoDialog = () => (
             <VideoBody />
           </Dialog.Body>
 
-          <Dialog.Footer px={4} py={2}>
+          <Dialog.Footer px={4} py={0}>
             <Button colorScheme="yellow" ml="auto">
               Upload
             </Button>
