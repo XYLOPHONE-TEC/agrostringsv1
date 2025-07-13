@@ -23,6 +23,8 @@ import {
   FiBarChart2,
 } from "react-icons/fi";
 import { MdEco } from "react-icons/md";
+import TvFarmer from "./tv-farmer";
+import AnalyticsFarmer from "./analytics-farmer";
 
 import MiddleContent from "./middle-content-farmer";
 import ProductDashboard from "./products-component";
@@ -62,7 +64,7 @@ export default function MainContent() {
     // push history entry
     window.history.pushState({ tool: label }, "", `#${label}`);
     // if navigating to Produce or Carbon Tracker, show loader
-    if (label === "Produce" || label === "Carbon Tracker") {
+    if (label === "Produce" || label === "Carbon Tracker" || label === "TV" || label === "Analytics") {
       setIsLoading(true);
       setTimeout(() => {
         setActive(label);
@@ -73,7 +75,7 @@ export default function MainContent() {
     }
   }, []);
 
-  const isFull = active === "Produce" || active === "Carbon Tracker";
+  const isFull = active === "Produce" || active === "Carbon Tracker" || active === "TV" || active === "Analytics";
   const showSides = !isFull;
   const templateColumns = useBreakpointValue({
     base: "1fr",
@@ -84,6 +86,8 @@ export default function MainContent() {
   const renderMiddle = () => {
     if (active === "Produce") return <ProductDashboard />;
     if (active === "Carbon Tracker") return <CarbonTracker />;
+    if (active === "TV") return <TvFarmer />;
+    if (active === "Analytics") return <AnalyticsFarmer />;
     return <MiddleContent />;
   };
 
@@ -93,37 +97,61 @@ export default function MainContent() {
         {/* Left sidebar */}
         {showSides && (
           <GridItem>
-            <VStack spacing={4} align="stretch">
+            <VStack spacing={4} align="stretch" >
               {/* Weather Card */}
-              <Box bg="gray.800" p={4} rounded="lg" color="white">
-                <HStack justify="space-between" mb={2}>
-                  <Text fontSize="md" fontWeight="semibold">Weather</Text>
-                  <Text fontSize="xs" color="yellow.300" cursor="pointer">
-                    View more
-                  </Text>
-                </HStack>
-                <HStack align="center" spacing={3} mb={2}>
-                  <Icon as={FiSun} boxSize="1.6em" color="yellow.300" />
-                  <VStack align="start" spacing={0}>
-                    <Text fontSize="2xl" fontWeight="bold">24°C</Text>
-                    <Text fontSize="xs" color="gray.400">Partly cloudy</Text>
-                  </VStack>
-                </HStack>
-                <HStack justify="space-between" mb={1}>
-                  <HStack spacing={1}>
-                    <Icon as={FiThermometer} boxSize="1em" color="blue.300" />
-                    <Text fontSize="xs">Low: 14°C</Text>
-                  </HStack>
-                  <HStack spacing={1}>
-                    <Icon as={FiThermometer} boxSize="1em" color="yellow.300" />
-                    <Text fontSize="xs">High: 34°C</Text>
-                  </HStack>
-                </HStack>
-                <HStack spacing={1}>
-                  <Icon as={FiCloudRain} boxSize="1em" color="gray.400" />
-                  <Text fontSize="xs" color="gray.400">Rain expected</Text>
-                </HStack>
-              </Box>
+              <Box
+  p={4}
+  rounded="lg"
+  color="white"
+  bg="gray.800"
+  position="relative"
+  overflow="hidden"
+  _before={{
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    bgImage: "url('https://images.unsplash.com/photo-1542349314-b0ceb4d90f2d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xvdWRzfGVufDB8fDB8fHww')", // example cloud image
+    bgSize: "cover",
+    bgPosition: "center",
+    opacity: 0.3,
+    zIndex: 0,
+  }}
+>
+  {/* Content sits on top */}
+  <Box position="relative" zIndex={1}>
+    <HStack justify="space-between" mb={2}>
+      <Text fontSize="md" fontWeight="semibold">Weather</Text>
+      <Text fontSize="xs" color="yellow.300" cursor="pointer">
+        View more
+      </Text>
+    </HStack>
+    <HStack align="center" spacing={3} mb={2}>
+      <Icon as={FiSun} boxSize="1.6em" color="yellow.300" />
+      <VStack align="start" spacing={0}>
+        <Text fontSize="2xl" fontWeight="bold">24°C</Text>
+        <Text fontSize="xs" color="gray.300">Partly cloudy</Text>
+      </VStack>
+    </HStack>
+    <HStack justify="space-between" mb={1}>
+      <HStack spacing={1}>
+        <Icon as={FiThermometer} boxSize="1em" color="blue.300" />
+        <Text fontSize="xs">Low: 14°C</Text>
+      </HStack>
+      <HStack spacing={1}>
+        <Icon as={FiThermometer} boxSize="1em" color="yellow.300" />
+        <Text fontSize="xs">High: 34°C</Text>
+      </HStack>
+    </HStack>
+    <HStack spacing={1}>
+      <Icon as={FiCloudRain} boxSize="1em" color="gray.400" />
+      <Text fontSize="xs" color="gray.400">Rain expected</Text>
+    </HStack>
+  </Box>
+</Box>
+
 
               {/* Tools selector */}
               <Box bg="gray.800" p={4} rounded="lg" color="white">
