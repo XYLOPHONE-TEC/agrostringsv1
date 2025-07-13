@@ -34,7 +34,7 @@ const CarbonRightSection = ({
   onTestSoil,
 }) => {
   return (
-    <VStack gap={4} align="stretch">
+    <VStack gap={4} align="stretch" p={2}>
       {/* Section Header */}
      
       

@@ -27,7 +27,7 @@ const Panel = ({ title, children }) => (
         </Text>
       </Box>
     )}
-    <Box p={4} h="calc(100% - 3rem)" overflowY="auto">
+    <Box p={0} h="calc(100% - 3rem)" overflowY="auto">
       {children}
     </Box>
   </Box>
@@ -38,7 +38,7 @@ const CarbonTracker = () => {
 
   if (isMobile) {
     return (
-      <Container maxW="container.sm" px={0} py={2} mx={0}>
+      <Container maxW="container.sm" p={0}  mx={0}>
         <VStack spacing={5} align="stretch">
           {/* Mobile Tabs */}
           <Tabs>
@@ -70,7 +70,7 @@ const CarbonTracker = () => {
   }
 
   return (
-    <Container maxW="container.xl" p={4} h="100vh">
+    <Container maxW="container.xl" p={4} h="100vh" >
       <Grid templateColumns="2fr 4fr 1.5fr" gap={6} h="full">
         <GridItem maxH="90vh">
           <Panel title="Your Farm Details">
