@@ -2,7 +2,7 @@
 import { Box, Heading, VStack, Text, Flex } from "@chakra-ui/react";
 export default function CropMarketCard({ data }) {
   return (
-    <Box boxShadow="md" borderRadius="md" p={6} >
+    <Box boxShadow="md" borderRadius="md" p={6} px={0}>
       <Heading size="sm" mb={4} color={"gray.200"}>
         National Crop Market
       </Heading>

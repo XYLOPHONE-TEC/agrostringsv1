@@ -2,7 +2,7 @@
 import { Box, Heading, SimpleGrid, Text } from "@chakra-ui/react";
 export default function ContentPerformanceCard({ data }) {
   return (
-    <Box boxShadow="md" borderRadius="md" p={4}>
+    <Box boxShadow="md" borderRadius="md" p={4} px={0}>
       <Heading size="sm" mb={2}>
         Content Performance
       </Heading>

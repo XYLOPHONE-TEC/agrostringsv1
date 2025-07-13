@@ -36,7 +36,7 @@ const data = [
 
 export default function ReceivedInputsCard() {
   return (
-    <Box boxShadow="md" borderRadius="md" p={4}>
+    <Box boxShadow="md" borderRadius="md" p={4} px={0}>
       <Heading size="sm" mb={4}>
         Received Farm Inputs
       </Heading>
