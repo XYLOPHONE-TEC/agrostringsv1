@@ -33,9 +33,7 @@ const MiddleContent = () => (
       <Text fontSize="lg" fontWeight="semibold" color="white">
         Agrostrings TV
       </Text>
-      <Button variant="link" color="yellow.400" size="sm">
-        See all →
-      </Button>
+     
     </Box>
 
     {/* Featured video spanning full width */}

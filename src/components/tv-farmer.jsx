@@ -46,6 +46,8 @@ export default function TvFarmer() {
       <AspectRatio
         ratio={16 / 9}
         w="100%"
+   
+
         borderRadius="md"
         overflow="hidden"
         mb={8}
