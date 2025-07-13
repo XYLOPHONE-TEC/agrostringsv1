@@ -3,7 +3,7 @@ import { Box, Heading, Flex, Text } from "@chakra-ui/react";
 import Donut from "./donutanalytics";
 export default function CarbonCard({ data }) {
   return (
-    <Box bg="gray.700" p={-3} boxShadow="sm" borderRadius="md" color="white">
+    <Box bg="gray.700" p={4} boxShadow="sm" borderRadius="md" color="white">
       <Heading size="md" mb={4}>
         Environmental Impact
       </Heading>
