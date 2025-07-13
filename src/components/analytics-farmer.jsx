@@ -45,11 +45,11 @@ const productTrends = [
 ];
 
 const cropPrices = [
-  { crop: "Wheat", price: "$245", change: "+2.3%" },
-  { crop: "Corn", price: "$180", change: "+1.8%" },
-  { crop: "Soybeans", price: "$320", change: "+3.1%" },
-  { crop: "Rice", price: "$195", change: "+1.5%" },
-  { crop: "Cotton", price: "$150", change: "+2.7%" },
+  { crop: "Wheat", price: "UGX 245", change: "+2.3%" },
+  { crop: "Corn", price: "UGX 180", change: "+1.8%" },
+  { crop: "Soybeans", price: "UGX 320", change: "+3.1%" },
+  { crop: "Rice", price: "UGX 195", change: "+1.5%" },
+  { crop: "Cotton", price: "UGX 150", change: "+2.7%" },
 ];
 
 
