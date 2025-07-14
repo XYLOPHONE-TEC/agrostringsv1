@@ -13,7 +13,6 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import {
-
   VideoIcon,
   Undo2 as Undo,
   Redo2 as Redo,
@@ -77,29 +76,24 @@ export default function VideoEditor() {
     generateThumbnails(v, dur);
   };
 
+  // Modified: capture only first frame and repeat it
   const generateThumbnails = (video, dur) => {
     const interval = 1;
+    const count = Math.floor(dur / interval) + 1;
     const canvas = document.createElement('canvas');
     canvas.width = 120;
     canvas.height = 68;
     const ctx = canvas.getContext('2d');
-    const thumbs = [];
-    let t = 0;
 
-    const capture = () => { video.currentTime = t; };
     const onSeeked = () => {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      thumbs.push(canvas.toDataURL());
-      t += interval;
-      if (t <= dur) capture();
-      else {
-        video.removeEventListener('seeked', onSeeked);
-        setThumbnails(thumbs);
-      }
+      const frameData = canvas.toDataURL();
+      setThumbnails(Array(count).fill(frameData));
+      video.removeEventListener('seeked', onSeeked);
     };
 
     video.addEventListener('seeked', onSeeked);
-    capture();
+    video.currentTime = 0;
   };
 
   const togglePlay = () => {
@@ -177,11 +171,15 @@ export default function VideoEditor() {
   return (
     <Flex direction="column" height="80vh" bg="#2B2B2B" color="white">
       {/* Hidden elements */}
-      <video ref={hiddenVidRef} src={src} style={{ display: 'none' }} onLoadedMetadata={onLoadedMetadata} />
+      <video
+        ref={hiddenVidRef}
+        src={src}
+        style={{ display: 'none' }}
+        onLoadedMetadata={onLoadedMetadata}
+      />
 
       {/* Header toolbar */}
       <Flex as="header" px={6} py={2} bg="#3A3A3A" align="center" justify="space-between">
-        
         <Stack direction="row" spacing={3} align="center">
           <IconBtn onClick={togglePlay}>
             <VideoIcon color="#F75A3F" size={iconSize} strokeWidth={iconStroke} />
@@ -191,8 +189,9 @@ export default function VideoEditor() {
           </IconBtn>
         </Stack>
         <Stack direction="row" spacing={3} align="center">
-          {/* Removed music volume control */}
-          <Button size="sm" onClick={saveAndPost} bg="#fada25" color="black">Post</Button>
+          <Button size="sm" onClick={saveAndPost} bg="#fada25" color="black">
+            Post
+          </Button>
         </Stack>
       </Flex>
 
@@ -208,7 +207,12 @@ export default function VideoEditor() {
         ) : (
           <Flex direction="column" align="center" justify="center" height="100%" bg="#1F1F1F">
             <Text mb={4}>Upload a video to begin editing</Text>
-            <Input type="file" accept="video/*" onChange={e => e.target.files && setFile(e.target.files[0])} width="auto" />
+            <Input
+              type="file"
+              accept="video/*"
+              onChange={e => e.target.files && setFile(e.target.files[0])}
+              width="auto"
+            />
           </Flex>
         )}
       </Box>
@@ -229,16 +233,50 @@ export default function VideoEditor() {
         </Flex>
 
         <Box px={6} py={4}>
-          <Box id="thumb-strip" position="relative" h="68px" overflowX="auto" bg="rgba(255,255,255,0.05)" borderRadius="md">
+          <Box
+            id="thumb-strip"
+            position="relative"
+            h="68px"
+            overflowX="auto"
+            bg="rgba(255,255,255,0.05)"
+            borderRadius="md"
+          >
             <Flex w="100%">
               {thumbnails.map((thumb, i) => (
-                <Image key={i} src={thumb} flexShrink={0} w={`${100 / thumbnails.length}%`} h="68px" objectFit="cover" />
+                <Image
+                  key={i}
+                  src={thumb}
+                  flexShrink={0}
+                  w={`${100 / thumbnails.length}%`}
+                  h="68px"
+                 
+                />
               ))}
             </Flex>
             <Box position="absolute" top={0} left="0" w={`${startPct}%`} h="100%" bg="rgba(0,0,0,0.6)" />
             <Box position="absolute" top={0} left={`${endPct}%`} w={`${100 - endPct}%`} h="100%" bg="rgba(0,0,0,0.6)" />
-            <Box position="absolute" top={0} left={`${startPct}%`} transform="translateX(-50%)" w="8px" h="100%" bg="yellow.400" cursor="ew-resize" onMouseDown={() => setDragging('start')} />
-            <Box position="absolute" top={0} left={`${endPct}%`} transform="translateX(-50%)" w="8px" h="100%" bg="yellow.400" cursor="ew-resize" onMouseDown={() => setDragging('end')} />
+            <Box
+              position="absolute"
+              top={0}
+              left={`${startPct}%`}
+              transform="translateX(-50%)"
+              w="8px"
+              h="100%"
+              bg="yellow.400"
+              cursor="ew-resize"
+              onMouseDown={() => setDragging('start')}
+            />
+            <Box
+              position="absolute"
+              top={0}
+              left={`${endPct}%`}
+              transform="translateX(-50%)"
+              w="8px"
+              h="100%"
+              bg="yellow.400"
+              cursor="ew-resize"
+              onMouseDown={() => setDragging('end')}
+            />
             <Box position="absolute" top={0} left={`${playPct}%`} transform="translateX(-50%)" w="2px" h="100%" bg="yellow.400" />
           </Box>
           <Text fontSize="xs" color="gray.300" mt={2} textAlign="center">
