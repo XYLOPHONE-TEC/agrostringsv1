@@ -1,9 +1,8 @@
-// VideoEditor.jsx
 "use client";
 
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import {
-  Box,  
+  Box,
   Flex,
   Stack,
   Text,
@@ -11,9 +10,10 @@ import {
   Input,
   Image,
   Button,
+  HStack,
 } from '@chakra-ui/react';
 import {
-  Plus,
+
   VideoIcon,
   Undo2 as Undo,
   Redo2 as Redo,
@@ -78,7 +78,6 @@ export default function VideoEditor() {
   };
 
   const generateThumbnails = (video, dur) => {
-    const count = Math.ceil(dur);
     const interval = 1;
     const canvas = document.createElement('canvas');
     canvas.width = 120;
@@ -87,17 +86,13 @@ export default function VideoEditor() {
     const thumbs = [];
     let t = 0;
 
-    const capture = () => {
-      video.currentTime = t;
-    };
-
+    const capture = () => { video.currentTime = t; };
     const onSeeked = () => {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       thumbs.push(canvas.toDataURL());
       t += interval;
-      if (t <= dur) {
-        capture();
-      } else {
+      if (t <= dur) capture();
+      else {
         video.removeEventListener('seeked', onSeeked);
         setThumbnails(thumbs);
       }
@@ -138,84 +133,55 @@ export default function VideoEditor() {
     v.currentTime = t;
   };
 
-  const onMouseMove = useCallback(
-    (e) => {
-      if (!dragging) return;
-      const strip = document.getElementById('thumb-strip');
-      if (!strip) return;
-      const rect = strip.getBoundingClientRect();
-      let pct = (e.clientX - rect.left) / rect.width;
-      pct = Math.max(0, Math.min(1, pct));
-      const time = pct * duration;
-
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        if (dragging === 'start') {
-          setTrimStart((prev) => Math.min(time, trimEnd - 0.1));
-        } else {
-          setTrimEnd((prev) => Math.max(time, trimStart + 0.1));
-        }
-      });
-    },
-    [dragging, duration, trimStart, trimEnd]
-  );
-
-  const onMouseUp = () => {
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
-    setDragging(null);
-  };
+  const onMouseMove = useCallback((e) => {
+    if (!dragging) return;
+    const strip = document.getElementById('thumb-strip');
+    if (!strip) return;
+    const rect = strip.getBoundingClientRect();
+    let pct = (e.clientX - rect.left) / rect.width;
+    pct = Math.max(0, Math.min(1, pct));
+    const time = pct * duration;
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      dragging === 'start'
+        ? setTrimStart(prev => Math.min(time, trimEnd - 0.1))
+        : setTrimEnd(prev => Math.max(time, trimStart + 0.1));
+    });
+  }, [dragging, duration, trimStart, trimEnd]);
 
   useEffect(() => {
+    const handleMouseUp = () => {
+      rafRef.current && cancelAnimationFrame(rafRef.current);
+      setDragging(null);
+    };
     window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('mouseup', handleMouseUp);
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onMouseUp);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [onMouseMove]);
 
   const startPct = duration ? (trimStart / duration) * 100 : 0;
-  const endPct   = duration ? (trimEnd   / duration) * 100 : 0;
-  const playPct  = duration ? (currentTime / duration) * 100 : 0;
+  const endPct = duration ? (trimEnd / duration) * 100 : 0;
+  const playPct = duration ? (currentTime / duration) * 100 : 0;
 
-  const formatTime = (t) => {
-    const mm = String(Math.floor(t / 60)).padStart(2, '0');
-    const ss = String(Math.floor(t % 60)).padStart(2, '0');
+  const formatTime = t => {
+    const mm = String(Math.floor(t / 60)).padStart(2,'0');
+    const ss = String(Math.floor(t % 60)).padStart(2,'0');
     return `${mm}:${ss}`;
   };
 
-  const saveAndPost = () => {
-    // TODO: implement save and post functionality
-    console.log('Save and post clicked');
-  };
+  const saveAndPost = () => console.log('Save and post clicked');
 
   return (
     <Flex direction="column" height="80vh" bg="#2B2B2B" color="white">
-      <video
-        ref={hiddenVidRef}
-        src={src}
-        style={{ display: 'none' }}
-        onLoadedMetadata={onLoadedMetadata}
-      />
+      {/* Hidden elements */}
+      <video ref={hiddenVidRef} src={src} style={{ display: 'none' }} onLoadedMetadata={onLoadedMetadata} />
 
-      <Flex
-        as="header"
-        px={6}
-        py={2}
-        bg="#3A3A3A"
-        align="center"
-        justify="space-between"
-      >
-        <Stack direction="row" spacing={4} align="center">
-          <IconBtn>
-            <Plus size={iconSize} strokeWidth={iconStroke} />
-          </IconBtn>
-          <Text fontSize="xs">Add Music</Text>
-        </Stack>
+      {/* Header toolbar */}
+      <Flex as="header" px={6} py={2} bg="#3A3A3A" align="center" justify="space-between">
+        
         <Stack direction="row" spacing={3} align="center">
           <IconBtn onClick={togglePlay}>
             <VideoIcon color="#F75A3F" size={iconSize} strokeWidth={iconStroke} />
@@ -224,13 +190,13 @@ export default function VideoEditor() {
             <FaFont size={iconSize} />
           </IconBtn>
         </Stack>
-        <Stack direction="row" spacing={3}>
-          <Button size="sm" onClick={saveAndPost}>
-            Save & Post
-          </Button>
+        <Stack direction="row" spacing={3} align="center">
+          {/* Removed music volume control */}
+          <Button size="sm" onClick={saveAndPost} bg="#fada25" color="">Post</Button>
         </Stack>
       </Flex>
 
+      {/* Main display */}
       <Box position="relative" flex={1} overflow="hidden">
         {src ? (
           <video
@@ -240,92 +206,40 @@ export default function VideoEditor() {
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
         ) : (
-          <Flex
-            direction="column"
-            align="center"
-            justify="center"
-            height="100%"
-            bg="#1F1F1F"
-          >
+          <Flex direction="column" align="center" justify="center" height="100%" bg="#1F1F1F">
             <Text mb={4}>Upload a video to begin editing</Text>
-            <Input
-              type="file"
-              accept="video/*"
-              onChange={(e) => e.target.files && setFile(e.target.files[0])}
-              width="auto"
-            />
+            <Input type="file" accept="video/*" onChange={e => e.target.files && setFile(e.target.files[0])} width="auto" />
           </Flex>
         )}
       </Box>
 
+      {/* Controls & trim strip */}
       <Box bg="#3A3A3A">
         <Flex px={6} py={2} align="center">
           <IconBtn><Undo size={iconSize} strokeWidth={iconStroke} /></IconBtn>
           <IconBtn><Redo size={iconSize} strokeWidth={iconStroke} /></IconBtn>
           <IconBtn><Trash size={iconSize} strokeWidth={iconStroke} /></IconBtn>
           <Spacer/>
-          <IconBtn onClick={() => skip(-5)}><SkipBack size={iconSize} strokeWidth={iconStroke}/></IconBtn>
-          <IconBtn onClick={togglePlay}><PlayCircle size={iconSize} strokeWidth={iconStroke}/></IconBtn>
-          <IconBtn onClick={() => skip(5)}><SkipForward size={iconSize} strokeWidth={iconStroke}/></IconBtn>
+          <IconBtn onClick={() => skip(-5)}><SkipBack size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn onClick={togglePlay}><PlayCircle size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn onClick={() => skip(5)}><SkipForward size={iconSize} strokeWidth={iconStroke} /></IconBtn>
           <Spacer/>
-          <IconBtn><Expand size={iconSize} strokeWidth={iconStroke}/></IconBtn>
-          <IconBtn><Info size={iconSize} strokeWidth={iconStroke}/></IconBtn>
+          <IconBtn><Expand size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          <IconBtn><Info size={iconSize} strokeWidth={iconStroke} /></IconBtn>
         </Flex>
 
         <Box px={6} py={4}>
-          <Box
-            id="thumb-strip"
-            position="relative"
-            h="68px"
-            overflowX="auto"
-            bg="rgba(255,255,255,0.05)"
-            borderRadius="md"
-          >
+          <Box id="thumb-strip" position="relative" h="68px" overflowX="auto" bg="rgba(255,255,255,0.05)" borderRadius="md">
             <Flex w="100%">
               {thumbnails.map((thumb, i) => (
-                <Image
-                  key={i}
-                  src={thumb}
-                  flexShrink={0}
-                  w={`${100 / thumbnails.length}%`}
-                  h="68px"
-                  objectFit="cover"
-                />
+                <Image key={i} src={thumb} flexShrink={0} w={`${100 / thumbnails.length}%`} h="68px" objectFit="cover" />
               ))}
             </Flex>
-
-            <Box position="absolute" top={0} left="0"      w={`${startPct}%`}     h="100%" bg="rgba(0,0,0,0.6)" />
+            <Box position="absolute" top={0} left="0" w={`${startPct}%`} h="100%" bg="rgba(0,0,0,0.6)" />
             <Box position="absolute" top={0} left={`${endPct}%`} w={`${100 - endPct}%`} h="100%" bg="rgba(0,0,0,0.6)" />
-
-            <Box
-              position="absolute"
-              top={0}
-              left={`${startPct}%`}
-              transform="translateX(-50%)"
-              w="8px" h="100%"
-              bg="yellow.400"
-              cursor="ew-resize"
-              onMouseDown={() => setDragging('start')}
-            />
-            <Box
-              position="absolute"
-              top={0}
-              left={`${endPct}%`}
-              transform="translateX(-50%)"
-              w="8px" h="100%"
-              bg="yellow.400"
-              cursor="ew-resize"
-              onMouseDown={() => setDragging('end')}
-            />
-
-            <Box
-              position="absolute"
-              top={0}
-              left={`${playPct}%`}
-              transform="translateX(-50%)"
-              w="2px" h="100%"
-              bg="yellow.400"
-            />
+            <Box position="absolute" top={0} left={`${startPct}%`} transform="translateX(-50%)" w="8px" h="100%" bg="yellow.400" cursor="ew-resize" onMouseDown={() => setDragging('start')} />
+            <Box position="absolute" top={0} left={`${endPct}%`} transform="translateX(-50%)" w="8px" h="100%" bg="yellow.400" cursor="ew-resize" onMouseDown={() => setDragging('end')} />
+            <Box position="absolute" top={0} left={`${playPct}%`} transform="translateX(-50%)" w="2px" h="100%" bg="yellow.400" />
           </Box>
           <Text fontSize="xs" color="gray.300" mt={2} textAlign="center">
             Trim: {formatTime(trimStart)} – {formatTime(trimEnd)}
