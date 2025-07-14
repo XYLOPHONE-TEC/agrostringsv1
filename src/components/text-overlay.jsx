@@ -8,7 +8,6 @@ import {
   Input,
   Button,
   Text,
-  useBreakpointValue,
 } from '@chakra-ui/react';
 import { Undo2 as UndoIcon } from 'lucide-react';
 
@@ -19,7 +18,7 @@ export default function TextOverlay({ onClose, onAddText }) {
   const [dragging, setDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0, origX: 0, origY: 0 });
 
-  // Add drag event listeners
+  // Drag behavior
   useEffect(() => {
     if (dragging) {
       const move = e => {
@@ -34,6 +33,7 @@ export default function TextOverlay({ onClose, onAddText }) {
 
       window.addEventListener('mousemove', move);
       window.addEventListener('mouseup', up);
+
       return () => {
         window.removeEventListener('mousemove', move);
         window.removeEventListener('mouseup', up);
@@ -41,7 +41,6 @@ export default function TextOverlay({ onClose, onAddText }) {
     }
   }, [dragging]);
 
-  // Handle drag start
   const startDragging = e => {
     dragStart.current = {
       x: e.clientX,
@@ -53,7 +52,6 @@ export default function TextOverlay({ onClose, onAddText }) {
     e.stopPropagation();
   };
 
-  // Submit text
   const handleAdd = () => {
     if (text.trim()) {
       onAddText({ text: text.trim(), x: pos.x, y: pos.y });
@@ -69,58 +67,65 @@ export default function TextOverlay({ onClose, onAddText }) {
       direction="column"
       justify="center"
       align="center"
-      bg="rgba(0, 0, 0, 0.65)"
-      zIndex={50}
+      bg="rgba(0, 0, 0, 0.5)"
+      zIndex={999}
       onMouseDown={e => e.stopPropagation()}
     >
-      {/* Close Button */}
+      {/* Close Icon */}
       <Box position="absolute" top={4} right={4}>
         <IconButton
-          icon={<UndoIcon size={24} color="white" />}
+          icon={<UndoIcon size={20} />}
           aria-label="Close"
           onClick={onClose}
           variant="ghost"
-          _hover={{ bg: 'whiteAlpha.200' }}
+          colorScheme="whiteAlpha"
+          _hover={{ bg: 'whiteAlpha.300' }}
         />
       </Box>
 
-      {/* Text Box */}
+      {/* Draggable Text Box */}
       <Box
         position="absolute"
         left={pos.x}
         top={pos.y}
         onMouseDown={startDragging}
-        cursor="grab"
-        p={2}
-        bg="whiteAlpha.800"
-        border="2px dashed gray"
+        cursor="move"
+        px={4}
+        py={2}
+        bg="white"
         borderRadius="md"
-        minW="150px"
+        boxShadow="lg"
+        border="1px solid #ddd"
+        minW="180px"
+        textAlign="center"
       >
-        <Text fontSize="lg" fontWeight="bold" color="gray.800" textAlign="center">
-          {text || 'Your text here'}
+        <Text fontSize="lg" fontWeight="semibold" color="gray.700">
+          {text || 'Type your text'}
         </Text>
       </Box>
 
-      {/* Text Controls */}
+      {/* Bottom Control Panel */}
       <Flex
         position="absolute"
-        bottom={6}
-        px={6}
+        bottom={10}
+        bg="white"
+        px={5}
         py={4}
-        borderRadius="lg"
-        bg="blackAlpha.700"
-        gap={3}
+        borderRadius="xl"
+        boxShadow="lg"
+        gap={4}
+        align="center"
       >
         <Input
-          placeholder="Enter your text..."
+          placeholder="Enter text..."
           value={text}
           onChange={e => setText(e.target.value)}
-          bg="white"
+          bg="gray.100"
           color="black"
+          borderRadius="md"
         />
         <Button onClick={handleAdd} colorScheme="yellow" px={6}>
-          Add
+          Add Text
         </Button>
       </Flex>
     </Flex>
