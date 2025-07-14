@@ -29,14 +29,14 @@ export default function MarketTips() {
         <Text fontWeight="semibold" fontSize={{ base: 'md', md: 'lg' }}>
           Market Tips
         </Text>
-        <Link
+        {/* <Link
           fontSize={{ base: 'xs', md: 'sm' }}
           color="yellow.300"
           fontWeight="medium"
           _hover={{ textDecoration: 'underline' }}
         >
           Sell All →
-        </Link>
+        </Link> */}
       </HStack>
 
       {/* Separator */}

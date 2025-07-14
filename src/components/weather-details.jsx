@@ -1,7 +1,7 @@
 // src/weather-detail.jsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   VStack,
@@ -28,7 +28,7 @@ const sampleWeather = {
   },
   hourly: Array.from({ length: 12 }).map((_, i) => ({
     dt: Date.now() / 1000 + i * 3600,
-    temp: 20 + i % 5,
+    temp: 20 + (i % 5),
     weather: [{ main: i % 3 === 0 ? "Rain" : "Clouds" }],
   })),
   daily: Array.from({ length: 7 }).map((_, i) => ({
@@ -41,19 +41,36 @@ const sampleWeather = {
 export default function WeatherDetail() {
   const [weather] = useState(sampleWeather);
   const bg = "gray.700";
-
   const { current, hourly, daily } = weather;
 
   return (
     <Box color="white">
       {/* Current conditions */}
-      <VStack bg={bg} p={6} rounded="lg" gap={4} mb={6} backgroundImage="url('https://images.unsplash.com/photo-1498496294664-d9372eb521f3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGNsb3Vkc3xlbnwwfHwwfHx8MA%3D%3D')"
-  backgroundSize="cover"
-  backgroundPosition="center"
-  backgroundRepeat="no-repeat">
-        <HStack gap={4}>
+      <VStack
+        position="relative"
+        bg={bg}
+        p={6}
+        rounded="lg"
+        gap={4}
+        mb={6}
+        backgroundImage="url('https://images.unsplash.com/photo-1498496294664-d9372eb521f3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGNsb3Vkc3xlbnwwfHwwfHx8MA%3D%3D')"
+        backgroundSize="cover"
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
+        _before={{
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          bg: "blackAlpha.600",
+          zIndex: 0,
+        }}
+      >
+        <HStack spacing={4} position="relative" zIndex={1}>
           <Icon as={FiSun} boxSize="2em" color="yellow.300" />
-          <VStack gap={0} align="start">
+          <VStack spacing={0} align="start">
             <Text fontSize="4xl" fontWeight="bold">
               {current.temp}°C
             </Text>
@@ -62,18 +79,18 @@ export default function WeatherDetail() {
             </Text>
           </VStack>
         </HStack>
-        <HStack gap={8}>
-          <HStack gap={2}>
+        <HStack spacing={8} position="relative" zIndex={1}>
+          <HStack spacing={2}>
             <Icon as={FiThermometer} />
             <Text fontSize="sm">
               Feels like {current.feels_like}°C
             </Text>
           </HStack>
-          <HStack gap={2}>
+          <HStack spacing={2}>
             <Icon as={FiWind} />
             <Text fontSize="sm">{current.wind_speed} m/s</Text>
           </HStack>
-          <HStack gap={2}>
+          <HStack spacing={2}>
             <Icon as={FiCloudRain} />
             <Text fontSize="sm">{current.pop * 100}% chance rain</Text>
           </HStack>
@@ -108,7 +125,7 @@ export default function WeatherDetail() {
         </SimpleGrid>
       </Box>
 
-      {/* 7-day forecast */}
+      {/* 7‑Day forecast */}
       <Box>
         <Text fontSize="lg" mb={2}>
           7‑Day Forecast
@@ -129,7 +146,7 @@ export default function WeatherDetail() {
                   day: "numeric",
                 })}
               </Text>
-              <HStack gap={3}>
+              <HStack spacing={3}>
                 <Icon
                   as={
                     d.weather[0].main === "Rain"
