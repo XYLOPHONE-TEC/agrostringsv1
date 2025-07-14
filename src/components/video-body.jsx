@@ -192,7 +192,7 @@ export default function VideoEditor() {
         </Stack>
         <Stack direction="row" spacing={3} align="center">
           {/* Removed music volume control */}
-          <Button size="sm" onClick={saveAndPost} bg="#fada25" color="">Post</Button>
+          <Button size="sm" onClick={saveAndPost} bg="#fada25" color="black">Post</Button>
         </Stack>
       </Flex>
 
