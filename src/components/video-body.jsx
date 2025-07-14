@@ -10,7 +10,6 @@ import {
   Input,
   Image,
   Button,
-  HStack,
 } from '@chakra-ui/react';
 import {
   VideoIcon,
@@ -24,6 +23,9 @@ import {
   Info,
 } from 'lucide-react';
 import { FaFont } from 'react-icons/fa6';
+
+// Import your recorder
+import VideoRecorder from './videorecorder';
 
 function IconBtn({ children, onClick }) {
   return (
@@ -55,6 +57,9 @@ export default function VideoEditor() {
   const [trimEnd, setTrimEnd] = useState(0);
   const [dragging, setDragging] = useState(null);
 
+  // NEW: recorder toggle
+  const [showRecorder, setShowRecorder] = useState(false);
+
   const iconSize = 16;
   const iconStroke = 1.5;
 
@@ -76,7 +81,7 @@ export default function VideoEditor() {
     generateThumbnails(v, dur);
   };
 
-  // Modified: capture only first frame and repeat it
+  // capture only first frame
   const generateThumbnails = (video, dur) => {
     const interval = 1;
     const count = Math.floor(dur / interval) + 1;
@@ -161,129 +166,140 @@ export default function VideoEditor() {
   const playPct = duration ? (currentTime / duration) * 100 : 0;
 
   const formatTime = t => {
-    const mm = String(Math.floor(t / 60)).padStart(2,'0');
-    const ss = String(Math.floor(t % 60)).padStart(2,'0');
+    const mm = String(Math.floor(t / 60)).padStart(2, '0');
+    const ss = String(Math.floor(t % 60)).padStart(2, '0');
     return `${mm}:${ss}`;
   };
 
   const saveAndPost = () => console.log('Save and post clicked');
 
   return (
-    <Flex direction="column" height="80vh" bg="#2B2B2B" color="white">
-      {/* Hidden elements */}
-      <video
-        ref={hiddenVidRef}
-        src={src}
-        style={{ display: 'none' }}
-        onLoadedMetadata={onLoadedMetadata}
-      />
+    <>
+      {/* If recorder is open, show it on top */}
+      {showRecorder && <VideoRecorder onClose={() => setShowRecorder(false)} />}
 
-      {/* Header toolbar */}
-      <Flex as="header" px={6} py={2} bg="#3A3A3A" align="center" justify="space-between">
-        <Stack direction="row" spacing={3} align="center">
-          <IconBtn onClick={togglePlay}>
-            <VideoIcon color="#F75A3F" size={iconSize} strokeWidth={iconStroke} />
-          </IconBtn>
-          <IconBtn>
-            <FaFont size={iconSize} />
-          </IconBtn>
-        </Stack>
-        <Stack direction="row" spacing={3} align="center">
+      <Flex direction="column" height="80vh" bg="#2B2B2B" color="white">
+        {/* Hidden loader video */}
+        <video
+          ref={hiddenVidRef}
+          src={src}
+          style={{ display: 'none' }}
+          onLoadedMetadata={onLoadedMetadata}
+        />
+
+        {/* Header toolbar */}
+        <Flex as="header" px={6} py={2} bg="#3A3A3A" align="center" justify="space-between">
+          <Stack direction="row" spacing={3} align="center">
+            {/* Open recorder on click */}
+            <IconBtn onClick={() => setShowRecorder(true)}>
+              <VideoIcon color="#F75A3F" size={iconSize} strokeWidth={iconStroke} />
+            </IconBtn>
+            <IconBtn>
+              <FaFont size={iconSize} />
+            </IconBtn>
+          </Stack>
           <Button size="sm" onClick={saveAndPost} bg="#fada25" color="black">
             Post
           </Button>
-        </Stack>
-      </Flex>
-
-      {/* Main display */}
-      <Box position="relative" flex={1} overflow="hidden">
-        {src ? (
-          <video
-            ref={videoRef}
-            src={src}
-            onTimeUpdate={onTimeUpdate}
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-          />
-        ) : (
-          <Flex direction="column" align="center" justify="center" height="100%" bg="#1F1F1F">
-            <Text mb={4}>Upload a video to begin editing</Text>
-            <Input
-              type="file"
-              accept="video/*"
-              onChange={e => e.target.files && setFile(e.target.files[0])}
-              width="auto"
-            />
-          </Flex>
-        )}
-      </Box>
-
-      {/* Controls & trim strip */}
-      <Box bg="#3A3A3A">
-        <Flex px={6} py={2} align="center">
-          <IconBtn><Undo size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn><Redo size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn><Trash size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <Spacer/>
-          <IconBtn onClick={() => skip(-5)}><SkipBack size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn onClick={togglePlay}><PlayCircle size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn onClick={() => skip(5)}><SkipForward size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <Spacer/>
-          <IconBtn><Expand size={iconSize} strokeWidth={iconStroke} /></IconBtn>
-          <IconBtn><Info size={iconSize} strokeWidth={iconStroke} /></IconBtn>
         </Flex>
 
-        <Box px={6} py={4}>
-          <Box
-            id="thumb-strip"
-            position="relative"
-            h="68px"
-            overflowX="auto"
-            bg="rgba(255,255,255,0.05)"
-            borderRadius="md"
-          >
-            <Flex w="100%">
-              {thumbnails.map((thumb, i) => (
-                <Image
-                  key={i}
-                  src={thumb}
-                  flexShrink={0}
-                  w={`${100 / thumbnails.length}%`}
-                  h="68px"
-                 
-                />
-              ))}
+        {/* Video display */}
+        <Box position="relative" flex={1} overflow="hidden">
+          {src ? (
+            <video
+              ref={videoRef}
+              src={src}
+              onTimeUpdate={onTimeUpdate}
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          ) : (
+            <Flex direction="column" align="center" justify="center" height="100%" bg="#1F1F1F">
+              <Text mb={4}>Upload a video to begin editing</Text>
+              <Input
+                type="file"
+                accept="video/*"
+                onChange={e => e.target.files && setFile(e.target.files[0])}
+                width="auto"
+              />
             </Flex>
-            <Box position="absolute" top={0} left="0" w={`${startPct}%`} h="100%" bg="rgba(0,0,0,0.6)" />
-            <Box position="absolute" top={0} left={`${endPct}%`} w={`${100 - endPct}%`} h="100%" bg="rgba(0,0,0,0.6)" />
-            <Box
-              position="absolute"
-              top={0}
-              left={`${startPct}%`}
-              transform="translateX(-50%)"
-              w="8px"
-              h="100%"
-              bg="yellow.400"
-              cursor="ew-resize"
-              onMouseDown={() => setDragging('start')}
-            />
-            <Box
-              position="absolute"
-              top={0}
-              left={`${endPct}%`}
-              transform="translateX(-50%)"
-              w="8px"
-              h="100%"
-              bg="yellow.400"
-              cursor="ew-resize"
-              onMouseDown={() => setDragging('end')}
-            />
-            <Box position="absolute" top={0} left={`${playPct}%`} transform="translateX(-50%)" w="2px" h="100%" bg="yellow.400" />
-          </Box>
-          <Text fontSize="xs" color="gray.300" mt={2} textAlign="center">
-            Trim: {formatTime(trimStart)} – {formatTime(trimEnd)}
-          </Text>
+          )}
         </Box>
-      </Box>
-    </Flex>
+
+        {/* Controls & thumbnail strip */}
+        <Box bg="#3A3A3A">
+          <Flex px={6} py={2} align="center">
+            <IconBtn><Undo size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+            <IconBtn><Redo size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+            <IconBtn><Trash size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+            <Spacer/>
+            <IconBtn onClick={() => skip(-5)}><SkipBack size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+            <IconBtn onClick={togglePlay}><PlayCircle size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+            <IconBtn onClick={() => skip(5)}><SkipForward size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+            <Spacer/>
+            <IconBtn><Expand size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+            <IconBtn><Info size={iconSize} strokeWidth={iconStroke} /></IconBtn>
+          </Flex>
+
+          <Box px={6} py={4}>
+            <Box
+              id="thumb-strip"
+              position="relative"
+              h="68px"
+              overflowX="auto"
+              bg="rgba(255,255,255,0.05)"
+              borderRadius="md"
+            >
+              <Flex w="100%">
+                {thumbnails.map((thumb, i) => (
+                  <Box
+                    key={i}
+                    flexShrink={0}
+                    w={`${100 / thumbnails.length}%`}
+                    h="68px"
+                    bg="black"
+                    mx="0.5px"
+                  >
+                    <Image
+                      src={thumb}
+                      w="100%"
+                      h="100%"
+                      objectFit="cover"
+                    />
+                  </Box>
+                ))}
+              </Flex>
+              <Box position="absolute" top={0} left="0" w={`${startPct}%`} h="100%" bg="rgba(0,0,0,0.6)" />
+              <Box position="absolute" top={0} left={`${endPct}%`} w={`${100 - endPct}%`} h="100%" bg="rgba(0,0,0,0.6)" />
+              <Box
+                position="absolute"
+                top={0}
+                left={`${startPct}%`}
+                transform="translateX(-50%)"
+                w="8px"
+                h="100%"
+                bg="yellow.400"
+                cursor="ew-resize"
+                onMouseDown={() => setDragging('start')}
+              />
+              <Box
+                position="absolute"
+                top={0}
+                left={`${endPct}%`}
+                transform="translateX(-50%)"
+                w="8px"
+                h="100%"
+                bg="yellow.400"
+                cursor="ew-resize"
+                onMouseDown={() => setDragging('end')}
+              />
+              <Box position="absolute" top={0} left={`${playPct}%`} transform="translateX(-50%)" w="2px" h="100%" bg="yellow.400" />
+            </Box>
+            <Text fontSize="xs" color="gray.300" mt={2} textAlign="center">
+              Trim: {formatTime(trimStart)} – {formatTime(trimEnd)}
+            </Text>
+          </Box>
+        </Box>
+      </Flex>
+    </>
   );
 }
