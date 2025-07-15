@@ -63,7 +63,7 @@ export default function AddNewProduct({ isOpen, onClose, onSave }) {
 
             <Dialog.Body>
               <Box mb="3">
-                <Button size="sm" mb="2" bg="yellow.500"  onClick={handleChooseImage}>
+                <Button size="sm" mb="2" bg="yellow.500" color="black"  onClick={handleChooseImage}>
                   Choose Image
                 </Button>
                 <input

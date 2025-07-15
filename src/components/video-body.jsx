@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 import { FaFont } from 'react-icons/fa6';
 
-import VideoRecorder from './Videorecorder';
+import VideoRecorder from './videorecorder';
 import TextOverlay from './text-overlay';
 
 function IconBtn({ children, onClick }) {
