@@ -99,7 +99,7 @@ export default function WeatherDetail() {
 
       {/* Hourly forecast */}
       <Box mb={6}>
-        <Text fontSize="lg" mb={2}>
+        <Text fontSize="sm" mb={2}>
           Hourly Forecast
         </Text>
         <SimpleGrid columns={{ base: 3, md: 6 }} gap={4}>
@@ -127,7 +127,7 @@ export default function WeatherDetail() {
 
       {/* 7‑Day forecast */}
       <Box>
-        <Text fontSize="lg" mb={2}>
+        <Text fontSize="sm" mb={2}>
           7‑Day Forecast
         </Text>
         <SimpleGrid columns={{ base: 1, md: 3 }} gap={4}>
@@ -138,8 +138,9 @@ export default function WeatherDetail() {
               p={4}
               rounded="md"
               justify="space-between"
+           
             >
-              <Text flex="1">
+              <Text flex="1" fontSize="xs" >
                 {new Date(d.dt * 1000).toLocaleDateString(undefined, {
                   weekday: "short",
                   month: "short",
@@ -156,7 +157,7 @@ export default function WeatherDetail() {
                       : FiSun
                   }
                 />
-                <Text>
+                <Text fontSize="xs">
                   {d.temp.max}° / {d.temp.min}°
                 </Text>
               </HStack>
