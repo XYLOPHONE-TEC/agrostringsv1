@@ -148,7 +148,7 @@ export default function WeatherDetail() {
                 })}
               </Text>
               <HStack spacing={3}>
-                <Icon
+                <Icon color="yellow.200"
                   as={
                     d.weather[0].main === "Rain"
                       ? FiCloudRain
