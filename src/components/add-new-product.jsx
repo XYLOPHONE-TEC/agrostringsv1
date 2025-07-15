@@ -8,6 +8,8 @@ import {
   Box,
   Image,
   SimpleGrid,
+  VStack,
+  useBreakpointValue,
 } from '@chakra-ui/react'
 
 export default function AddNewProduct({ isOpen, onClose, onSave }) {
@@ -18,52 +20,56 @@ export default function AddNewProduct({ isOpen, onClose, onSave }) {
     quantity: '',
     imageFile: null,
   })
-
   const fileInputRef = useRef(null)
 
   useEffect(() => {
-    if (isOpen) {
-      setForm(f => ({ ...f, imageFile: null }))
-    }
+    if (isOpen) setForm(f => ({ ...f, imageFile: null }))
   }, [isOpen])
 
   const handleFileChange = e => {
     const file = e.target.files?.[0]
-    if (file) {
-      setForm(f => ({ ...f, imageFile: file }))
-    }
+    if (file) setForm(f => ({ ...f, imageFile: file }))
   }
 
-  const handleChooseImage = () => {
-    fileInputRef.current?.click()
-  }
-
+  const handleChooseImage = () => fileInputRef.current?.click()
   const handleChange = e => {
     const { name, value } = e.target
     setForm(f => ({ ...f, [name]: value }))
   }
-
   const handleSave = () => {
     onSave({ ...form, image: form.imageFile })
     onClose()
   }
 
+  const dialogWidth = useBreakpointValue({ base: '95%', md: '480px' })
+
   return (
-    <Dialog.Root open={isOpen} onOpenChange={open => !open && onClose()} >
+    <Dialog.Root open={isOpen} onOpenChange={open => !open && onClose()}>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content maxW="480px" bg={"gray.800"}>
+          <Dialog.Content
+            maxW="480px"
+            w={dialogWidth}
+            bg="gray.800"
+            borderRadius="md"
+            overflow="hidden"
+          >
             <Dialog.Header>
               <Dialog.Title color="white">Add New Product</Dialog.Title>
-              <Dialog.CloseTrigger asChild >
+              <Dialog.CloseTrigger asChild>
                 <CloseButton size="sm" color="white" onClick={onClose} />
               </Dialog.CloseTrigger>
             </Dialog.Header>
 
-            <Dialog.Body>
-              <Box mb="3">
-                <Button size="sm" mb="2" bg="yellow.500" color="black"  onClick={handleChooseImage}>
+            <Dialog.Body px={{ base: 4, md: 6 }} py={4}>
+              <VStack spacing={4} align="stretch">
+                <Button
+                  size="sm"
+                  bg="yellow.500"
+                  color="black"
+                  onClick={handleChooseImage}
+                >
                   Choose Image
                 </Button>
                 <input
@@ -75,7 +81,12 @@ export default function AddNewProduct({ isOpen, onClose, onSave }) {
                 />
 
                 {form.imageFile && (
-                  <Box mt="3" maxH="150px" overflow="hidden" borderRadius="md" bg="black">
+                  <Box
+                    maxH="150px"
+                    overflow="hidden"
+                    borderRadius="md"
+                    bg="black"
+                  >
                     <Image
                       src={URL.createObjectURL(form.imageFile)}
                       alt="Preview"
@@ -85,29 +96,30 @@ export default function AddNewProduct({ isOpen, onClose, onSave }) {
                     />
                   </Box>
                 )}
-              </Box>
 
-              <SimpleGrid columns={{ base: 1, md: 2 }} gap={3}>
-                {['name', 'price', 'location', 'quantity'].map(field => (
-                  <Input
-                    key={field}
-                    name={field}
-                    value={form[field]}
-                    onChange={handleChange}
-                    placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                    size="sm"
-                    bg="gray.700"
-                    color="white"
-                  
-                    border="none"
-                    className='whitePlaceholder'
-                  />
-                ))}
-              </SimpleGrid>
+                <SimpleGrid columns={2} gap={3} w="100%">
+                  {['name', 'price', 'location', 'quantity'].map(field => (
+                    <Input
+                      key={field}
+                      name={field}
+                      value={form[field]}
+                      onChange={handleChange}
+                      placeholder={
+                        field.charAt(0).toUpperCase() + field.slice(1)
+                      }
+                      size="sm"
+                      bg="gray.700"
+                      color="white"
+                      border="none"
+                      className="whitePlaceholder"
+                    />
+                  ))}
+                </SimpleGrid>
+              </VStack>
             </Dialog.Body>
 
-            <Dialog.Footer>
-              <Button  onClick={onClose} mr="3" size="sm">
+            <Dialog.Footer px={{ base: 4, md: 6 }} py={3}>
+              <Button onClick={onClose} mr="3" size="sm">
                 Cancel
               </Button>
               <Button colorScheme="yellow" onClick={handleSave} size="sm">
