@@ -96,8 +96,10 @@ export default function AddNewProduct({ isOpen, onClose, onSave }) {
                     onChange={handleChange}
                     placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
                     size="sm"
-                    bg="gray.500"
+                    bg="gray.700"
                     color="white"
+                  
+                    border="none"
                     className='whitePlaceholder'
                   />
                 ))}
