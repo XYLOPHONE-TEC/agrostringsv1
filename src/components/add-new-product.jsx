@@ -63,7 +63,7 @@ export default function AddNewProduct({ isOpen, onClose, onSave }) {
             </Dialog.Header>
 
             <Dialog.Body px={{ base: 4, md: 6 }} py={4}>
-              <VStack spacing={4} align="stretch">
+              <VStack gap={4} align="stretch">
                 <Button
                   size="sm"
                   bg="yellow.500"
@@ -97,16 +97,18 @@ export default function AddNewProduct({ isOpen, onClose, onSave }) {
                   </Box>
                 )}
 
-                <SimpleGrid columns={2} gap={3} w="100%">
+                <SimpleGrid
+                  columns={{ base: 1, md: 2 }}
+                  gap={3}
+                  w="100%"
+                >
                   {['name', 'price', 'location', 'quantity'].map(field => (
                     <Input
                       key={field}
                       name={field}
                       value={form[field]}
                       onChange={handleChange}
-                      placeholder={
-                        field.charAt(0).toUpperCase() + field.slice(1)
-                      }
+                      placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
                       size="sm"
                       bg="gray.700"
                       color="white"
