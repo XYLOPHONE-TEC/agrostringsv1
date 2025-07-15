@@ -63,7 +63,7 @@ export default function AddNewProduct({ isOpen, onClose, onSave }) {
 
             <Dialog.Body>
               <Box mb="3">
-                <Button size="sm" mb="2" bg="gray"  onClick={handleChooseImage}>
+                <Button size="sm" mb="2" bg="yellow.500"  onClick={handleChooseImage}>
                   Choose Image
                 </Button>
                 <input
@@ -75,7 +75,7 @@ export default function AddNewProduct({ isOpen, onClose, onSave }) {
                 />
 
                 {form.imageFile && (
-                  <Box mt="3" maxH="150px" overflow="hidden" borderRadius="md" bg="gray">
+                  <Box mt="3" maxH="150px" overflow="hidden" borderRadius="md" bg="black">
                     <Image
                       src={URL.createObjectURL(form.imageFile)}
                       alt="Preview"
@@ -96,7 +96,7 @@ export default function AddNewProduct({ isOpen, onClose, onSave }) {
                     onChange={handleChange}
                     placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
                     size="sm"
-                    bg="gray.800"
+                    bg="gray.500"
                     color="white"
                     className='whitePlaceholder'
                   />
