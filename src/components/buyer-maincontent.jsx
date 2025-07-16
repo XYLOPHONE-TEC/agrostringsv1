@@ -12,17 +12,19 @@ import {
   Text,
   Heading,
 } from "@chakra-ui/react";
+import Nearme from './near-me-products'
+import QuickActions from './quick-actions'
 
 const containSliderData = [
-  { id: "1", title: "", buttonLabel: "Discover Uniqueness", background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
-  { id: "2", title: "", buttonLabel: "Discover", background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
-  { id: "3", title: "", buttonLabel: "Discover", background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
+  { id: "1", title: "",  background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
+  { id: "2", title: "",  background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
+  { id: "3", title: "",  background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
 ];
 
 const coverSliderData = [
-  { id: "1", title: "", buttonLabel: "Explore", background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
-  { id: "2", title: "", buttonLabel: "Discover", background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
-  { id: "3", title: "Personalise", buttonLabel: "Shop Now", background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
+  { id: "1", title: "",  background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
+  { id: "2", title: "", background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
+  { id: "3", title: "",  background: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&auto=format&fit=crop&q=60" },
 ];
 
 const SLIDE_DURATION = 6000;
@@ -67,9 +69,7 @@ function CombinedSlider({ containData, coverData }) {
         <Text color="white" fontSize="lg" fontWeight="600" mb={2}>
           {currentData[currentIndex].title}
         </Text>
-        <Button size="sm" bg="gray.600" color="white" _hover={{ bg: "gray.700" }}>
-          {currentData[currentIndex].buttonLabel}
-        </Button>
+        
       </Box>
       <Flex pos="absolute" bottom="10px" w="100%" justify="center" zIndex={3}>
         {currentData.map((_, idx) => (
@@ -129,7 +129,7 @@ function NewArrivals({ onAddToCart }) {
   return (
     <Box bg="gray.800" borderRadius="md">
       <Flex align="center" justify="space-between" bg="#Fada25" color="black" px={2} borderRadius="xs" >
-        <Heading as="h3" size="sm">Freshly Stocked</Heading>
+        <Heading as="h3" size="sm">Marketplace</Heading>
         <Button variant="link" color="black" fontSize="sm">View All</Button>
       </Flex>
       <Flex overflowX="auto" pb={4}>
@@ -144,7 +144,7 @@ function NewArrivals({ onAddToCart }) {
           </Box>
         ))}
       </Flex>
-      <Box h="7px" bg="yellow.500" borderRadius="xs" mt={-2}/>
+      
     </Box>
   );
 }
@@ -153,10 +153,22 @@ export default function ProductSliderWithArrivals() {
   const handleAddToCart = (item) => alert(`Added to cart: ${item.name}`);
 
   return (
-    <Container  centerContent >
-      <CombinedSlider containData={containSliderData} coverData={coverSliderData} />
-      <Box w="100%" mt={6}>
-        <NewArrivals onAddToCart={handleAddToCart} />
+    <Container centerContent>
+      <CombinedSlider
+        containData={containSliderData}
+        coverData={coverSliderData}
+      />
+      <Box w="100%" mt={5}>
+   
+        <Text  p={3} fontSize="sm" fontWeight="bold" color="gray.200">
+          Quick Access
+          
+        </Text>
+        
+        
+        <QuickActions />
+             <NewArrivals onAddToCart={handleAddToCart} />
+        <Nearme />
       </Box>
     </Container>
   );
