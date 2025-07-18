@@ -21,7 +21,7 @@ const productDescription =
 
 export default function ProductDetails() {
   return (
-    <Box w="110%"  bg="gray.800" color="gray.200">
+    <Box w="105%"  bg="gray.800" color="gray.200">
       {/* Image with overlays */}
       <Box position="relative" borderTopRadius="lg" overflow="hidden">
         <Image
@@ -149,8 +149,8 @@ export default function ProductDetails() {
                 h="120px"
                 objectFit="cover"
               />
-              <Text fontWeight="600" mt={2}>Product {id}</Text>
-              <Text>UGX {id * 10000}</Text>
+              <Text fontWeight="600"  fontSize="sm" mt={2}>Product {id}</Text>
+              <Text  fontSize="sm">UGX {id * 10000}</Text>
             </Box>
           ))}
         </Box>
