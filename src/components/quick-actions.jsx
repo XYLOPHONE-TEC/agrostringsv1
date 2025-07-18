@@ -7,21 +7,20 @@ import { FiHeart, FiShoppingCart, FiGrid, FiHelpCircle } from "react-icons/fi";
 const tools = [
   { label: "My Favorites", icon: FiHeart, onClick: "onFavorites" },
   { label: "My Orders", icon: FiShoppingCart, onClick: "onOrders" },
-  { label: "Shop Now", icon: FiGrid, onClick: "onShop" },
-  { label: "Support", icon: FiHelpCircle, onClick: "onSupport" },
+ 
 ];
 
 export default function QuickActions({
   onFavorites,
   onOrders,
-  onShop,
-  onSupport,
+ 
+ 
 }) {
   const handlers = {
     onFavorites,
     onOrders,
-    onShop,
-    onSupport,
+   
+    
   };
 
   return (

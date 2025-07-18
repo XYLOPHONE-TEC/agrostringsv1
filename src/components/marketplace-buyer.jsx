@@ -1,3 +1,4 @@
+// MarketplaceProducts.jsx
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -10,7 +11,7 @@ import {
   Heading,
   SimpleGrid,
   Container,
-  Button
+  Button,
 } from "@chakra-ui/react";
 import { FiPhone } from "react-icons/fi";
 import { PiUserCircleLight } from 'react-icons/pi';
@@ -62,21 +63,21 @@ export default function MarketplaceProducts({ onSelect }) {
   }
 
   return (
-    <Container px={0} >
-    
+    <Container px={0}>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
         {products.map((product) => (
           <Box
             key={product.id}
             bg="gray.800"
-           p={2}
+            p={2}
             color="gray.200"
             borderRadius="sm"
             overflow="hidden"
-            _hover={{ boxShadow: "lg", transform: "translateY(-4px)" }}
+            _hover={{ boxShadow: "lg", transform: "translateY(-4px)", cursor: "pointer" }}
             transition="0.2s"
+            onClick={() => onSelect(product.id)}
           >
-            <Flex p={4}  align="center" justify="space-between" >
+            <Flex p={4} align="center" justify="space-between">
               <Box>
                 <Heading size="sm">{product.name}</Heading>
                 <Text fontSize="xs" color="gray.200">
@@ -99,7 +100,6 @@ export default function MarketplaceProducts({ onSelect }) {
               align="center"
               justify="space-between"
               bg="gray.800"
-            
               py={3}
               borderTop="1px solid #e2e8f0"
             >
@@ -115,25 +115,21 @@ export default function MarketplaceProducts({ onSelect }) {
                 </Box>
               </HStack>
 
-              <Box
-                as="button"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                px={4}
-                py={2}
+              <Button
+                size="xs"
                 borderRadius="full"
-                bg="#fada25"
+                bg="#FADA25"
                 color="black"
-                fontSize="xs"
-                fontWeight="semibold"
+                leftIcon={<FiPhone />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  alert(`Calling seller: ${product.seller.name}`);
+                }}
                 _hover={{ bg: "yellow.600" }}
                 _active={{ bg: "yellow.700" }}
-                onClick={() => alert(`Calling seller: ${product.seller.name}`)}
               >
-                <FiPhone />
-                <Text ml={2}>Call Farmer</Text>
-              </Box>
+                Call Farmer
+              </Button>
             </Flex>
           </Box>
         ))}
