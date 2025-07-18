@@ -21,7 +21,7 @@ const productDescription =
 
 export default function ProductDetails() {
   return (
-    <Box w="full" maxW="400px" mx="auto"  bg="gray.800" color="gray.200">
+    <Box w="full"  bg="gray.800" color="gray.200">
       {/* Image with overlays */}
       <Box position="relative" borderTopRadius="lg" overflow="hidden">
         <Image
