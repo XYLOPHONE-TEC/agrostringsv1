@@ -1,6 +1,6 @@
 // src/pages/Dashboard.jsx
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Flex,
@@ -8,6 +8,7 @@ import {
   Text,
   Button,
   Icon,
+  Spinner
 } from '@chakra-ui/react';
 import { FiHelpCircle } from 'react-icons/fi';
 // Removed VideoDialog import
@@ -34,7 +35,6 @@ const Dashboard = () => (
         </Text>
       </Text>
       <HStack spacing={2} fontSize="xs">
--       
         <Button size="xs" bg="gray.700" _hover={{ bg: 'gray.600' }}>
           EN
         </Button>
@@ -46,8 +46,7 @@ const Dashboard = () => (
 
     {/* Main Content */}
     <Box flex="1" px={{ base: 2, md: 8 }} py={{ base: 4, md: 6 }} overflow="auto">
-  <BuyerMainContent />
-    
+      <BuyerMainContent />
     </Box>
 
     {/* Footer */}
@@ -82,4 +81,18 @@ const Dashboard = () => (
   </Flex>
 );
 
-export default Dashboard;
+export default function BuyerDashboardWithLoader() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+  if (loading) {
+    return (
+      <Flex minH="100vh" align="center" justify="center">
+        <Spinner size="xl" color="yellow.400" />
+      </Flex>
+    );
+  }
+  return <Dashboard />;
+}
