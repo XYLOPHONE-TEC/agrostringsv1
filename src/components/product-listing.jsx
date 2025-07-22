@@ -32,8 +32,10 @@ export default function ProductDashboard() {
       w="100%"
       h="100vh"
       pos="relative"
+      
     >
       <MarketProduce items={allProduceItems} />
+
       {/* Full-width bottom overlay */}
       <Box
         pos="absolute"

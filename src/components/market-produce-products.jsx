@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Grid,
   Box,
@@ -8,17 +8,16 @@ import {
   Text,
   Badge,
   useBreakpointValue,
-  Flex
+  Flex,
 } from '@chakra-ui/react';
-import placeholder from '../assets/images/image.png';
 
 export default function MarketProduce({ items, onAddPrice }) {
   if (items.length === 0) return <Text color="gray.400">No products available.</Text>;
 
   const unitPrices = {
-    'Fresh Lettuce': 'UGX 4,250/kg',
-    'Organic Tomatoes': 'UGX 4,000/kg',
-    'Carrots': 'UGX 4,000/kg',
+    'Fresh Lettuce': 'UGX 4,250/kg',
+    'Organic Tomatoes': 'UGX 4,000/kg',
+    'Carrots': 'UGX 4,000/kg',
   };
 
   const columnCount = useBreakpointValue({ base: 1, sm: 1, md: 2, lg: 3 });
@@ -32,7 +31,7 @@ export default function MarketProduce({ items, onAddPrice }) {
     >
       {items.map((item) => {
         const blurred = item.isBlurred;
-        const [imgLoaded, setImgLoaded] = useState(false);
+
         return (
           <Box
             key={item.id}
@@ -53,35 +52,15 @@ export default function MarketProduce({ items, onAddPrice }) {
               align="center"
               gap={4}
             >
-              <Box position="relative" borderRadius="md" boxSize={{ base: '100%', sm: '120px' }} flexShrink={0} overflow="hidden">
-                {/* Placeholder thumbnail */}
-                {!imgLoaded && (
-                  <Image
-                    src={placeholder}
-                    alt="placeholder"
-                    borderRadius="md"
-                    boxSize={{ base: '100%', sm: '120px' }}
-                    objectFit="cover"
-                    position="absolute"
-                    top={0}
-                    left={0}
-                    w="100%"
-                    h="100%"
-                    zIndex={1}
-                  />
-                )}
-                {/* Actual product image */}
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  borderRadius="md"
-                  boxSize={{ base: '100%', sm: '120px' }}
-                  objectFit="cover"
-                  flexShrink={0}
-                  onLoad={() => setImgLoaded(true)}
-                  style={imgLoaded ? {} : { visibility: 'hidden' }}
-                />
-              </Box>
+              <Image
+                src={item.image}
+                alt={item.name}
+                borderRadius="md"
+                boxSize={{ base: '100%', sm: '120px' }}
+                objectFit="cover"
+                flexShrink={0}
+                
+              />
               <VStack align="start" spacing={1} flex="1">
                 <HStack justify="space-between" w="100%">
                   <Text fontSize="md" fontWeight="semibold">{item.name}</Text>
@@ -91,7 +70,7 @@ export default function MarketProduce({ items, onAddPrice }) {
                   {item.farm} – {item.location}
                 </Text>
                 <Text fontSize="sm" color="#fada25" fontWeight="bold" mt={1}>
-                  {unitPrices[item.name] || 'UGX --/kg'}
+                  {unitPrices[item.name] || 'UGX --/kg'}
                 </Text>
               </VStack>
             </Flex>
