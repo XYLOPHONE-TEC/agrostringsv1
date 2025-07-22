@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import '../index.css';
-import { Box, Text, Button, Spinner, Flex } from '@chakra-ui/react';
+import { Box, Text, Button } from '@chakra-ui/react';
 import MarketProduce from './market-produce-products';
 import product1 from '../assets/images/product.png';
 import product2 from '../assets/images/toma.jpeg';
@@ -27,18 +27,6 @@ const allProduceItems = Array.from({ length: 12 }, (_, idx) => {
 });
 
 export default function ProductDashboard() {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-  if (loading) {
-    return (
-      <Flex minH="60vh" align="center" justify="center">
-        <Spinner size="xl" color="yellow.400" />
-      </Flex>
-    );
-  }
   return (
     <Box
       w="100%"

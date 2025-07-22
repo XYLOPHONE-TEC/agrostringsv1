@@ -1,5 +1,5 @@
 // src/components/FarmerChannel.jsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Box,
   SimpleGrid,
@@ -8,7 +8,6 @@ import {
   Image,
   Text,
   Badge,
-  Spinner
 } from '@chakra-ui/react';
 import { ViewIcon, Tv } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -73,18 +72,6 @@ const sampleVideos = [
 ];
 
 export default function FarmerChannel() {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-  if (loading) {
-    return (
-      <Box minH="60vh" display="flex" alignItems="center" justifyContent="center">
-        <Spinner size="xl" color="yellow.400" />
-      </Box>
-    );
-  }
   return (
     <Box h="100%" display="flex" flexDirection="column" >
       <Text fontSize="lg" fontWeight="bold" mb={4} color="white">

@@ -1,6 +1,6 @@
 // src/pages/Dashboard.jsx
 "use client";
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Box,
   Flex,
@@ -8,7 +8,6 @@ import {
   Text,
   Button,
   Icon,
-  Spinner
 } from '@chakra-ui/react';
 import { FiHelpCircle } from 'react-icons/fi';
 import VideoDialog from '../modals/videp-upload';
@@ -81,18 +80,4 @@ const Dashboard = () => (
   </Flex>
 );
 
-export default function FarmerDashboardWithLoader() {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-  if (loading) {
-    return (
-      <Flex minH="100vh" align="center" justify="center">
-        <Spinner size="xl" color="yellow.400" />
-      </Flex>
-    );
-  }
-  return <Dashboard />;
-}
+export default Dashboard;
